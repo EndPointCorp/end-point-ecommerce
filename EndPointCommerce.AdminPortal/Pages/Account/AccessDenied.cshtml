@@ -1,0 +1,26 @@
+@page
+@model EndPointCommerce.AdminPortal.Pages.Account.AccessDeniedModel
+
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container-fluid px-4">
+    <div class="row py-4">
+        <div class="col">
+            <h2><i class="fas fa-person"></i> Access denied</h2>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <p>You don't have permissions to view this section.</p>
+                </div>
+                <button type="submit" class="btn btn-primary float-end me-2">
+                    Log out
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

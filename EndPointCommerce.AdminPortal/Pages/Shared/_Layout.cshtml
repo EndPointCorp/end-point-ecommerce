@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - End Point Commerce - Admin Portal</title>
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    <script src="~/node_modules/@@fortawesome/fontawesome-free/js/all.min.js"></script>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+    <partial name="_TopNavBar.cshtml" />
+
+    <div id="layoutSidenav">
+        <partial name="_SideNavBar.cshtml" />
+
+        <div id="layoutSidenav_content">
+            <main>
+                @RenderBody()
+            </main>
+
+            <partial name="_Footer.cshtml" />
+        </div>
+    </div>
+
+    <script src="~/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="~/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

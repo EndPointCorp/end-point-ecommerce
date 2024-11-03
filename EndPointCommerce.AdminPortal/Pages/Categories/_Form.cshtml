@@ -1,0 +1,57 @@
+@model EndPointCommerce.Domain.Entities.Category
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-circle-info"></i>
+        Info
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input asp-for="IsEnabled" class="form-check-input">
+                <label asp-for="IsEnabled" class="form-check-label"></label>
+            </div>
+            <span asp-validation-for="IsEnabled" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Search Engine Optimization
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label asp-for="UrlKey" class="form-label"></label>
+            <input asp-for="UrlKey" class="form-control" />
+            <span asp-validation-for="UrlKey" class="text-danger"></span>
+            <div class="form-text">
+                Allowed characters: letters, digits, dashes (-), dots (.), underscores (_) and tildes (~).
+            </div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="MetaTitle" class="form-label"></label>
+            <input asp-for="MetaTitle" class="form-control" />
+            <span asp-validation-for="MetaTitle" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="MetaKeywords" class="form-label"></label>
+            <input asp-for="MetaKeywords" class="form-control" />
+            <span asp-validation-for="MetaKeywords" class="text-danger"></span>
+            <div class="form-text">Use a comma-separated list of values.</div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="MetaDescription" class="form-label"></label>
+            <textarea asp-for="MetaDescription" class="form-control"></textarea>
+            <span asp-validation-for="MetaDescription" class="text-danger"></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+@page
+@model EndPointCommerce.AdminPortal.Pages.SiteContents.IndexModel
+
+@{
+    ViewData["Title"] = "Site Contents";
+}
+
+<div class="container-fluid px-4">
+    <form method="post">
+        <div class="row py-4">
+            <div class="col">
+                <h2><i class="fa fa-code"></i> Site Contents</h2>
+            </div>
+            <div class="col">
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+            </div>
+        </div>
+
+        @{
+            var i = 0;
+        }
+        @foreach (var item in Model.SiteContents)
+        {
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>@Html.DisplayFor(m => item.Name)</h3>
+
+                    <input type="hidden" asp-for="SiteContents[i].Id" />
+                    <textarea asp-for="SiteContents[i].Content" class="form-control" rows="6"></textarea>
+                </div>
+            </div>
+
+            i++;
+        }
+    </form>
+</div>

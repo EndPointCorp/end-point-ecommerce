@@ -1,0 +1,51 @@
+@model EndPointCommerce.AdminPortal.ViewModels.QuoteViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-usd"></i>
+        Totals
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="Price" class="form-label"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <span class="form-control">@Model.Price.ToString("F2")</span>
+                </div>
+            </div>
+            <div class="col">
+                <label asp-for="Discount" class="form-label"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <span class="form-control">@Model.Discount.ToString("F2")</span>
+                </div>
+            </div>
+            <div class="col">
+                <label asp-for="Tax" class="form-label"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <span class="form-control">@Model.Tax.ToString("F2")</span>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="Subtotal" class="form-label"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <span class="form-control">@Model.Subtotal.ToString("F2")</span>
+                </div>
+            </div>
+            <div class="col">
+                <label asp-for="Total" class="form-label"></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <span class="form-control">@Model.Total.ToString("F2")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

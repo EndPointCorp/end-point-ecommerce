@@ -1,0 +1,24 @@
+{
+  "name": "end-point-commerce-admin-portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --load-path=node_modules ../Stylesheets/styles.scss css/site.css"
+  },
+  "keywords": [],
+  "author": "End Point Dev",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "6.5.1",
+    "bootstrap": "5.3.2",
+    "chart.js": "2.8.0",
+    "jquery": "3.7.1",
+    "jquery-validation": "1.20.0",
+    "jquery-validation-unobtrusive": "4.0.0",
+    "quill": "2.0.0-rc.2",
+    "quill-html-edit-button": "^2.2.13",
+    "sass": "1.71.0",
+    "simple-datatables": "9.0.0"
+  }
+}

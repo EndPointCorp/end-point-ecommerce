@@ -1,0 +1,15 @@
+@using EndPointCommerce.RazorTemplates.ViewModels
+
+@model IdentityEmailViewModel
+
+<tr>
+    <td valign="top">
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            @Model.User.Greeting,
+        </p>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Welcome to EndPointCommerce.com.
+            Please confirm your account by <a href="@Model.Link">clicking here</a>.
+        </p>
+    </td>
+</tr>

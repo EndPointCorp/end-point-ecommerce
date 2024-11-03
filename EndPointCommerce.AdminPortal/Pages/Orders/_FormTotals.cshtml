@@ -1,0 +1,32 @@
+@model EndPointCommerce.AdminPortal.ViewModels.OrderViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-circle-info"></i>
+        Totals
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label asp-for="Subtotal" class="form-label"></label>
+            <input asp-for="Subtotal" class="form-control" />
+            <span asp-validation-for="Subtotal" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Discount" class="form-label"></label>
+            <input asp-for="Discount" class="form-control" />
+            <span asp-validation-for="Discount" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Tax" class="form-label"></label>
+            <input asp-for="Tax" class="form-control" />
+            <span asp-validation-for="Tax" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Total" class="form-label"></label>
+            <input asp-for="Total" class="form-control" />
+            <span asp-validation-for="Total" class="text-danger"></span>
+        </div>
+    </div>
+</div>

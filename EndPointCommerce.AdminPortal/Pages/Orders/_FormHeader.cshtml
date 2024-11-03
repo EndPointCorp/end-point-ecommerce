@@ -1,0 +1,50 @@
+@model EndPointCommerce.AdminPortal.ViewModels.OrderViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-circle-info"></i>
+        Info
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-6">
+                <label asp-for="StatusId" class="form-label"></label>
+                <select asp-for="StatusId" class="form-control" asp-items="Model.Statuses"></select>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <label asp-for="PaymentMethodId" class="form-label"></label>
+                <select asp-for="PaymentMethodId" class="form-control" asp-items="Model.PaymentMethods"></select>
+                <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="TrackingNumber" class="form-label"></label>
+                <input asp-for="TrackingNumber" class="form-control" />
+                <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="CustomerId" class="form-label"></label>
+                <select asp-for="CustomerId" class="form-control" asp-items="Model.Customers"></select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <label asp-for="BillingAddressId" class="form-label"></label>
+                <select asp-for="BillingAddressId" class="form-control"></select>
+                <span asp-validation-for="BillingAddressId" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <label asp-for="ShippingAddressId" class="form-label"></label>
+                <select asp-for="ShippingAddressId" class="form-control"></select>
+                <span asp-validation-for="ShippingAddressId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>

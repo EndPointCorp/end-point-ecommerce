@@ -1,0 +1,122 @@
+@using EndPointCommerce.RazorTemplates.ViewModels
+
+@model OrderConfirmationViewModel
+
+<tr>
+    <td valign="top">
+        <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Thank You @Model.Order.Customer.FullName,
+        </h1>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Once your package ships we will send an email with a link to track your order.
+            If you have any questions about your order, please
+            contact us at <a href="mailto:store@endpointcommerce.com">store@endpointcommerce.com</a>
+        </p>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Your order confirmation is below. Thank you again for your business.
+        </p>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Your Order #@Model.Order.Id was placed on @Model.AsLongDate(Model.Order.DateCreated).
+        </p>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            Please allow 2 business days for your order to be processed.
+        </p>
+        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+            For shipping rates, please visit
+            <a href="@Model.WebsiteShippingInfoUrl">
+                EndPointCommerce.com/shipping-information
+            </a>
+        </p>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table cellspacing="0" cellpadding="0" border="0" width="650">
+            <thead>
+                <tr>
+                    <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                        Shipping Information:
+                    </th>
+                    <th width="10"></th>
+                    <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                        Billing Information:
+                    </th>
+                    <th width="10"></th>
+                    <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                        Payment Method:
+                    </th>
+                    <th width="10"></th>
+                    <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                        Price:
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                        <p>@Model.Order.ShippingAddress.FullName</p>
+                        <p>@Model.Order.ShippingAddress.Street</p>
+                        <p>@Model.Order.ShippingAddress.StreetTwo</p>
+                        <p>@Model.Order.ShippingAddress.City, @Model.Order.ShippingAddress.State.Abbreviation @Model.Order.ShippingAddress.ZipCode</p>
+                    </td>
+                    <td></td>
+                    <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                        <p>@Model.Order.BillingAddress.FullName</p>
+                        <p>@Model.Order.BillingAddress.Street</p>
+                        <p>@Model.Order.BillingAddress.StreetTwo</p>
+                        <p>@Model.Order.BillingAddress.City, @Model.Order.BillingAddress.State.Abbreviation @Model.Order.BillingAddress.ZipCode</p>
+                    </td>
+                    <td></td>
+                    <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                        @Model.Order.PaymentMethod.Name
+                    </td>
+                    <td></td>
+                    <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                        <p>Subtotal: @Model.AsCurrency(Model.Order.Subtotal)</p>
+                        <p>Tax: @Model.AsCurrency(Model.Order.Tax)</p>
+                        <p>Grand Total: @Model.AsCurrency(Model.Order.Total)</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
+        <h1 style="font-size:18px; font-weight:normal; margin:0 0 11px 0;">
+            You've ordered:
+        </h1>
+
+        @foreach (var item in Model.Order.Items)
+        {
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <thead>
+                    <tr>
+                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                            Item:
+                        </th>
+                        <th width="10"></th>
+                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">
+                            Price:
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <p>Order Item #@item.Id</p>
+
+                            <p>
+                                <span>@item.Quantity of @item.Product.Name</span>
+                            </p>
+                        </td>
+                        <td></td>
+                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
+                            <p>Subtotal: @Model.AsCurrency(item.TotalPrice)</p>
+                            <p>Discount: @Model.AsCurrency(item.Discount)</p>
+                            <p>Total: @Model.AsCurrency(item.Total)</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </td>
+</tr>

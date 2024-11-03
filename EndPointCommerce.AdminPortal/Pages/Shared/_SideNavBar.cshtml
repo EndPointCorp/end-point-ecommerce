@@ -1,0 +1,75 @@
+@if ((User.Identity != null) && (User.Identity.IsAuthenticated))
+{
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-page="/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Catalog</div>
+                    <a asp-page="/Products/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-gift"></i></div>
+                        Products
+                    </a>
+                    <a asp-page="/Categories/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-icons"></i></div>
+                        Categories
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Customers</div>
+                    <a asp-page="/Customers/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-person"></i></div>
+                        Customers
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Marketing</div>
+                    <a asp-page="/Coupons/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-ticket"></i></div>
+                        Coupons
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">Sales</div>
+                    <a asp-page="/Quotes/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-file-invoice"></i></div>
+                        Quotes
+                    </a>
+                    <a asp-page="/Orders/Index" class="nav-link">
+                        <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
+                        Orders
+                    </a>
+
+                    <div class="sb-sidenav-menu-heading">System</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfiguration" aria-expanded="false" aria-controls="collapseConfiguration">
+                        <div class="sb-nav-link-icon"><i class="fas fa-gears"></i></div>
+                        Configuration
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseConfiguration" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a asp-page="/Users/Index" class="nav-link">
+                                <div class="sb-nav-link-icon"><i class="fas fa-person"></i></div>
+                                Users
+                            </a>
+                            <a asp-page="/SiteContents/Index" class="nav-link">
+                                <div class="sb-nav-link-icon"><i class="fa fa-code"></i></div>
+                                Content
+                            </a>
+                        </nav>
+                    </div>
+                        
+                }
+
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            @User.Identity.Name
+        </div>
+    </nav>
+</div>
+}

@@ -1,0 +1,70 @@
+@page "{id:int}"
+@model EndPointCommerce.AdminPortal.Pages.Categories.EditModel
+
+@{
+    ViewData["Title"] = $"Edit category";
+}
+
+<div class="container-fluid px-4">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Edit category</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+                <button type="submit" asp-page-handler="SaveAndContinue" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <input type="hidden" asp-for="Category.Id" />
+
+        <partial name="_Form.cshtml" for="Category" />
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-image"></i>
+                Category Image
+            </div>
+            <div class="card-body">
+                <div class="row mb-3 d-flex">
+                    <div class="col-auto flex-fill">
+                        <input asp-for="Category.MainImageFile" accept="image/*" class="form-control" />
+                        <span asp-validation-for="Category.MainImageFile" class="text-danger"></span>
+                    </div>
+                    <div class="col-auto">
+                        <button
+                            type="submit"
+                            asp-page-handler="DeleteMainImage"
+                            disabled="@(!Model.Category.HasMainImage ? "disabled" : null)"
+                            class="btn btn-outline-danger"
+                        >
+                            <i class="fa-solid fa-trash-can"></i>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+                @if (Model.Category.HasMainImage)
+                {
+                    <img
+                        src="@Model.Category.MainImageUrl"
+                        asp-append-version="true"
+                        alt="Main category image"
+                        class="mx-auto d-block w-25"
+                    />
+                }
+            </div>
+        </div>
+    </form>
+</div>
