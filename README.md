@@ -2,6 +2,8 @@
 
 This solution contains the source code for the backend apps for the End Point Commerce store.
 
+[![pipeline status](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/badges/main/pipeline.svg)](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/-/commits/main)
+
 ## Projects
 
 The solution is organized in a simple structure inspired by Clean Architecture and Domain Driven Design.
@@ -81,3 +83,21 @@ Finally, open the project directory in VS Code and run the "Dev Containers: Reop
 That will download and build the necessary images and containers: one for the PostgreSQL database and one with .NET 8 for running and debugging the apps themselves. Once done, VS Code will connect to the app container and you'll be able to develop in the container as if it was your host machine. NodeJS, along with PNPM, as well as the dotnet-aspnet-codegenerator and dotnet-ef tools will also be installed without needing any extra steps.
 
 On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update`. This will work if run from within the `EndPointCommerce.WebApi` or `EndPointCommerce.AdminPortal` directories.
+
+
+## CI
+
+CI is setup with GitLab CI. The pipeline is defined in the `.gitlab-ci.yml` file. For pushes to branches and tags, the pipeline runs tests, builds docker images from `Dockerfile.{AdminPortal,Maintenance,Webapi}`, and pushes them to gitlab container registry associated with this repo.
+
+## CI/CD Variables
+
+Gitlab CI/CD variables are used to store sensitive info like API keys, the following should be defined in `Settings -> CI/CD -> Variables`:
+- `TAX_JAR_API_KEY` - Sandbox API key for TaxJar for use by tests
+
+
+## Container Registry
+
+CI pushes the following docker images to the gitlab container registry at `bits.endpointdev.com:5050/end-point-open-source/end-point-commerce/`:
+- `webapi` - The WebApi project running on port 8080
+- `adminportal` - The AdminPortal running on port 8080
+- `maintenance` - For dev related tasks

@@ -1,0 +1,32 @@
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# install tools
+RUN dotnet tool install dotnet-ef --global
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+WORKDIR /source
+
+# copy sln and csproj files and restore
+COPY end-point-commerce.sln .
+COPY EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/EndPointCommerce.IntegrationTests.csproj ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/EndPointCommerce.UnitTests.csproj ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
+RUN dotnet restore
+
+# copy everything else
+COPY EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/. ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/

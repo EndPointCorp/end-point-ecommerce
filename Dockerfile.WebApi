@@ -1,0 +1,33 @@
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /source
+
+# copy sln and csproj files and restore
+COPY end-point-commerce.sln .
+COPY EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/EndPointCommerce.IntegrationTests.csproj ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/EndPointCommerce.UnitTests.csproj ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
+RUN dotnet restore
+
+# copy everything else
+COPY EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/. ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
+
+# build app
+WORKDIR /source/EndPointCommerce.WebApi
+RUN dotnet publish -c release -o /app --no-restore
+
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app ./
+ENTRYPOINT ["dotnet", "EndPointCommerce.WebApi.dll"]
