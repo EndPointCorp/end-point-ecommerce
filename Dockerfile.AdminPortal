@@ -1,0 +1,46 @@
+# https://hub.docker.com/_/microsoft-dotnet
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+# install Node.js and pnpm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends nodejs
+RUN npm install -g pnpm@8.15.5
+
+WORKDIR /source
+
+# copy sln and csproj files and restore
+COPY end-point-commerce.sln .
+COPY EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/EndPointCommerce.IntegrationTests.csproj ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/EndPointCommerce.UnitTests.csproj ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
+RUN dotnet restore
+
+# copy everything else
+COPY EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
+COPY EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
+COPY EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
+COPY EndPointCommerce.IntegrationTests/. ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
+COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
+COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
+
+# build frontend
+WORKDIR /source/EndPointCommerce.AdminPortal/wwwroot
+RUN pnpm install
+RUN pnpm run sass
+
+# build app
+WORKDIR /source/EndPointCommerce.AdminPortal
+RUN dotnet publish -c release -o /app --no-restore
+
+# final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app ./
+RUN mkdir -p /images/category-images /images/product-images
+ENTRYPOINT ["dotnet", "EndPointCommerce.AdminPortal.dll"]
