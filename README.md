@@ -84,7 +84,6 @@ That will download and build the necessary images and containers: one for the Po
 
 On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update`. This will work if run from within the `EndPointCommerce.WebApi` or `EndPointCommerce.AdminPortal` directories.
 
-
 ## CI
 
 CI is setup with GitLab CI. The pipeline is defined in the `.gitlab-ci.yml` file. For pushes to branches and tags, the pipeline runs tests, builds docker images from `Dockerfile.{AdminPortal,Maintenance,Webapi}`, and pushes them to gitlab container registry associated with this repo.
