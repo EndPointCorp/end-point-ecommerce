@@ -9,8 +9,8 @@
     <title></title>
 </head>
 
-<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-    <div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<body style="background:#DCDCDC; font-family:Times New Roman, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;">
+    <div style="background:#DCDCDC; font-family:Times New Roman, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;">
         <table cellspacing="0" cellpadding="0" border="0" width="100%">
             <tr>
                 <td align="center" valign="top" style="padding:20px 0 20px 0">
@@ -19,24 +19,18 @@
                         cellspacing="0" cellpadding="10" border="0" width="650"
                         style="border:1px solid #E0E0E0;"
                     >
-                        <tr>
-                            <td valign="top">
-                                <a href="@ViewData["WebsiteUrl"]">
-                                    <img
-                                        src="@ViewData["WebsiteLogoUrl"]"
-                                        alt="EndPointCommerce.com"
-                                        style="margin-bottom:10px;"
-                                        border="0"
-                                    />
-                                </a>
+                            <td bgcolor="#000000" style="background:#000000;">
+                                <p style="font-size:14px; margin:0;color:white">
+                                    <strong>End Point Commerce</strong>
+                                </p>
                             </td>
                         </tr>
                         @RenderBody()
                         <tr>
-                            <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;">
+                            <td bgcolor="#000000" align="center" style="background:#000000; text-align:center;">
                                 <center>
-                                    <p style="font-size:12px; margin:0;">
-                                        Thank you again, <strong>End Point Commerce</strong>
+                                    <p style="font-size:10px; margin:0;color:white">
+                                        <strong>End Point Commerce, @DateTime.Now.Year.ToString()</strong>
                                     </p>
                                 </center>
                             </td>
