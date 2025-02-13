@@ -40,10 +40,9 @@ namespace EndPointCommerce.IntegrationTests.RazorTemplates.Services
 
             // Assert
             Assert.Contains("<!DOCTYPE html>", result);
-            Assert.Contains("Welcome to EndPointCommerce.com", result);
+            Assert.Contains("Thank you for signing up with EndPointCommerce.com", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("Please confirm your account by <a href=\"test_confirmation_link\">clicking here</a>", result);
-            Assert.Contains("Thank you again, <strong>End Point Commerce</strong>", result);
+            Assert.Contains("Please <a href=\"test_confirmation_link\">click here</a> to confirm your account.", result);
         }
 
         [Fact]
@@ -70,9 +69,9 @@ namespace EndPointCommerce.IntegrationTests.RazorTemplates.Services
             // Assert
             Assert.Contains("<!DOCTYPE html>", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("There was recently a request to change the password for your account.", result);
+            Assert.Contains("click the following button to reset your password", result);
             Assert.Contains("<a href=\"test_password_reset_link\" target=\"_blank\">", result);
-            Assert.Contains("Thank you again, <strong>End Point Commerce</strong>", result);
+            Assert.Contains("If you did not request a password reset, please ignore this email.", result);
         }
 
         [Fact]
@@ -125,10 +124,8 @@ namespace EndPointCommerce.IntegrationTests.RazorTemplates.Services
 
             // Assert
             Assert.Contains("<!DOCTYPE html>", result);
-            Assert.Contains("Thank You test_name test_last_name", result);
-            Assert.Contains("Your Order #123 was placed on Sunday, October 10, 2010", result);
-            Assert.Contains("<a href=\"test_website_shipping_info_url\">", result);
-            Assert.Contains("Thank you again, <strong>End Point Commerce</strong>", result);
+            Assert.Contains("Hello test_name test_last_name", result);
+            Assert.Contains("Here are the details for Order #123 that was placed on Sunday, October 10, 2010", result);
         }
     }
 }

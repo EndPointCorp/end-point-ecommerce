@@ -67,7 +67,7 @@ namespace EndPointCommerce.UnitTests.Infrastructure.Services
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>
                 msg.To == email &&
                 msg.ToName == user.Greeting &&
-                msg.Subject == "Welcome to EndPointCommerce.com - Please confirm your email" &&
+                msg.Subject == "Please confirm your email" &&
                 msg.Body == "test_rendered_body"
             )), Times.Once);
         }
@@ -94,7 +94,7 @@ namespace EndPointCommerce.UnitTests.Infrastructure.Services
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>
                 msg.To == email &&
                 msg.ToName == user.Greeting &&
-                msg.Subject == "Reset your EndPointCommerce.com password" &&
+                msg.Subject == "Reset your password" &&
                 msg.Body == "test_rendered_body"
             )), Times.Once);
         }

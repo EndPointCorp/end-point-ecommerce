@@ -35,7 +35,7 @@ public class IdentityEmailSender : IEmailSender<User>
         await _mailer.SendMailAsync(new() {
             To = email,
             ToName = user.Greeting,
-            Subject = "Welcome to EndPointCommerce.com - Please confirm your email",
+            Subject = "Please confirm your email",
             Body = body
         });
     }
@@ -54,7 +54,7 @@ public class IdentityEmailSender : IEmailSender<User>
         await _mailer.SendMailAsync(new() {
             To = email,
             ToName = user.Greeting,
-            Subject = "Reset your EndPointCommerce.com password",
+            Subject = "Reset your password",
             Body = body
         });
     }
