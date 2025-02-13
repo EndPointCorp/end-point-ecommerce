@@ -16,7 +16,7 @@ variables:
 
 dotnet test:
   stage: test
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:9.0
   variables:
     TaxJarApiKey: $TAX_JAR_API_KEY
     TaxJarFromCountry: US
@@ -29,7 +29,7 @@ dotnet test:
     - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
     - dotnet test
   services:
-    - name: postgres:16-alpine
+    - name: postgres:17.2-alpine
       alias: db
 
 deploy api:
