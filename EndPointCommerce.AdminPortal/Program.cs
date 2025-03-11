@@ -18,12 +18,15 @@ public class Program
         builder.Services.AddRazorPages();
         builder.Services.AddHttpContextAccessor();
 
-        builder.Services.AddDataProtection().PersistKeysToFileSystem(
-            new DirectoryInfo(
-                builder.Configuration["AdminPortalDataProtectionKeysPath"] ??
-                    throw new InvalidOperationException("Config setting 'AdminPortalDataProtectionKeysPath' not found.")
-            )
-        );
+        builder.Services
+            .AddDataProtection()
+            .SetApplicationName("end-point-commerce-admin-portal")
+            .PersistKeysToFileSystem(
+                new DirectoryInfo(
+                    builder.Configuration["AdminPortalDataProtectionKeysPath"] ??
+                        throw new InvalidOperationException("Config setting 'AdminPortalDataProtectionKeysPath' not found.")
+                )
+            );
 
         builder.Services.AddEndPointCommerceDbContext(
             builder.Configuration.GetConnectionString("EndPointCommerceDbContext") ??

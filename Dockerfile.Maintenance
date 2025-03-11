@@ -20,6 +20,7 @@ COPY EndPointCommerce.IntegrationTests/EndPointCommerce.IntegrationTests.csproj 
 COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
 COPY EndPointCommerce.UnitTests/EndPointCommerce.UnitTests.csproj ./EndPointCommerce.UnitTests/
 COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
+COPY EndPointCommerce.WebStore/EndPointCommerce.WebStore.csproj ./EndPointCommerce.WebStore/
 RUN dotnet restore
 
 # copy everything else
@@ -30,3 +31,4 @@ COPY EndPointCommerce.IntegrationTests/. ./EndPointCommerce.IntegrationTests/
 COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
 COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
 COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
+COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
