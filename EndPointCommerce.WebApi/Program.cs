@@ -14,6 +14,20 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                var origins = builder.Configuration["AllowedOrigins"]?.Split(",");
+                if (origins == null || origins.Length == 0) return;
+
+                policy.WithOrigins(origins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+
         // Add services to the container.
         builder.Services.AddControllers();
         builder.Services.AddHttpContextAccessor();
@@ -22,12 +36,15 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddDataProtection().PersistKeysToFileSystem(
-            new DirectoryInfo(
-                builder.Configuration["WebApiDataProtectionKeysPath"] ??
-                    throw new InvalidOperationException("Config setting 'WebApiDataProtectionKeysPath' not found.")
-            )
-        );
+        builder.Services
+            .AddDataProtection()
+            .SetApplicationName("end-point-commerce-web-api")
+            .PersistKeysToFileSystem(
+                new DirectoryInfo(
+                    builder.Configuration["WebApiDataProtectionKeysPath"] ??
+                        throw new InvalidOperationException("Config setting 'WebApiDataProtectionKeysPath' not found.")
+                )
+            );
 
         builder.Services.AddEndPointCommerceDbContext(
             builder.Configuration.GetConnectionString("EndPointCommerceDbContext") ??
@@ -67,6 +84,8 @@ public class Program
         }
 
         // app.UseHttpsRedirection();
+
+        app.UseCors();
 
         app.UseAuthorization();
 

@@ -1,0 +1,232 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button type="button" onclick="getProducts()">GET api/Products</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button type="button" onclick="postQuoteItem()">POST api/Quote/Items</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button type="button" onclick="putQuote()">PUT api/Quote</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button type="button" onclick="getQuote()">GET api/Quote</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button type="button" onclick="postQuoteValidate()">POST api/Quote/Validate</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <form id="paymentForm">
+            <input type="text" name="cardNumber" id="cardNumber" placeholder="cardNumber"/> <br><br>
+            <input type="text" name="expMonth" id="expMonth" placeholder="expMonth"/> <br><br>
+            <input type="text" name="expYear" id="expYear" placeholder="expYear"/> <br><br>
+            <input type="text" name="cardCode" id="cardCode" placeholder="cardCode"/> <br><br>
+            <input type="hidden" name="dataValue" id="dataValue" />
+            <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
+
+            <button type="button" onclick="postOrder()">POST api/Orders</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="@Model.AcceptJsUrl" charset="utf-8"></script>
+
+    <script>
+        window.apiUrl = '@Model.EndPointCommerceApiUrl';
+
+        window.authNetConfig = {
+            apiLoginID: '@Model.AuthNetLoginId',
+            clientKey: '@Model.AuthNetClientKey'
+        };
+    </script>
+
+    <script>
+        function getProducts() {
+            var url = new URL('api/Products', window.apiUrl).href;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+
+        function postQuoteItem() {
+            var url = new URL('api/Quote/Items', window.apiUrl).href;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "productId": 1,
+                    "quantity": 5
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+
+        function putQuote() {
+            var url = new URL('api/Quote', window.apiUrl).href;
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    "email": "test_user@email.com",
+                    "shippingAddress": {
+                        "name": "test_name",
+                        "lastName": "test_last_name",
+                        "street": "123 main st",
+                        "streetTwo": "no. 10",
+                        "city": "test_city",
+                        "stateId": 1,
+                        "zipCode": "12345",
+                        "phoneNumber": "1234567890"
+                    },
+                    "billingAddress": {
+                        "name": "test_name",
+                        "lastName": "test_last_name",
+                        "street": "123 main st",
+                        "streetTwo": "no. 10",
+                        "city": "test_city",
+                        "stateId": 1,
+                        "zipCode": "12345",
+                        "phoneNumber": "1234567890"
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+
+        function getQuote() {
+            var url = new URL('api/Quote', window.apiUrl).href;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+
+        function postQuoteValidate() {
+            var url = new URL('api/Quote/Validate', window.apiUrl).href;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
+
+        function postOrder() {
+            sendPaymentDataToAuthNet(response => {
+                var url = new URL('api/Orders', window.apiUrl).href;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        "paymentMethodNonceValue": response.opaqueData.dataValue,
+                        "paymentMethodNonceDescriptor": response.opaqueData.dataDescriptor
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+            });
+        }
+
+        function sendPaymentDataToAuthNet(onDone) {
+            var authData = {
+                clientKey: window.authNetConfig.clientKey,
+                apiLoginID: window.authNetConfig.apiLoginID
+            };
+
+            var cardData = {
+                cardNumber: document.getElementById("cardNumber").value,
+                month: document.getElementById("expMonth").value,
+                year: document.getElementById("expYear").value,
+                cardCode: document.getElementById("cardCode").value
+            };
+
+            /* var bankData = {
+                accountNumber: document.getElementById('accountNumber').value,
+                routingNumber: document.getElementById('routingNumber').value,
+                nameOnAccount: document.getElementById('nameOnAccount').value,
+                accountType: document.getElementById('accountType').value
+            }; */
+
+            var data = {
+                authData,
+                cardData
+                /* bankData: */
+            };
+
+            Accept.dispatchData(data, response => handleAuthNetResponse(response, onDone));
+        }
+
+        function handleAuthNetResponse(response, onDone) {
+            if (response.messages.resultCode === "Error") {
+                var i = 0;
+                while (i < response.messages.message.length) {
+                    console.log(
+                        response.messages.message[i].code + ": " +
+                        response.messages.message[i].text
+                    );
+                    i = i + 1;
+                }
+            } else {
+                onDone(response);
+            }
+        }
+    </script>
+}
