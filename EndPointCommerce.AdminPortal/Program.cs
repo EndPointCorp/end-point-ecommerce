@@ -70,6 +70,8 @@ public class Program
 
         var app = builder.Build();
 
+        app.UseRequestLocalization("en-US");
+
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
