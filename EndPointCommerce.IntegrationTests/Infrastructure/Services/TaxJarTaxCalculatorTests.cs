@@ -29,7 +29,7 @@ public class TaxJarTaxCalculatorTests : IClassFixture<DatabaseFixture>
         return config;
     }
 
-    [Fact(Skip = "Test case is disabled for now.")]
+    [Fact]
     public async Task CalculateTest()
     {
         await _database.WithTransaction(_dbContext, async () =>

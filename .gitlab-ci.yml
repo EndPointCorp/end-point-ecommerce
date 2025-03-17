@@ -27,7 +27,7 @@ dotnet test:
   script:
     - mkdir -p /images/category-images /images/product-images
     - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
-    - dotnet test
+    - dotnet test --filter 'FullyQualifiedName!=EndPointCommerce.IntegrationTests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
   services:
     - name: postgres:17.2-alpine
       alias: db
