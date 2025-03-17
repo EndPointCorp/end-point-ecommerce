@@ -68,7 +68,8 @@ public class Program
 
         builder.Services.AddWebApiDependencyInjectionServices();
 
-        builder.Services.AddHealthChecks();
+        builder.Services.AddHealthChecks()
+            .AddDbContextCheck<EndPointCommerceDbContext>();
 
         if (builder.Environment.IsDevelopment())
         {
