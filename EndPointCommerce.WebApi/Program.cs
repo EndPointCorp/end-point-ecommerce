@@ -68,6 +68,8 @@ public class Program
 
         builder.Services.AddWebApiDependencyInjectionServices();
 
+        builder.Services.AddHealthChecks();
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -92,6 +94,8 @@ public class Program
         app.MapGroup("/api/User").MapIdentityApi<User>();
 
         app.MapControllers();
+        
+        app.MapHealthChecks("/healthz");
 
         app.Run();
     }
