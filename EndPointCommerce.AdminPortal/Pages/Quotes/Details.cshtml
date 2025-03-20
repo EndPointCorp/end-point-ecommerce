@@ -5,10 +5,6 @@
     ViewData["Title"] = $"Quote Details";
 }
 
-@section styles {
-    <link rel="stylesheet" href="~/node_modules/simple-datatables/dist/style.css" />
-}
-
 <div class="container-fluid px-4">
     <form method="post">
         <div class="row py-4">
@@ -30,6 +26,5 @@
 </div>
 
 @section scripts {
-    <script src="~/node_modules/simple-datatables/dist/umd/simple-datatables.js"></script>
     <script src="~/js/quotes.form.js" asp-append-version="true"></script>
 }

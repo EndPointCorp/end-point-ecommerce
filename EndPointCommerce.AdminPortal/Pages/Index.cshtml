@@ -4,10 +4,6 @@
     ViewData["Title"] = "Dashboard";
 }
 
-@section styles {
-    <link rel="stylesheet" href="~/node_modules/simple-datatables/dist/style.css" />
-}
-
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
     <div class="row">
@@ -138,124 +134,14 @@
 </div>
 
 @section scripts {
-
-    <script src="~/node_modules/chart.js/dist/Chart.min.js"></script>
-    <script src="~/node_modules/simple-datatables/dist/umd/simple-datatables.js"></script>
-    <script src="~/js/dashboard.js" asp-append-version="true"></script>
-
     <script type="text/javascript">
-
-        // Set new default font family and font color to mimic Bootstrap's default styling
-        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-        Chart.defaults.global.defaultFontColor = '#292b2c';
-
-        // Orders chart and data
-        var ordersChartLabels = JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.OrdersChart.Select(x => x.Label)))');
-        var ordersChartValues = JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.OrdersChart.Select(x => x.Value)))');
-        var ctx = document.getElementById("ordersChart");
-        var myLineChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ordersChartLabels,
-            datasets: [{
-              label: "Orders",
-              lineTension: 0,
-              backgroundColor: "rgba(2,117,216,0.2)",
-              borderColor: "rgba(2,117,216,1)",
-              pointRadius: 5,
-              pointBackgroundColor: "rgba(2,117,216,1)",
-              pointBorderColor: "rgba(255,255,255,0.8)",
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: "rgba(2,117,216,1)",
-              pointHitRadius: 50,
-              pointBorderWidth: 2,
-              data: ordersChartValues,
-            }],
-          },
-          options: {
-            scales: {
-              xAxes: [{
-                time: {
-                  unit: 'date'
-                },
-                gridLines: {
-                  display: false
-                },
-                ticks: {
-                  maxTicksLimit: 7
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  min: 0,
-                  maxTicksLimit: 5
-                },
-                gridLines: {
-                  color: "rgba(0, 0, 0, .125)",
-                }
-              }],
-            },
-            legend: {
-              display: false
-            }
-          }
-        });
-
-
-        // Orders chart and data
-        var amountsChartLabels = JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.AmountsChart.Select(x => x.Label)))');
-        var amountsChartValues = JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.AmountsChart.Select(x => x.Value)))');
-        var ctx = document.getElementById("amountsChart");
-        var myLineChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: amountsChartLabels,
-            datasets: [{
-              label: "Amount",
-              lineTension: 0,
-              backgroundColor: "rgba(2,117,216,0.2)",
-              borderColor: "rgba(2,117,216,1)",
-              pointRadius: 5,
-              pointBackgroundColor: "rgba(2,117,216,1)",
-              pointBorderColor: "rgba(255,255,255,0.8)",
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: "rgba(2,117,216,1)",
-              pointHitRadius: 50,
-              pointBorderWidth: 2,
-              data: amountsChartValues,
-            }],
-          },
-          options: {
-            scales: {
-              xAxes: [{
-                time: {
-                  unit: 'date'
-                },
-                gridLines: {
-                  display: false
-                },
-                ticks: {
-                  maxTicksLimit: 7
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  min: 0,
-                  maxTicksLimit: 5
-                },
-                gridLines: {
-                  color: "rgba(0, 0, 0, .125)",
-                }
-              }],
-            },
-            legend: {
-              display: false
-            }
-          }
-        });
-
-
-
+        window.dashboardCharts = {
+          ordersChartLabels: JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.OrdersChart.Select(x => x.Label)))'),
+          ordersChartValues: JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.OrdersChart.Select(x => x.Value)))'),
+          amountsChartLabels: JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.AmountsChart.Select(x => x.Label)))'),
+          amountsChartValues: JSON.parse('@Html.Raw(Json.Serialize(Model.Dashboard.AmountsChart.Select(x => x.Value)))')
+        };
     </script>
 
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
 }

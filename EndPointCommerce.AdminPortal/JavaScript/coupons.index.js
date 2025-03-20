@@ -1,4 +1,7 @@
-﻿window.addEventListener('DOMContentLoaded', _event => {
+﻿import DataTable from 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+
+window.addEventListener('DOMContentLoaded', _event => {
     let url = location.protocol + '//' + location.host + location.pathname;
     let query = `?handler=Search`;
 

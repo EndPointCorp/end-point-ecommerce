@@ -1,18 +1,19 @@
-﻿window.addEventListener('DOMContentLoaded', _event => {
+﻿import DataTable from 'datatables.net-bs5';
+import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
+
+window.addEventListener('DOMContentLoaded', _event => {
     let url = location.protocol + '//' + location.host + location.pathname;
     let query = `?handler=Search`;
 
-    new DataTable('#table-orders', {
+    new DataTable('#table-customers', {
         ajax: `${url}${query}`,
         processing: true,
         serverSide: true,
         columns: [
-            { name: 'id', data: 'id' },
+            { name: 'name', data: 'name' },
+            { name: 'lastName', data: 'lastName' },
+            { name: 'email', data: 'email' },
             { name: 'dateCreated', data: 'dateCreated' },
-            { name: 'customerFullName', data: 'customerFullName' },
-            { name: 'statusName', data: 'statusName' },
-            { name: 'billingAddressStateName', data: 'billingAddressStateName' },
-            { name: 'total', data: 'total' },
             {
                 name: 'action',
                 sortable: false,

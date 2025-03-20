@@ -1,4 +1,6 @@
+import { DataTable } from 'simple-datatables';
+
 window.addEventListener('DOMContentLoaded', _event => {
     const datatablesSimple = document.getElementById('table-products');
-    new simpleDatatables.DataTable(datatablesSimple);
+    new DataTable(datatablesSimple);
 });

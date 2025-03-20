@@ -1,3 +1,6 @@
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
+
 window.addEventListener('DOMContentLoaded', _event => {
     const quill = new Quill('#product-description-editor', { theme: 'snow' });
 
