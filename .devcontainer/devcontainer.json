@@ -10,7 +10,9 @@
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
             "nodeGypDependencies": true,
-            "version": "lts",
+            "installYarnUsingApt": true,
+            "version": "22",
+            "pnpmVersion": "10",
             "nvmVersion": "latest"
         }
     },
@@ -24,7 +26,7 @@
                 "ms-dotnettools.csdevkit"
             ]
         }
-    },
+    }
 
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [5000, 5001, 5432],
