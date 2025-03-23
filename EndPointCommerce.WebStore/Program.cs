@@ -1,7 +1,16 @@
+using EndPointCommerce.WebStore.Api;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient<IApiClient, ApiClient>(client => {
+    client.BaseAddress = new Uri(
+        builder.Configuration["EndPointCommerceApiUrl"] ??
+            throw new InvalidOperationException("Connection string 'EndPointCommerceApiUrl' not found.")
+    );
+});
 
 var app = builder.Build();
 
