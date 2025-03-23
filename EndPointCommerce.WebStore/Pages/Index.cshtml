@@ -4,229 +4,209 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@* @section styles {
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true">
+} *@
 
-<div class="row">
-    <div class="col">
-        <button type="button" onclick="getProducts()">GET api/Products</button>
+<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Fancy Product</h5>
+                    <!-- Product price-->
+                    $40.00 - $80.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Sale badge-->
+            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Special Item</h5>
+                    <!-- Product reviews-->
+                    <div class="d-flex justify-content-center small text-warning mb-2">
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                    </div>
+                    <!-- Product price-->
+                    <span class="text-muted text-decoration-line-through">$20.00</span>
+                    $18.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Sale badge-->
+            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Sale Item</h5>
+                    <!-- Product price-->
+                    <span class="text-muted text-decoration-line-through">$50.00</span>
+                    $25.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Popular Item</h5>
+                    <!-- Product reviews-->
+                    <div class="d-flex justify-content-center small text-warning mb-2">
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                    </div>
+                    <!-- Product price-->
+                    $40.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Sale badge-->
+            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Sale Item</h5>
+                    <!-- Product price-->
+                    <span class="text-muted text-decoration-line-through">$50.00</span>
+                    $25.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Fancy Product</h5>
+                    <!-- Product price-->
+                    $120.00 - $280.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Sale badge-->
+            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Special Item</h5>
+                    <!-- Product reviews-->
+                    <div class="d-flex justify-content-center small text-warning mb-2">
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                    </div>
+                    <!-- Product price-->
+                    <span class="text-muted text-decoration-line-through">$20.00</span>
+                    $18.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <!-- Product image-->
+            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <!-- Product details-->
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <!-- Product name-->
+                    <h5 class="fw-bolder">Popular Item</h5>
+                    <!-- Product reviews-->
+                    <div class="d-flex justify-content-center small text-warning mb-2">
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                        <div class="bi-star-fill"></div>
+                    </div>
+                    <!-- Product price-->
+                    $40.00
+                </div>
+            </div>
+            <!-- Product actions-->
+            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-        <button type="button" onclick="postQuoteItem()">POST api/Quote/Items</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <button type="button" onclick="putQuote()">PUT api/Quote</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <button type="button" onclick="getQuote()">GET api/Quote</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <button type="button" onclick="postQuoteValidate()">POST api/Quote/Validate</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <form id="paymentForm">
-            <input type="text" name="cardNumber" id="cardNumber" placeholder="cardNumber"/> <br><br>
-            <input type="text" name="expMonth" id="expMonth" placeholder="expMonth"/> <br><br>
-            <input type="text" name="expYear" id="expYear" placeholder="expYear"/> <br><br>
-            <input type="text" name="cardCode" id="cardCode" placeholder="cardCode"/> <br><br>
-            <input type="hidden" name="dataValue" id="dataValue" />
-            <input type="hidden" name="dataDescriptor" id="dataDescriptor" />
 
-            <button type="button" onclick="postOrder()">POST api/Orders</button>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="@Model.AcceptJsUrl" charset="utf-8"></script>
-
-    <script>
-        window.apiUrl = '@Model.EndPointCommerceApiUrl';
-
-        window.authNetConfig = {
-            apiLoginID: '@Model.AuthNetLoginId',
-            clientKey: '@Model.AuthNetClientKey'
-        };
-    </script>
-
-    <script>
-        function getProducts() {
-            var url = new URL('api/Products', window.apiUrl).href;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        }
-
-        function postQuoteItem() {
-            var url = new URL('api/Quote/Items', window.apiUrl).href;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    "productId": 1,
-                    "quantity": 5
-                })
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        }
-
-        function putQuote() {
-            var url = new URL('api/Quote', window.apiUrl).href;
-
-            fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    "email": "test_user@email.com",
-                    "shippingAddress": {
-                        "name": "test_name",
-                        "lastName": "test_last_name",
-                        "street": "123 main st",
-                        "streetTwo": "no. 10",
-                        "city": "test_city",
-                        "stateId": 1,
-                        "zipCode": "12345",
-                        "phoneNumber": "1234567890"
-                    },
-                    "billingAddress": {
-                        "name": "test_name",
-                        "lastName": "test_last_name",
-                        "street": "123 main st",
-                        "streetTwo": "no. 10",
-                        "city": "test_city",
-                        "stateId": 1,
-                        "zipCode": "12345",
-                        "phoneNumber": "1234567890"
-                    }
-                })
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        }
-
-        function getQuote() {
-            var url = new URL('api/Quote', window.apiUrl).href;
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        }
-
-        function postQuoteValidate() {
-            var url = new URL('api/Quote/Validate', window.apiUrl).href;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-            })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
-        }
-
-        function postOrder() {
-            sendPaymentDataToAuthNet(response => {
-                var url = new URL('api/Orders', window.apiUrl).href;
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        "paymentMethodNonceValue": response.opaqueData.dataValue,
-                        "paymentMethodNonceDescriptor": response.opaqueData.dataDescriptor
-                    })
-                })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error(error));
-            });
-        }
-
-        function sendPaymentDataToAuthNet(onDone) {
-            var authData = {
-                clientKey: window.authNetConfig.clientKey,
-                apiLoginID: window.authNetConfig.apiLoginID
-            };
-
-            var cardData = {
-                cardNumber: document.getElementById("cardNumber").value,
-                month: document.getElementById("expMonth").value,
-                year: document.getElementById("expYear").value,
-                cardCode: document.getElementById("cardCode").value
-            };
-
-            /* var bankData = {
-                accountNumber: document.getElementById('accountNumber').value,
-                routingNumber: document.getElementById('routingNumber').value,
-                nameOnAccount: document.getElementById('nameOnAccount').value,
-                accountType: document.getElementById('accountType').value
-            }; */
-
-            var data = {
-                authData,
-                cardData
-                /* bankData: */
-            };
-
-            Accept.dispatchData(data, response => handleAuthNetResponse(response, onDone));
-        }
-
-        function handleAuthNetResponse(response, onDone) {
-            if (response.messages.resultCode === "Error") {
-                var i = 0;
-                while (i < response.messages.message.length) {
-                    console.log(
-                        response.messages.message[i].code + ": " +
-                        response.messages.message[i].text
-                    );
-                    i = i + 1;
-                }
-            } else {
-                onDone(response);
-            }
-        }
-    </script>
+@section scripts {
+    @* <script src="~/js/index.js" asp-append-version="true"></script> *@
 }
