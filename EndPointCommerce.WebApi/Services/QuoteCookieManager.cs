@@ -22,13 +22,9 @@ public class QuoteCookieManager : IQuoteCookieManager
     public int? GetQuoteIdFromCookie(HttpRequest request)
     {
         var quoteCookie = request.Cookies[COOKIE_NAME];
+        if (quoteCookie == null) return null;
 
-        int? quoteId = null;
-
-        if (quoteCookie != null)
-            quoteId = int.Parse(_protector.Unprotect(quoteCookie));
-
-        return quoteId;
+        return int.Parse(_protector.Unprotect(quoteCookie));
     }
 
     public void SetQuoteIdCookie(HttpResponse response, int quoteId)
