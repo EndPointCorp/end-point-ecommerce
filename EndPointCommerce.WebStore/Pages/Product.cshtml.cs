@@ -10,16 +10,31 @@ public class ProductModel : PageWithQuoteModel
 
     public Product Product { get; set; } = default!;
 
-    private readonly IApiClient _apiClient;
+    [BindProperty]
+    [Required, Range(1, int.MaxValue)]
+    public int ProductQuantity { get; set; } = 1;
 
-    public ProductModel(IApiClient apiClient)
-    {
         _apiClient = apiClient;
     }
 
     public async Task OnGetAsync(int id)
     {
         await LoadData(id);
+    }
+
+    public async Task<IActionResult> OnPostAddToQuoteAsync(int productId)
+    {
+        if (!ModelState.IsValid)
+        {
+            await LoadData(productId);
+            return Page();
+        }
+
+        var quoteItem = await _apiClient.PostQuoteItem(productId, ProductQuantity, GetQuoteCookie());
+        if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
+
+
+        return RedirectToPage("/Product", new { Id = productId });
     }
 
     private async Task LoadData(int productId)
