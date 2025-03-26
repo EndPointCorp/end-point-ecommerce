@@ -1,10 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 using EndPointCommerce.WebStore.Api;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EndPointCommerce.WebStore.Pages;
 
-public class ProductModel : PageModel
+public class ProductModel : PageWithQuoteModel
 {
+    public ProductModel(IApiClient apiClient) : base(apiClient) { }
+
+    public Product Product { get; set; } = default!;
+
     private readonly IApiClient _apiClient;
 
     public ProductModel(IApiClient apiClient)
@@ -14,6 +19,12 @@ public class ProductModel : PageModel
 
     public async Task OnGetAsync(int id)
     {
+        await LoadData(id);
+    }
+
+    private async Task LoadData(int productId)
+    {
         var product = await _apiClient.GetProduct(id);
+        Product = await _apiClient.GetProduct(productId);
     }
 }
