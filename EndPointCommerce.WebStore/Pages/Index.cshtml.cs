@@ -9,8 +9,8 @@ public class IndexModel : PageWithQuoteModel
 
     public List<Product> Products { get; set; } = [];
 
-        _apiClient = apiClient;
-    }
+    [TempData]
+    public string? SuccessAlertMessage { get; set; }
 
     public async Task OnGetAsync()
     {

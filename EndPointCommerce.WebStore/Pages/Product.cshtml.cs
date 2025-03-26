@@ -14,8 +14,8 @@ public class ProductModel : PageWithQuoteModel
     [Required, Range(1, int.MaxValue)]
     public int ProductQuantity { get; set; } = 1;
 
-        _apiClient = apiClient;
-    }
+    [TempData]
+    public string? SuccessAlertMessage { get; set; }
 
     public async Task OnGetAsync(int id)
     {
@@ -33,6 +33,7 @@ public class ProductModel : PageWithQuoteModel
         var quoteItem = await _apiClient.PostQuoteItem(productId, ProductQuantity, GetQuoteCookie());
         if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
 
+        SuccessAlertMessage = "Product added to cart";
 
         return RedirectToPage("/Product", new { Id = productId });
     }

@@ -12,6 +12,14 @@
 <body>
     <partial name="_NavBar.cshtml" />
 
+    @if (TempData.ContainsKey("SuccessAlertMessage"))
+    {
+        <div class="alert alert-success alert-dismissible fade show fixed-bottom text-center m-2" role="alert">
+            @TempData["SuccessAlertMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     @RenderBody()
 
     <partial name="_Footer.cshtml" />
