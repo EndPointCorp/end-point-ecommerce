@@ -24,7 +24,7 @@ public class ProductModel : PageWithQuoteModel
 
     private async Task LoadData(int productId)
     {
-        var product = await _apiClient.GetProduct(id);
+        await FetchQuote();
         Product = await _apiClient.GetProduct(productId);
     }
 }

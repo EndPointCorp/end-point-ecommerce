@@ -14,6 +14,7 @@ public class IndexModel : PageWithQuoteModel
 
     public async Task OnGetAsync()
     {
+        await FetchQuote();
         Products = await _apiClient.GetProducts();
     }
 
@@ -22,7 +23,7 @@ public class IndexModel : PageWithQuoteModel
         var quoteItem = await _apiClient.PostQuoteItem(productId, 1, GetQuoteCookie());
         if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
 
-        var products = await _apiClient.GetProducts();
+        SuccessAlertMessage = "Product added to cart";
 
         return RedirectToPage("/Index");
     }
