@@ -1,9 +1,20 @@
 using EndPointCommerce.WebStore.Api;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services
+    .AddDataProtection()
+    .SetApplicationName("end-point-commerce-web-store")
+    .PersistKeysToFileSystem(
+        new DirectoryInfo(
+            builder.Configuration["WebStoreDataProtectionKeysPath"] ??
+                throw new InvalidOperationException("Config setting 'WebStoreDataProtectionKeysPath' not found.")
+        )
+    );
 
 builder.Services.AddDistributedMemoryCache();
 
