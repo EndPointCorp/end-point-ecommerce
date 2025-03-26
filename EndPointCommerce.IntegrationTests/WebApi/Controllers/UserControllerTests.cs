@@ -198,7 +198,7 @@ public class UserControllerTests : IntegrationTestFixture
             // Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var errorMessage = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Passwords must be at least 8 characters. Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
+            Assert.Contains("Passwords must be at least 6 characters. Passwords must have at least one non alphanumeric character. Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
         });
     }
 
