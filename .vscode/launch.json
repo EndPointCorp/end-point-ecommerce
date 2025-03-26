@@ -12,6 +12,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj"
+        },
+        {
+            "name": "Debug WebStore",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/EndPointCommerce.WebStore/EndPointCommerce.WebStore.csproj"
         }
     ]
 }
