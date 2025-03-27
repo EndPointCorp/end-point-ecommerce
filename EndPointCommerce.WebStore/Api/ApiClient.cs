@@ -7,6 +7,7 @@ public interface IApiClient
     Task<List<Category>> GetCategories();
     Task<List<Product>> GetProducts();
     Task<Product> GetProduct(int id);
+    Task<List<Product>> GetProductsByCategoryId(int id);
     Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie);
     Task<ResponseWithCookie<QuoteItem>> PostQuoteItem(int productId, int quantity, string? quoteCookie);
 }
@@ -57,6 +58,14 @@ public class ApiClient : IApiClient, IDisposable
         response.EnsureSuccessStatusCode();
 
         return (await response.Content.ReadFromJsonAsync<Product>())!;
+    }
+
+    public async Task<List<Product>> GetProductsByCategoryId(int id)
+    {
+        using var response = await _httpClient.GetAsync($"api/Products/CategoryId/{id}");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Product>>())!;
     }
 
     public async Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie)
