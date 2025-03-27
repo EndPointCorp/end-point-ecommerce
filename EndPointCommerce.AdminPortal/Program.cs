@@ -63,6 +63,9 @@ public class Program
 
         builder.Services.AddAdminPortalDependencyInjectionServices();
 
+        builder.Services.AddHealthChecks()
+            .AddDbContextCheck<EndPointCommerceDbContext>();
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -111,6 +114,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapRazorPages();
+
+        app.MapHealthChecks("/healthz");
 
         app.Run();
     }
