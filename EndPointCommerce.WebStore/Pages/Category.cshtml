@@ -1,4 +1,5 @@
 @page "{id:int}"
+@using EndPointCommerce.WebStore.ViewModels
 @model CategoryModel
 @{
     ViewData["Title"] = Model.Category.Name;
@@ -9,70 +10,18 @@
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @foreach (var product in Model.Products)
             {
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        @if (product.IsDiscounted)
+                @await Html.PartialAsync(
+                    "Shared/_ProductCard",
+                    new ProductCardViewModel
+                    (
+                        Product: product,
+                        AddToCartRouteData: new()
                         {
-                            <!-- Sale badge-->
-                            <div
-                                class="badge bg-dark text-white position-absolute"
-                                style="top: 0.5rem; right: 0.5rem"
-                            >
-                                Sale
-                            </div>
+                            { "productId", product.Id.ToString() },
+                            { "categoryId", Model.Category.Id.ToString() }
                         }
-
-                        <!-- Product image-->
-                        @if (!string.IsNullOrEmpty(product.ThumbnailImageUrl))
-                        {
-                            <img class="card-img-top" src="@product.ThumbnailImageUrl" alt="@product.Name" />
-                        }
-                        else
-                        {
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        }
-
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">
-                                    <a asp-page="./Product" asp-route-id="@product.Id">
-                                        @product.Name
-                                    </a>
-                                </h5>
-
-                                <!-- Product price-->
-                                @if (product.IsDiscounted)
-                                {
-                                    <span class="text-muted text-decoration-line-through">$@product.BasePrice</span>
-                                    <span>$@product.DiscountedPrice</span>
-                                }
-                                else
-                                {
-                                    <span>$@product.BasePrice</span>
-                                }
-                            </div>
-                        </div>
-
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <form method="post">
-                                    <button
-                                        type="submit"
-                                        asp-page-handler="AddToQuote"
-                                        asp-route-productId="@product.Id"
-                                        asp-route-categoryId="@Model.Category.Id"
-                                        class="btn btn-outline-dark mt-auto"
-                                    >
-                                        Add to cart
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    )
+                );
             }
         </div>
     </div>
