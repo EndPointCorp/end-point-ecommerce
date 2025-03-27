@@ -1,3 +1,5 @@
+@using EndPointCommerce.WebStore.Api
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
         <a asp-page="./Index" class="navbar-brand">End Point Commerce</a>
@@ -18,9 +20,17 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a asp-page="./Index" class="dropdown-item">All Products</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        @* TODO: Add links per category here *@
-                        <li><a asp-page="./Index" class="dropdown-item">Popular Items</a></li>
-                        <li><a asp-page="./Index" class="dropdown-item">New Arrivals</a></li>
+                        @{
+                            var categories = ViewData["Categories"] as List<Category> ?? [];
+                            foreach (var category in categories)
+                            {
+                                <li>
+                                    <a asp-page="./Category" asp-route-id="@category.Id" class="dropdown-item">
+                                        @category.Name
+                                    </a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </li>
             </ul>

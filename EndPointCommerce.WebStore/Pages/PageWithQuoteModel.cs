@@ -14,10 +14,18 @@ public abstract class PageWithQuoteModel : PageModel
         _apiClient = apiClient;
     }
 
+    [ViewData]
+    public List<Category> Categories { get; set; } = [];
+
     public Quote? Quote { get; set; }
 
     [ViewData]
     public int QuoteItemCount { get; set; }
+
+    protected async Task FetchCategories()
+    {
+        Categories = (await _apiClient.GetCategories()).OrderBy(c => c.Name).ToList();
+    }
 
     protected async Task FetchQuote()
     {

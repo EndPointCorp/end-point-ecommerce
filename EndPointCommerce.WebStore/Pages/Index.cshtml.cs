@@ -14,6 +14,7 @@ public class IndexModel : PageWithQuoteModel
 
     public async Task OnGetAsync()
     {
+        await FetchCategories();
         await FetchQuote();
         Products = await _apiClient.GetProducts();
     }

@@ -4,6 +4,7 @@ namespace EndPointCommerce.WebStore.Api;
 
 public interface IApiClient
 {
+    Task<List<Category>> GetCategories();
     Task<List<Product>> GetProducts();
     Task<Product> GetProduct(int id);
     Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie);
@@ -33,6 +34,14 @@ public class ApiClient : IApiClient, IDisposable
     }
 
     public void Dispose() => _httpClient?.Dispose();
+
+    public async Task<List<Category>> GetCategories()
+    {
+        using var response = await _httpClient.GetAsync("api/Categories");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Category>>())!;
+    }
 
     public async Task<List<Product>> GetProducts()
     {

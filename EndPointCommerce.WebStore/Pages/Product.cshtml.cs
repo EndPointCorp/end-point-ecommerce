@@ -40,6 +40,7 @@ public class ProductModel : PageWithQuoteModel
 
     private async Task LoadData(int productId)
     {
+        await FetchCategories();
         await FetchQuote();
         Product = await _apiClient.GetProduct(productId);
     }
