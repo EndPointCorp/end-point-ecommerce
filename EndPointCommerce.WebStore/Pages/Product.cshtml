@@ -21,7 +21,7 @@
                     <img
                         class="card-img-top mb-5 mb-md-0"
                         src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
-                        alt="..."
+                        alt="@Model.Product.Name"
                     />
                 }
             </div>
@@ -44,24 +44,24 @@
                 </p>
 
                 <form method="post">
-                <div class="d-flex">
-                        <input
-                            asp-for="ProductQuantity"
-                            type="number"
-                            min="1"
-                            class="form-control text-center me-3"
-                            style="max-width: 5rem"
-                        />
-                        <button
-                            type="submit"
-                            asp-page-handler="AddToQuote"
-                            asp-route-productId="@Model.Product.Id"
-                            class="btn btn-outline-dark flex-shrink-0"
-                        >
-                        <i class="bi-cart-fill me-1"></i>
-                        Add to cart
-                    </button>
-                </div>
+                    <div class="d-flex">
+                            <input
+                                asp-for="ProductQuantity"
+                                type="number"
+                                min="1"
+                                class="form-control text-center me-3"
+                                style="max-width: 5rem"
+                            />
+                            <button
+                                type="submit"
+                                asp-page-handler="AddToQuote"
+                                asp-route-productId="@Model.Product.Id"
+                                class="btn btn-outline-dark flex-shrink-0"
+                            >
+                            <i class="bi-cart-fill me-1"></i>
+                            Add to cart
+                        </button>
+                    </div>
 
                     <div>
                         <span asp-validation-for="ProductQuantity" class="text-danger"></span>

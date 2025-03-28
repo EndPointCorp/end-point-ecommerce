@@ -17,11 +17,19 @@
         <!-- Product image-->
         @if (!string.IsNullOrEmpty(Model.Product.ThumbnailImageUrl))
         {
-            <img class="card-img-top" src="@Model.Product.ThumbnailImageUrl" alt="@Model.Product.Name" />
+            <img
+                class="card-img-top"
+                src="@Model.Product.ThumbnailImageUrl"
+                alt="@Model.Product.Name"
+            />
         }
         else
         {
-            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+            <img
+                class="card-img-top"
+                src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                alt="@Model.Product.Name"
+            />
         }
 
         <!-- Product details-->
