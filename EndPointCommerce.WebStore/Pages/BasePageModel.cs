@@ -34,10 +34,10 @@ public abstract class BasePageModel : PageModel
     {
         try
         {
-            var quote = await _apiClient.GetQuote(GetQuoteCookie());
-            if (quote.Cookie != null) SetQuoteCookie(quote.Cookie);
+            var response = await _apiClient.GetQuote(GetQuoteCookie());
+            if (response.Cookie != null) SetQuoteCookie(response.Cookie);
 
-            Quote = quote.Body;
+            Quote = response.Body;
             QuoteItemCount = Quote?.Items.Count ?? 0;
         }
         catch (HttpRequestException ex)
@@ -48,8 +48,8 @@ public abstract class BasePageModel : PageModel
 
     protected async Task AddItemToQuote(int productId, int quantity)
     {
-        var quoteItem = await _apiClient.PostQuoteItem(productId, quantity, GetQuoteCookie());
-        if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
+        var response = await _apiClient.PostQuoteItem(productId, quantity, GetQuoteCookie());
+        if (response.Cookie != null) SetQuoteCookie(response.Cookie);
 
         SuccessAlertMessage = "Product added to cart.";
     }
