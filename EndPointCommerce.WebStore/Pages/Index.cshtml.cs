@@ -3,14 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EndPointCommerce.WebStore.Pages;
 
-public class IndexModel : PageWithQuoteModel
+public class IndexModel : BasePageModel
 {
     public IndexModel(IApiClient apiClient) : base(apiClient) { }
 
     public List<Product> Products { get; set; } = [];
-
-    [TempData]
-    public string? SuccessAlertMessage { get; set; }
 
     public async Task OnGetAsync()
     {
@@ -21,10 +18,7 @@ public class IndexModel : PageWithQuoteModel
 
     public async Task<IActionResult> OnPostAddToQuoteAsync(int productId)
     {
-        var quoteItem = await _apiClient.PostQuoteItem(productId, 1, GetQuoteCookie());
-        if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
-
-        SuccessAlertMessage = "Product added to cart";
+        await AddItemToQuote(productId, 1);
 
         return RedirectToPage("/Index");
     }

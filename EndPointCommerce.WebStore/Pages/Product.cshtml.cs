@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EndPointCommerce.WebStore.Pages;
 
-public class ProductModel : PageWithQuoteModel
+public class ProductModel : BasePageModel
 {
     public ProductModel(IApiClient apiClient) : base(apiClient) { }
 
@@ -13,9 +13,6 @@ public class ProductModel : PageWithQuoteModel
     [BindProperty]
     [Required, Range(1, int.MaxValue)]
     public int ProductQuantity { get; set; } = 1;
-
-    [TempData]
-    public string? SuccessAlertMessage { get; set; }
 
     public async Task OnGetAsync(int id)
     {
@@ -30,10 +27,7 @@ public class ProductModel : PageWithQuoteModel
             return Page();
         }
 
-        var quoteItem = await _apiClient.PostQuoteItem(productId, ProductQuantity, GetQuoteCookie());
-        if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
-
-        SuccessAlertMessage = "Product added to cart";
+        await AddItemToQuote(productId, ProductQuantity);
 
         return RedirectToPage("/Product", new { Id = productId });
     }

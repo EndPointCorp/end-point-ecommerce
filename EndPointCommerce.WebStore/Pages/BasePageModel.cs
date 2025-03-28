@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EndPointCommerce.WebStore.Pages;
 
-public abstract class PageWithQuoteModel : PageModel
+public abstract class BasePageModel : PageModel
 {
     protected readonly IApiClient _apiClient;
 
-    public PageWithQuoteModel(IApiClient apiClient)
+    public BasePageModel(IApiClient apiClient)
     {
         _apiClient = apiClient;
     }
@@ -21,6 +21,9 @@ public abstract class PageWithQuoteModel : PageModel
 
     [ViewData]
     public int QuoteItemCount { get; set; }
+
+    [TempData]
+    public string? SuccessAlertMessage { get; set; }
 
     protected async Task FetchCategories()
     {
@@ -41,6 +44,14 @@ public abstract class PageWithQuoteModel : PageModel
         {
             if (ex.StatusCode != HttpStatusCode.NotFound) throw;
         }
+    }
+
+    protected async Task AddItemToQuote(int productId, int quantity)
+    {
+        var quoteItem = await _apiClient.PostQuoteItem(productId, quantity, GetQuoteCookie());
+        if (quoteItem.Cookie != null) SetQuoteCookie(quoteItem.Cookie);
+
+        SuccessAlertMessage = "Product added to cart.";
     }
 
     private const string QuoteCookieSessionKey = "QUOTE_COOKIE_SESSION_KEY";
