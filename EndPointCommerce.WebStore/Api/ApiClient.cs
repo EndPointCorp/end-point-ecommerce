@@ -10,6 +10,8 @@ public interface IApiClient
     Task<List<Product>> GetProductsByCategoryId(int id);
     Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie);
     Task<ResponseWithCookie<QuoteItem>> PostQuoteItem(int productId, int quantity, string? quoteCookie);
+    Task<ResponseWithCookie<QuoteItem>> PutQuoteItem(int id, int quantity, string? quoteCookie);
+    Task<ResponseWithCookie<NoContent>> DeleteQuoteItem(int id, string? quoteCookie);
 }
 
 public class ResponseWithCookie<T>
@@ -89,6 +91,31 @@ public class ApiClient : IApiClient, IDisposable
             response.EnsureSuccessStatusCode();
 
             return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
+        });
+    }
+
+    public async Task<ResponseWithCookie<QuoteItem>> PutQuoteItem(
+        int id, int quantity, string? quoteCookie
+    ) {
+        return await WithCookie(quoteCookie, async httpClient => {
+            using var response = await httpClient.PutAsJsonAsync(
+                $"api/Quote/Items/{id}",
+                new { Quantity = quantity }
+            );
+            response.EnsureSuccessStatusCode();
+
+            return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
+        });
+    }
+
+    public async Task<ResponseWithCookie<NoContent>> DeleteQuoteItem(
+        int id, string? quoteCookie
+    ) {
+        return await WithCookie(quoteCookie, async httpClient => {
+            using var response = await httpClient.DeleteAsync($"api/Quote/Items/{id}");
+            response.EnsureSuccessStatusCode();
+
+            return new NoContent();
         });
     }
 

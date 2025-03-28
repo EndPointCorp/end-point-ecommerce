@@ -34,15 +34,15 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
-                <button class="btn btn-outline-dark" type="submit">
+            <div class="d-flex">
+                <a asp-page="./Cart" class="btn btn-outline-dark" role="button">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill">
                         @ViewData["QuoteItemCount"]
                     </span>
-                </button>
-            </form>
+                </a>
+            </div>
         </div>
     </div>
 </nav>

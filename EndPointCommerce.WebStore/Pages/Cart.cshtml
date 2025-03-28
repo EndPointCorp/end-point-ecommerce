@@ -1,0 +1,95 @@
+﻿@page
+@model CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        @if (Model.Quote == null || Model.Quote.Items.Count == 0)
+        {
+            <div class="text-center">
+                <h2 class="display-5 fw-bolder">Your cart is empty</h2>
+                <p class="lead">
+                    Add some <a asp-page="/Index">products</a> to your cart to get started!
+                </p>
+            </div>
+        }
+        else
+        {
+            <h1>Shopping Cart</h1>
+
+            @foreach (var item in Model.Quote.Items)
+            {
+                <div class="card mb-3 p-3">
+                    <div class="row g-0">
+                        <div class="col-md-4 text-center">
+                            @if (!string.IsNullOrEmpty(item.Product.ThumbnailImageUrl))
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="@item.Product.ThumbnailImageUrl"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                            else
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="https://dummyimage.com/300x300/dee2e6/6c757d.jpg"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text fs-4">@item.Product.Name</p>
+                                <p class="card-text">SKU: @item.Product.Sku</p>
+                                <p class="card-text">$@item.Total</p>
+
+                                <form method="post">
+                                    <div class="d-flex">
+                                        <input
+                                            name="quantity"
+                                            value="@item.Quantity"
+                                            type="number"
+                                            min="1"
+                                            class="form-control text-center me-3"
+                                            style="max-width: 5rem"
+                                        />
+                                        <button
+                                            type="submit"
+                                            asp-page-handler="UpdateItem"
+                                            asp-route-itemId="@item.Id"
+                                            class="btn btn-outline-success flex-shrink-0 me-3"
+                                        >
+                                            <i class="bi bi-cart-check-fill me-1"></i>
+                                            Update
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            asp-page-handler="RemoveItem"
+                                            asp-route-itemId="@item.Id"
+                                            class="btn btn-outline-danger flex-shrink-0 me-3"
+                                        >
+                                            <i class="bi bi-trash-fill me-1"></i>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-end">
+                <h2>Subtotal: $@Model.Quote.Subtotal</h2>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a asp-page="/Checkout" class="btn btn-outline-dark">Proceed to Checkout</a>
+            </div>
+        }
+    </div>
+</section>
