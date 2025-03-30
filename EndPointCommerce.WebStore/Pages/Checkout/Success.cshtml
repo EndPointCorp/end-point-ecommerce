@@ -1,0 +1,13 @@
+﻿@page
+@model Checkout.SuccessModel
+@{
+    ViewData["Title"] = "Thank you for your order!";
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1>Order Summary</h1>
+
+        Thank you for your order! Your order ID is <strong>@Model.OrderId</strong>.
+    </div>
+</section>
