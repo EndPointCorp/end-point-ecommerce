@@ -9,6 +9,7 @@ public class CartModel : BasePageModel
 
     public async Task OnGetAsync()
     {
+        await FetchCategories();
         await FetchQuote();
     }
 
