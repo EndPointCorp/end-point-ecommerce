@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using EndPointCommerce.WebStore.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EndPointCommerce.WebStore.Pages.Checkout;
@@ -56,8 +55,7 @@ public class ShippingModel : BasePageModel
         var response = await _apiClient.PutQuote(Email, ShippingAddress, BillingAddress, GetQuoteCookie());
         if (response.Cookie != null) SetQuoteCookie(response.Cookie);
 
-        // return RedirectToPage("/Checkout/Payment");
-        return RedirectToPage("/Checkout/Shipping");
+        return RedirectToPage("/Checkout/Payment");
     }
 
     private async Task FetchStates()
