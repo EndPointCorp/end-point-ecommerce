@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model CartModel
 @{
     ViewData["Title"] = "Cart";
@@ -6,7 +6,7 @@
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        @if (Model.Quote == null || Model.Quote.Items.Count == 0)
+        @if (Model.QuoteIsEmpty)
         {
             <div class="text-center">
                 <h2 class="display-5 fw-bolder">Your cart is empty</h2>
@@ -19,7 +19,7 @@
         {
             <h1>Shopping Cart</h1>
 
-            @foreach (var item in Model.Quote.Items)
+            @foreach (var item in Model.Quote!.Items)
             {
                 <div class="card mb-3 p-3">
                     <div class="row g-0">

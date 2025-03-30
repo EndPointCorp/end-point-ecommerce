@@ -22,6 +22,8 @@ public abstract class BasePageModel : PageModel
     [ViewData]
     public int QuoteItemCount { get; set; }
 
+    public bool QuoteIsEmpty => Quote == null || Quote.Items.Count == 0;
+
     [TempData]
     public string? SuccessAlertMessage { get; set; }
 
