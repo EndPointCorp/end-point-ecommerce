@@ -4,11 +4,13 @@ namespace EndPointCommerce.WebStore.Api;
 
 public interface IApiClient
 {
+    Task<List<State>> GetStates();
     Task<List<Category>> GetCategories();
     Task<List<Product>> GetProducts();
     Task<Product> GetProduct(int id);
     Task<List<Product>> GetProductsByCategoryId(int id);
     Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie);
+    Task<ResponseWithCookie<NoContent>> PutQuote(string email, Address shippingAddress, Address billingAddress, string? quoteCookie);
     Task<ResponseWithCookie<QuoteItem>> PostQuoteItem(int productId, int quantity, string? quoteCookie);
     Task<ResponseWithCookie<QuoteItem>> PutQuoteItem(int id, int quantity, string? quoteCookie);
     Task<ResponseWithCookie<NoContent>> DeleteQuoteItem(int id, string? quoteCookie);
@@ -37,6 +39,14 @@ public class ApiClient : IApiClient, IDisposable
     }
 
     public void Dispose() => _httpClient?.Dispose();
+
+    public async Task<List<State>> GetStates()
+    {
+        using var response = await _httpClient.GetAsync("api/States");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<State>>())!;
+    }
 
     public async Task<List<Category>> GetCategories()
     {
@@ -77,6 +87,25 @@ public class ApiClient : IApiClient, IDisposable
             response.EnsureSuccessStatusCode();
 
             return (await response.Content.ReadFromJsonAsync<Quote>())!;
+        });
+    }
+
+    public async Task<ResponseWithCookie<NoContent>> PutQuote(
+        string email, Address shippingAddress, Address billingAddress, string? quoteCookie
+    ) {
+        return await WithCookie(quoteCookie, async httpClient => {
+            using var response = await httpClient.PutAsJsonAsync(
+                "api/Quote",
+                new
+                {
+                    Email = email,
+                    ShippingAddress = shippingAddress,
+                    BillingAddress = billingAddress
+                }
+            );
+            response.EnsureSuccessStatusCode();
+
+            return new NoContent();
         });
     }
 
