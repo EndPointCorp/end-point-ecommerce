@@ -15,8 +15,8 @@ public class CartModel : BasePageModel
 
     public async Task<IActionResult> OnPostUpdateItemAsync(int itemId, int quantity)
     {
-        var response = await _apiClient.PutQuoteItem(itemId, quantity, GetQuoteCookie());
-        if (response.Cookie != null) SetQuoteCookie(response.Cookie);
+        var response = await _apiClient.PutQuoteItem(itemId, quantity, QuoteCookie);
+        if (response.Cookie != null) QuoteCookie = response.Cookie;
 
         SuccessAlertMessage = "Item updated.";
 
@@ -25,8 +25,8 @@ public class CartModel : BasePageModel
 
     public async Task<IActionResult> OnPostRemoveItemAsync(int itemId)
     {
-        var response = await _apiClient.DeleteQuoteItem(itemId, GetQuoteCookie());
-        if (response.Cookie != null) SetQuoteCookie(response.Cookie);
+        var response = await _apiClient.DeleteQuoteItem(itemId, QuoteCookie);
+        if (response.Cookie != null) QuoteCookie = response.Cookie;
 
         SuccessAlertMessage = "Item removed.";
 

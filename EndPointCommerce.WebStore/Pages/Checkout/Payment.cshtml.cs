@@ -54,7 +54,7 @@ public class PaymentModel : BasePageModel
 
         try
         {
-            await _apiClient.PostQuoteValidate(GetQuoteCookie());
+            await _apiClient.PostQuoteValidate(QuoteCookie);
         }
         catch
         {
@@ -67,8 +67,12 @@ public class PaymentModel : BasePageModel
         var response = await _apiClient.PostOrder(
             PaymentMethodNonceValue,
             PaymentMethodNonceDescriptor,
-            GetQuoteCookie()
+            QuoteCookie
         );
+
+        ClearQuoteCookie();
+
+        Order = response.Body;
 
         return RedirectToPage("/Checkout/Success", new { orderId = response.Body.Id });
     }

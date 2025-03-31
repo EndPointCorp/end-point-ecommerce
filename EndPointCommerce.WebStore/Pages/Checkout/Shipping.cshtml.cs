@@ -9,8 +9,6 @@ public class ShippingModel : BasePageModel
 {
     public ShippingModel(IApiClient apiClient) : base(apiClient) { }
 
-    public IEnumerable<SelectListItem> States { get; set; } = [];
-
     [BindProperty]
     [Required]
     [EmailAddress]
@@ -52,17 +50,10 @@ public class ShippingModel : BasePageModel
             return Page();
         }
 
-        var response = await _apiClient.PutQuote(Email, ShippingAddress, BillingAddress, GetQuoteCookie());
-        if (response.Cookie != null) SetQuoteCookie(response.Cookie);
+        var response = await _apiClient.PutQuote(Email, ShippingAddress, BillingAddress, QuoteCookie);
+        if (response.Cookie != null) QuoteCookie = response.Cookie;
 
         return RedirectToPage("/Checkout/Payment");
-    }
-
-    private async Task FetchStates()
-    {
-        States = (await _apiClient.GetStates())
-            .OrderBy(c => c.Name)
-            .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name });
     }
 
     private void ResolveBillingAddress()

@@ -159,6 +159,7 @@ public class ApiClient : IApiClient, IDisposable
             return new NoContent();
         });
     }
+
     public async Task<ResponseWithCookie<Order>> PostOrder(
         string paymentMethodNonceValue, string paymentMethodNonceDescriptor, string? quoteCookie
     ) {

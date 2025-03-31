@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using EndPointCommerce.WebStore.Api;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +7,18 @@ public class SuccessModel : BasePageModel
 {
     public SuccessModel(IApiClient apiClient) : base(apiClient) { }
 
-    public int OrderId { get; set; } = default!;
+    public string? ShippingAddressState { get; set; }
+    public string? BillingAddressState { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(int orderId)
+    public async Task<IActionResult> OnGetAsync()
     {
-        await FetchCategories();
+        if (Order == null) return RedirectToPage("/Cart");
 
-        OrderId = orderId;
+        await FetchCategories();
+        await FetchStates();
+
+        ShippingAddressState = States.FirstOrDefault(s => s.Value == Order.ShippingAddress.StateId.ToString())?.Text;
+        BillingAddressState = States.FirstOrDefault(s => s.Value == Order.BillingAddress.StateId.ToString())?.Text;
 
         return Page();
     }
