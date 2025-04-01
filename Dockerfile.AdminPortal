@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends nodejs
-RUN npm install -g pnpm@8.15.5
+RUN npm install -g pnpm@10.7.1
 
 WORKDIR /source
 
@@ -44,5 +44,4 @@ RUN dotnet publish -c release -o /app --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
 COPY --from=build /app ./
-RUN mkdir -p /images/category-images /images/product-images
 ENTRYPOINT ["dotnet", "EndPointCommerce.AdminPortal.dll"]
