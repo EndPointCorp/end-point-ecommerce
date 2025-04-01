@@ -29,6 +29,9 @@ services:
       "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
       dotnet EndPointCommerce.AdminPortal.dll"
     ]
+    healthcheck:
+      test: 'curl -f -LI http://localhost:8080/healthz'
+      start_period: 30s      
     depends_on:
       db:
         condition: service_healthy
@@ -72,6 +75,9 @@ services:
       "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
       dotnet EndPointCommerce.WebApi.dll"
     ]
+    healthcheck:
+      test: 'curl -f -LI http://localhost:8080/healthz'
+      start_period: 30s
     depends_on:
       db:
         condition: service_healthy
