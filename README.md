@@ -183,7 +183,7 @@ The default username is `epadmin` and the default password is `Password123`.
 
 Updating an existing deployment with an updated version more or less follows the steps outlined above, assuming you haven't made significant modifications to the `compose.yml` to suit your particular environment.
 
-#### Stop the services
+#### 1. Stop the services
 
 Stop everything that is running currently:
 
@@ -191,7 +191,7 @@ Stop everything that is running currently:
 docker compose down
 ```
 
-#### Pull your changes
+#### 2. Pull your changes
 
 Either run `git pull` or re-copy your updates to your deployment environment however you prefer in your particular environment.
 
@@ -203,7 +203,7 @@ Now start everything back up again and re-build updated images (unless you have 
 docker compose up -d --build
 ```
 
-#### Apply database migrations
+#### 3. Apply database migrations
 
 If your update includes any database migrations, you should run them now:
 
