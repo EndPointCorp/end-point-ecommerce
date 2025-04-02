@@ -5,6 +5,7 @@ using EndPointCommerce.Infrastructure.Startup;
 using EndPointCommerce.WebApi.Startup;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace EndPointCommerce.WebApi;
 
@@ -75,8 +76,17 @@ public class Program
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         }
+        
+        builder.Host.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration)
+        );
 
         var app = builder.Build();
+
+        app.UseSerilogRequestLogging(opts =>
+        {
+            opts.GetLevel = LogHelper.ExcludeHealthChecks;
+        });
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

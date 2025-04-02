@@ -1,10 +1,11 @@
-using Microsoft.Extensions.FileProviders;
+using EndPointCommerce.AdminPortal.Startup;
 using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.Infrastructure.Data;
 using EndPointCommerce.Infrastructure.Startup;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
-using EndPointCommerce.AdminPortal.Startup;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
+using Serilog;
 
 namespace EndPointCommerce.AdminPortal;
 
@@ -70,8 +71,17 @@ public class Program
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         }
+        
+        builder.Host.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration)
+        );
 
         var app = builder.Build();
+
+        app.UseSerilogRequestLogging(opts =>
+        {
+            opts.GetLevel = LogHelper.ExcludeHealthChecks;
+        });
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
