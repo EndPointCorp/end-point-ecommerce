@@ -1,0 +1,131 @@
+# If you need more help, visit the Docker compose reference guide at https://docs.docker.com/compose/compose-file/
+# For examples, see the Awesome Compose repository: https://github.com/docker/awesome-compose
+x-logging: &default-logging
+  options:
+    max-size: 50m
+
+services:
+  admin-portal:
+    build:
+      context: .
+      dockerfile: Dockerfile.AdminPortal
+    restart: always
+    ports:
+      - ${ADMIN_PORTAL_PORT}:8080
+    volumes:
+      - ./data-protection-keys:/data-protection-keys
+      - ./images:/images
+    environment:
+      - DOTNET_GCHighMemPercent = 0x48 # 72%
+      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
+      - AdminPortalDataProtectionKeysPath=/data-protection-keys/admin-portal
+      - CategoryImagesPath=/images/category-images
+      - ProductImagesPath=/images/product-images
+      - TaxJarApiKey=${TAX_JAR_API_KEY}
+    secrets:
+      - end-point-commerce-db-connection-string
+    entrypoint: [
+      "sh", "-c",
+      "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
+      dotnet EndPointCommerce.AdminPortal.dll"
+    ]
+    healthcheck:
+      test: 'curl -f -LI http://localhost:8080/healthz'
+      start_period: 30s      
+    depends_on:
+      db:
+        condition: service_healthy
+    logging: *default-logging
+
+  web-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.WebApi
+    restart: always
+    ports:
+      - ${WEB_API_PORT}:8080
+    volumes:
+      - ./data-protection-keys:/data-protection-keys
+    environment:
+      - DOTNET_GCHighMemPercent = 0x48 # 72%
+      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
+      - WebApiDataProtectionKeysPath=/data-protection-keys/web-api
+      - CategoryImagesUrlPath=${CATEGORY_IMAGES_URL_PATH}
+      - ProductImagesUrlPath=${PRODUCT_IMAGES_URL_PATH}
+      - WebsiteUrl=${WEBSITE_URL}
+      - WebsiteLogoUrl=${WEBSITE_LOGO_URL}
+      - WebsitePasswordResetUrl=${WEBSITE_PASSWORD_RESET_URL}
+      - WebsiteShippingInfoUrl=${WEBSITE_SHIPPING_INFO_URL}
+      - MailSettings__Server=${MAIL_SETTINGS_SERVER}
+      - MailSettings__Port=${MAIL_SETTINGS_PORT}
+      - MailSettings__SenderName=${MAIL_SETTINGS_SENDER_NAME}
+      - MailSettings__SenderEmail=${MAIL_SETTINGS_SENDER_EMAIL}
+      - MailSettings__UserName=${MAIL_SETTINGS_USER_NAME}
+      - MailSettings__Password=${MAIL_SETTINGS_PASSWORD}
+      - MailCcAddresses=${MAIL_CC_ADDRESSES}
+      - MailBccAddresses=${MAIL_BCC_ADDRESSES}
+      - TaxJarApiKey=${TAX_JAR_API_KEY}
+      - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
+      - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
+      - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
+    secrets:
+      - end-point-commerce-db-connection-string
+    entrypoint: [
+      "sh", "-c",
+      "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
+      dotnet EndPointCommerce.WebApi.dll"
+    ]
+    healthcheck:
+      test: 'curl -f -LI http://localhost:8080/healthz'
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+    logging: *default-logging
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.DB
+    restart: always
+    ports:
+      - ${DB_PORT}:5432
+    volumes:
+      - db-postgres-data:/var/lib/postgresql/data
+    environment:
+      - PGUSER=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-db-password
+      - END_POINT_COMMERCE_DB=${END_POINT_COMMERCE_DB}
+      - END_POINT_COMMERCE_DB_USERNAME=${END_POINT_COMMERCE_DB_USERNAME}
+      - END_POINT_COMMERCE_DB_PASSWORD_FILE=/run/secrets/end-point-commerce-db-password
+    secrets:
+      - postgres-db-password
+      - end-point-commerce-db-password
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging: *default-logging
+
+  maintenance:
+    build:
+      context: .
+      dockerfile: Dockerfile.Maintenance
+    init: true
+    volumes:
+      - ./images:/images
+    secrets:
+      - end-point-commerce-db-connection-string
+    command: sleep infinity
+
+volumes:
+  db-postgres-data:
+
+secrets:
+  postgres-db-password:
+    file: ./secrets/postgres-db-password.txt
+  end-point-commerce-db-password:
+    file: ./secrets/end-point-commerce-db-password.txt
+  end-point-commerce-db-connection-string:
+    file: ./secrets/end-point-commerce-db-connection-string.txt

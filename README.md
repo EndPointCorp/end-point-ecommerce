@@ -100,3 +100,119 @@ CI pushes the following docker images to the gitlab container registry at `bits.
 - `webapi` - The WebApi project running on port 8080
 - `adminportal` - The AdminPortal running on port 8080
 - `maintenance` - For dev related tasks
+
+## Deployment
+
+If you're trying to deploy this project somewhere, or you're just trying to run it locally without a full development environment ready, you can make use of the Docker Compose file `compose.yml` found in the root directory.
+
+### How to run a new deployment for the first time
+
+#### 1. Clone the repository
+
+The easiest way to get started is just to clone this repository to wherever you intend to run it from:
+
+```text
+git clone git@bits.endpointdev.com:end-point-open-source/end-point-commerce.git
+```
+
+Or if you prefer, you can of course clone it somewhere else and manually copy it to wherever you intend to run it from.
+
+#### 2. Update the secrets
+
+Modify the secrets found under `/secrets`:
+
+1. Set `postgres-db-password.txt` to a secure password that will be used for the Postgres database server's `postgres` user.
+2. Set `end-point-commerce-db-password.txt` to a secure password for the user that will be used by the EndPointCommerce services to connect to the Postgres database.
+3. Update the connection string found in `end-point-commerce-db-connection-string.txt` to ensure it is correct for your environment. In the majority of cases, all you will need to do is simply copy the password from the previous `end-point-commerce-db-password.txt` file, at put it at the end of the connection string here.
+
+#### 3. Set up `.env`
+
+Copy `/env.template` to `/.env` and modify it as appropriate for your environment. For example, you may want to adjust ports if you wish, and you will most likely need to update the various URLs except if you are just running locally to test.
+
+#### 4. Start the services
+
+To start up all the services and build the images run:
+
+```text
+docker compose up -d
+```
+
+This will start them all up in the background. You can follow the logs live while everything starts up by running:
+
+```text
+docker compose logs -f
+```
+
+Please note that with the way the `compose.yml` is out-of-the-box in this repository, the images that will be run are configured to be built locally from the various `Dockerfile`s that are also found in the root of this repository. The images you end up running will be directly built from the current commit of this repository that you have cloned. Most "real world" production deployments would likely wish to use tagged images built and pushed elsewhere (such as via a CI/CD pipeline). To do this, you will need to make some simple modifications to the `compose.yml`.
+
+#### 5. Run database migrations
+
+The Docker Compose file provides a "Maintenance" container as a convenience which can be used to do various maintenance tasks, such as applying database migrations. **Database migrations are NOT run automatically by the services at startup!** You _must_ run them manually.
+
+To run the migrations simply run:
+
+```text
+docker compose exec maintenance run-migrations.sh
+```
+
+After a short wait, they should complete successfully.
+
+If this is the first time you've run the migrations, you will likely see the following error:
+
+```text
+Failed executing DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+```
+
+As long as you see one or more `Applying migration ...` lines **after** this error, you can safely ignore it for the first run, as it is expected (the table in question doesn't exist until the migrations have been run at least once). It shouldn't happen again on subsequent runs.
+
+#### 6. Verify everything works
+
+Assuming you made no changes to the `.env` variables regarding ports or URLs, you should now be able to access the running services via the following URLs:
+
+- **WebApi**: http://localhost:8002/
+  This is a base API URL though, and there is nothing there (it will 404).
+- **WebApi Swagger**: http://localhost:8002/swagger/
+- **AdminPortal**: http://localhost:8001/
+
+The default username is `epadmin` and the default password is `Password123`.
+
+### Updating the deployment
+
+Updating an existing deployment with an updated version more or less follows the steps outlined above, assuming you haven't made significant modifications to the `compose.yml` to suit your particular environment.
+
+#### 1. Stop the services
+
+Stop everything that is running currently:
+
+```text
+docker compose down
+```
+
+#### 2. Pull your changes
+
+Either run `git pull` or re-copy your updates to your deployment environment however you prefer in your particular environment.
+
+#### Restart the services
+
+Now start everything back up again and re-build updated images (unless you have updated your `compose.yml` to pull tagged images from a repository, then you can of course omit the `--build` argument)
+
+```text
+docker compose up -d --build
+```
+
+#### 3. Apply database migrations
+
+If your update includes any database migrations, you should run them now:
+
+```text
+docker compose exec maintenance run-migrations.sh
+```
+
+You can also check if there are any pending database migrations that need to be run first if you prefer:
+
+```text
+docker compose exec maintenance check-migrations.sh
+```
