@@ -5,6 +5,7 @@ using EndPointCommerce.Infrastructure.Startup;
 using EndPointCommerce.WebApi.Startup;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace EndPointCommerce.WebApi;
 
@@ -64,14 +65,26 @@ public class Program
 
         builder.Services.AddWebApiDependencyInjectionServices();
 
+        builder.Services.AddHealthChecks()
+            .AddDbContextCheck<EndPointCommerceDbContext>();
+
         if (builder.Environment.IsDevelopment())
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         }
+        
+        builder.Host.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration)
+        );
 
         var app = builder.Build();
 
         app.UseRequestLocalization("en-US");
+
+        app.UseSerilogRequestLogging(opts =>
+        {
+            opts.GetLevel = LogHelper.ExcludeHealthChecks;
+        });
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -90,6 +103,8 @@ public class Program
         app.MapGroup("/api/User").MapIdentityApi<User>();
 
         app.MapControllers();
+        
+        app.MapHealthChecks("/healthz");
 
         app.Run();
     }
