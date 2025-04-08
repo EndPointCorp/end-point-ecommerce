@@ -40,6 +40,9 @@ builder.Host.UseSerilog((context, loggerConfig) =>
 );
 
 var app = builder.Build();
+
+app.UseRequestLocalization("en-US");
+
 app.UseSerilogRequestLogging(opts =>
 {
     opts.GetLevel = LogHelper.ExcludeHealthChecks;
