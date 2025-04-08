@@ -134,7 +134,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
         // DELETE: api/Quote/Items/{id}
         [HttpDelete("Items/{id}")]
-        public async Task<ActionResult<QuoteItem>> DeleteQuoteItem(int id)
+        public async Task<ActionResult> DeleteQuoteItem(int id)
         {
             return await HandleUpdateQuoteItem<object?>(
                 async quoteId => {

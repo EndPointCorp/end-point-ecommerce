@@ -1,0 +1,174 @@
+﻿@page
+@model Checkout.ShippingModel
+@{
+    ViewData["Title"] = "Shipping";
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1>Checkout</h1>
+
+        <form method="post">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Contact Information
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Shipping Address
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.Name" class="form-label"></label>
+                                    <input asp-for="ShippingAddress.Name" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress.Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.LastName" class="form-label"></label>
+                                    <input asp-for="ShippingAddress.LastName" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ShippingAddress.Street" class="form-label"></label>
+                                <input asp-for="ShippingAddress.Street" class="form-control" />
+                                <span asp-validation-for="ShippingAddress.Street" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ShippingAddress.StreetTwo" class="form-label"></label>
+                                <input asp-for="ShippingAddress.StreetTwo" class="form-control" />
+                                <span asp-validation-for="ShippingAddress.StreetTwo" class="text-danger"></span>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.City" class="form-label"></label>
+                                    <input asp-for="ShippingAddress.City" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress.City" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.StateId" class="form-label"></label>
+                                    <select asp-for="ShippingAddress.StateId" class="form-control" asp-items="Model.States"></select>
+                                    <span asp-validation-for="ShippingAddress.StateId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.ZipCode" class="form-label"></label>
+                                    <input asp-for="ShippingAddress.ZipCode" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress.ZipCode" class="text-danger"></span>
+                                </div>
+                                <div class="col-6">
+                                    <label asp-for="ShippingAddress.PhoneNumber" class="form-label"></label>
+                                    <input asp-for="ShippingAddress.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="ShippingAddress.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fa-solid fa-circle-info"></i>
+                            Billing Address
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input
+                                            asp-for="UseShippingAsBilling"
+                                            class="form-check-input" type="checkbox"
+                                        />
+                                        <label class="form-check-label" asp-for="UseShippingAsBilling">
+                                            Use shipping address
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="ShippingAddressFields" style="display: @(Model.UseShippingAsBilling ? "none" : "block")">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.Name" class="form-label"></label>
+                                        <input asp-for="BillingAddress.Name" class="form-control" />
+                                        <span asp-validation-for="BillingAddress.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.LastName" class="form-label"></label>
+                                        <input asp-for="BillingAddress.LastName" class="form-control" />
+                                        <span asp-validation-for="BillingAddress.LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="BillingAddress.Street" class="form-label"></label>
+                                    <input asp-for="BillingAddress.Street" class="form-control" />
+                                    <span asp-validation-for="BillingAddress.Street" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="BillingAddress.StreetTwo" class="form-label"></label>
+                                    <input asp-for="BillingAddress.StreetTwo" class="form-control" />
+                                    <span asp-validation-for="BillingAddress.StreetTwo" class="text-danger"></span>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.City" class="form-label"></label>
+                                        <input asp-for="BillingAddress.City" class="form-control" />
+                                        <span asp-validation-for="BillingAddress.City" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.StateId" class="form-label"></label>
+                                        <select asp-for="BillingAddress.StateId" class="form-control" asp-items="Model.States"></select>
+                                        <span asp-validation-for="BillingAddress.StateId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.ZipCode" class="form-label"></label>
+                                        <input asp-for="BillingAddress.ZipCode" class="form-control" />
+                                        <span asp-validation-for="BillingAddress.ZipCode" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label asp-for="BillingAddress.PhoneNumber" class="form-label"></label>
+                                        <input asp-for="BillingAddress.PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="BillingAddress.PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-outline-dark">Proceed to Payment</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const useShippingAsBilling = document.getElementById("UseShippingAsBilling");
+            const shippingAddressFields = document.getElementById("ShippingAddressFields");
+
+            useShippingAsBilling.addEventListener("change", function () {
+                shippingAddressFields.style.display = useShippingAsBilling.checked ? "none" : "block";
+            });
+        });
+    </script>
+}

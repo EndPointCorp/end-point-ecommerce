@@ -1,0 +1,126 @@
+﻿@page
+@model Checkout.PaymentModel
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1>Checkout</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-circle-info"></i>
+                Payment Information
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" name="cardNumber" id="cardNumber" class="form-control" />
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="expMonth" class="form-label">Expiration Month</label>
+                            <input type="text" name="expMonth" id="expMonth" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="expYear" class="form-label">Expiration Year</label>
+                            <input type="text" name="expYear" id="expYear" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="cardCode" class="form-label">CVV</label>
+                            <input type="text" name="cardCode" id="cardCode" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-dark" onclick="submitOrder()">Place Order</button>
+        </div>
+
+        <form id="authNetPaymentForm" method="post">
+            <input type="hidden" asp-for="PaymentMethodNonceValue" />
+            <input type="hidden" asp-for="PaymentMethodNonceDescriptor" />
+        </form>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Model.AcceptJsUrl" charset="utf-8"></script>
+
+    <script>
+        window.authNetConfig = {
+            apiLoginID: '@Model.AuthNetLoginId',
+            clientKey: '@Model.AuthNetClientKey'
+        };
+    </script>
+
+    <script>
+        function submitOrder() {
+            sendPaymentDataToAuthNet(response => {
+                console.log("Response from Authorize.Net: ", response);
+                var form = document.getElementById("authNetPaymentForm");
+
+                document.getElementById("PaymentMethodNonceValue").value = response.opaqueData.dataValue;
+                document.getElementById("PaymentMethodNonceDescriptor").value = response.opaqueData.dataDescriptor;
+
+                form.submit();
+            });
+        }
+
+        function sendPaymentDataToAuthNet(onDone) {
+            var authData = {
+                clientKey: window.authNetConfig.clientKey,
+                apiLoginID: window.authNetConfig.apiLoginID
+            };
+
+            var cardData = {
+                cardNumber: document.getElementById("cardNumber").value,
+                month: document.getElementById("expMonth").value,
+                year: document.getElementById("expYear").value,
+                cardCode: document.getElementById("cardCode").value
+            };
+
+            /* var bankData = {
+                accountNumber: document.getElementById('accountNumber').value,
+                routingNumber: document.getElementById('routingNumber').value,
+                nameOnAccount: document.getElementById('nameOnAccount').value,
+                accountType: document.getElementById('accountType').value
+            }; */
+
+            var data = {
+                authData,
+                cardData
+                /* bankData: */
+            };
+
+            Accept.dispatchData(data, response => handleAuthNetResponse(response, onDone));
+        }
+
+        function handleAuthNetResponse(response, onDone) {
+            if (response.messages.resultCode === "Error") {
+                var i = 0;
+                while (i < response.messages.message.length) {
+                    console.log(
+                        response.messages.message[i].code + ": " +
+                        response.messages.message[i].text
+                    );
+                    i = i + 1;
+                }
+            } else {
+                onDone(response);
+            }
+        }
+    </script>
+}

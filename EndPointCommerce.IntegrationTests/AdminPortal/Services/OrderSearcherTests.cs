@@ -167,6 +167,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         await _database.WithTransaction(_dbContext, async () =>
         {
             // Arrange
+            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             PopulateRecords();
 
             var parameters = new SearchParameters

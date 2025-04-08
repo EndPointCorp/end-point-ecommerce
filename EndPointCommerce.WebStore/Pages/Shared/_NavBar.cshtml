@@ -1,0 +1,48 @@
+@using EndPointCommerce.WebStore.Api
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+        <a asp-page="./Index" class="navbar-brand">End Point Commerce</a>
+        <button
+            class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a asp-page="./Index" class="nav-link active" aria-current="page">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a asp-page="./Index" class="dropdown-item">All Products</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        @{
+                            var categories = ViewData["Categories"] as List<Category> ?? [];
+                            foreach (var category in categories)
+                            {
+                                <li>
+                                    <a asp-page="./Category" asp-route-id="@category.Id" class="dropdown-item">
+                                        @category.Name
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <a asp-page="./Cart" class="btn btn-outline-dark" role="button">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill">
+                        @ViewData["QuoteItemCount"]
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

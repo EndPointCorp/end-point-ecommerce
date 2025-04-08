@@ -71,12 +71,14 @@ public class Program
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         }
-        
+
         builder.Host.UseSerilog((context, loggerConfig) =>
             loggerConfig.ReadFrom.Configuration(context.Configuration)
         );
 
         var app = builder.Build();
+
+        app.UseRequestLocalization("en-US");
 
         app.UseSerilogRequestLogging(opts =>
         {

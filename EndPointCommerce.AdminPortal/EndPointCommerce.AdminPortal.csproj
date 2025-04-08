@@ -28,8 +28,9 @@
     <ProjectReference Include="..\EndPointCommerce.Infrastructure\EndPointCommerce.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="wwwroot\node_modules\**" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
+  <!-- <Target Name="BundleFrontendAssets" BeforeTargets="Build">
+    <Exec Command="pnpm install" />
+    <Exec Command="pnpm run build" />
+  </Target> -->
 
 </Project>

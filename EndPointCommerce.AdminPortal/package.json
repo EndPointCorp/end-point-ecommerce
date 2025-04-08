@@ -1,0 +1,30 @@
+{
+  "name": "end-point-commerce-admin-portal",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node esbuild.config.mjs"
+  },
+  "keywords": [],
+  "author": "End Point Dev",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "6.7.2",
+    "bootstrap": "5.3.3",
+    "chart.js": "2.9.4",
+    "datatables.net-bs5": "2.1.7",
+    "jquery": "3.7.1",
+    "quill": "2.0.3",
+    "simple-datatables": "10.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "esbuild-sass-plugin": "3.3.1",
+    "sass": "1.77.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

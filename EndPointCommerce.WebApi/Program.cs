@@ -55,11 +55,7 @@ public class Program
 
         builder.Services.AddIdentityApiEndpoints<User>(opt =>
         {
-            opt.Password.RequiredLength = 8;
             opt.User.RequireUniqueEmail = true;
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.SignIn.RequireConfirmedEmail = false;
-            opt.SignIn.RequireConfirmedPhoneNumber = false;
         }).AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<EndPointCommerceDbContext>();
 
@@ -76,12 +72,14 @@ public class Program
         {
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
         }
-        
+
         builder.Host.UseSerilog((context, loggerConfig) =>
             loggerConfig.ReadFrom.Configuration(context.Configuration)
         );
 
         var app = builder.Build();
+
+        app.UseRequestLocalization("en-US");
 
         app.UseSerilogRequestLogging(opts =>
         {

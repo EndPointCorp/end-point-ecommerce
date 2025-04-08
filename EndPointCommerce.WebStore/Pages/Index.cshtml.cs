@@ -1,27 +1,25 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using EndPointCommerce.WebStore.Api;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EndPointCommerce.WebStore.Pages;
 
-public class IndexModel : PageModel
+public class IndexModel : BasePageModel
 {
-    private readonly string _authNetEnvironment = string.Empty;
+    public IndexModel(IApiClient apiClient) : base(apiClient) { }
 
-    public IndexModel(IConfiguration config)
+    public List<Product> Products { get; set; } = [];
+
+    public async Task OnGetAsync()
     {
-        _authNetEnvironment = config["AuthNetEnvironment"]!;
-
-        EndPointCommerceApiUrl = config["EndPointCommerceApiUrl"]!;
-        AuthNetLoginId = config["AuthNetLoginId"]!;
-        AuthNetClientKey = config["AuthNetClientKey"]!;
+        await FetchCategories();
+        await FetchQuote();
+        Products = await _apiClient.GetProducts();
     }
 
-    public string EndPointCommerceApiUrl { get; set; }
-    public string AuthNetLoginId { get; set; }
-    public string AuthNetClientKey { get; set; }
+    public async Task<IActionResult> OnPostAddToQuoteAsync(int productId)
+    {
+        await AddItemToQuote(productId, 1);
 
-    public string AcceptJsUrl => _authNetEnvironment == "Production" ?
-        "https://js.authorize.net/v1/Accept.js" :
-        "https://jstest.authorize.net/v1/Accept.js";
-
-    public void OnGet() { }
+        return RedirectToPage("/Index");
+    }
 }

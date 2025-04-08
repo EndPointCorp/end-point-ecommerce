@@ -31,11 +31,6 @@ COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
 COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
 COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 
-# build frontend
-WORKDIR /source/EndPointCommerce.AdminPortal/wwwroot
-RUN pnpm install
-RUN pnpm run sass
-
 # build app
 WORKDIR /source/EndPointCommerce.AdminPortal
 RUN dotnet publish -c release -o /app --no-restore

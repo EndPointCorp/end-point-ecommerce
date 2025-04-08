@@ -483,12 +483,20 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-data-protection-keys/admin-portal/*
-data-protection-keys/web-api/*
-!data-protection-keys/admin-portal/.keep
-!data-protection-keys/web-api/.keep
-
 images/category-images/*
 images/product-images/*
 !images/category-images/.keep
 !images/product-images/.keep
+
+data-protection-keys/admin-portal/*
+data-protection-keys/web-api/*
+data-protection-keys/web-store/*
+!data-protection-keys/admin-portal/.keep
+!data-protection-keys/web-api/.keep
+!data-protection-keys/web-store/.keep
+
+# Frontend asset bundles
+*/wwwroot/css/*
+*/wwwroot/js/*
+!*/wwwroot/css/.keep
+!*/wwwroot/js/.keep
