@@ -1,5 +1,7 @@
+using EndPointCommerce.Infrastructure.Startup;
 using EndPointCommerce.WebStore.Api;
 using Microsoft.AspNetCore.DataProtection;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +35,15 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>(client => {
     );
 });
 
+builder.Host.UseSerilog((context, loggerConfig) =>
+    loggerConfig.ReadFrom.Configuration(context.Configuration)
+);
+
 var app = builder.Build();
+app.UseSerilogRequestLogging(opts =>
+{
+    opts.GetLevel = LogHelper.ExcludeHealthChecks;
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
