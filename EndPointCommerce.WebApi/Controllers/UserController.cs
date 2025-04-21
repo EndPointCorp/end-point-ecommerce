@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using EndPointCommerce.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using EndPointCommerce.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace EndPointCommerce.WebApi.Controllers
 {
@@ -9,11 +12,20 @@ namespace EndPointCommerce.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IIdentityService _identityService;
+        private readonly UserManager<User> _userManager;
+        private readonly IEmailSender<User> _identityEmailSender;
+        private readonly string _confirmEmailURL;
 
         public UserController(
-            IIdentityService identityService
+            IIdentityService identityService,
+            UserManager<User> userManager,
+            IEmailSender<User> identityEmailSender,
+            IConfiguration config
         ) {
             _identityService = identityService;
+            _userManager = userManager;
+            _identityEmailSender = identityEmailSender;
+            _confirmEmailURL = config["WebsiteConfirmEmailURL"]!;
         }
 
         // GET: api/User
@@ -41,6 +53,12 @@ namespace EndPointCommerce.WebApi.Controllers
             {
                 return BadRequest(string.Join(" ", result.Errors.ToList().Select(x => x.Description).ToArray()));
             }
+
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
+
+            var emailLink = $"{_confirmEmailURL}?code={code}";
+
+            await _identityEmailSender.SendConfirmationLinkAsync(userEntity, user.Email, emailLink);
 
             return ResourceModels.User.FromEntity(userEntity);
         }
