@@ -58,7 +58,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Products
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(Page);
+            return await HandlePost(() => RedirectToPage("./Edit", new { Product.Id }));
         }
 
         public async Task<IActionResult> OnPostDeleteMainImageAsync()

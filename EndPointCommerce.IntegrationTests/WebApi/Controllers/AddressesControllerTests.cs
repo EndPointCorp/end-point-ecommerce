@@ -21,6 +21,7 @@ public class AddressesControllerTests : IntegrationTestFixture
             Street = "test_street_one",
             StreetTwo = "test_street_two",
             City = "test_city",
+            CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
             StateId = state.Id,
             ZipCode = "12345",
             PhoneNumber = "1234567890",
@@ -81,7 +82,6 @@ public class AddressesControllerTests : IntegrationTestFixture
             await SignUp(client);
             await Login(client);
 
-            var state = _dbContext.States.First();
             var customer = _dbContext.Customers.First();
             var address1 = CreateNewAddress(_dbContext.States.First(), customer);
             var address2 = CreateNewAddress(_dbContext.States.Skip(5).First(), customer);
@@ -159,6 +159,7 @@ public class AddressesControllerTests : IntegrationTestFixture
                     Street = "test_street_one",
                     StreetTwo = "test_street_two",
                     City = "test_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.First().Id,
                     ZipCode = "12345",
                     PhoneNumber = "1234567890"
@@ -235,6 +236,7 @@ public class AddressesControllerTests : IntegrationTestFixture
                     LastName = "updated_last_name",
                     Street = "updated_street",
                     City = "updated_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.Skip(10).First().Id,
                     ZipCode = "54321",
                     PhoneNumber = "0987654321"
@@ -301,6 +303,7 @@ public class AddressesControllerTests : IntegrationTestFixture
                     Street = "test_street_one",
                     StreetTwo = "test_street_two",
                     City = "test_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.First().Id,
                     ZipCode = "12345",
                     PhoneNumber = "1234567890"
@@ -342,6 +345,7 @@ public class AddressesControllerTests : IntegrationTestFixture
                     Street = "test_street_one",
                     StreetTwo = "test_street_two",
                     City = "test_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.First().Id,
                     ZipCode = "12345",
                     PhoneNumber = "1234567890"

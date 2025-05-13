@@ -91,14 +91,16 @@
                         <p>@Model.Order.ShippingAddress.FullName</p>
                         <p>@Model.Order.ShippingAddress.Street</p>
                         <p>@Model.Order.ShippingAddress.StreetTwo</p>
-                        <p>@Model.Order.ShippingAddress.City, @Model.Order.ShippingAddress.State.Abbreviation @Model.Order.ShippingAddress.ZipCode</p>
+                        <p>@Model.Order.ShippingAddress.City, @Model.Order.ShippingAddress.State?.Abbreviation @Model.Order.ShippingAddress.ZipCode</p>
+                        <p>@Model.Order.ShippingAddress.Country?.Name</p>
                     </td>
                     <td></td>
                     <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #B8B8B8; border-bottom:1px solid #B8B8B8; border-right:1px solid #927c7c;">
                         <p>@Model.Order.BillingAddress.FullName</p>
                         <p>@Model.Order.BillingAddress.Street</p>
                         <p>@Model.Order.BillingAddress.StreetTwo</p>
-                        <p>@Model.Order.BillingAddress.City, @Model.Order.BillingAddress.State.Abbreviation @Model.Order.BillingAddress.ZipCode</p>
+                        <p>@Model.Order.BillingAddress.City, @Model.Order.BillingAddress.State?.Abbreviation @Model.Order.BillingAddress.ZipCode</p>
+                        <p>@Model.Order.BillingAddress.Country?.Name</p>
                     </td>
                 </tr>
             </tbody>

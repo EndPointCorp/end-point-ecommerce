@@ -62,7 +62,9 @@ internal static class QuoteQueryExtensions
             .Include(x => x.Customer)
             .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.ThumbnailImage)
             .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
+            .Include(x => x.ShippingAddress).ThenInclude(x => x!.Country)
             .Include(x => x.ShippingAddress).ThenInclude(x => x!.State)
+            .Include(x => x.BillingAddress).ThenInclude(x => x!.Country)
             .Include(x => x.BillingAddress).ThenInclude(x => x!.State)
             .Include(x => x.Coupon);
 }

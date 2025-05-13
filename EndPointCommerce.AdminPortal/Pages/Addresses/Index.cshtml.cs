@@ -22,10 +22,17 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
         public async Task OnGetAsync(int? customerId)
         {
             CustomerId = customerId;
+
             var query = _context.Addresses as IQueryable<Address>;
+
             if (customerId != null)
                 query = query.Where(x => x.Customer!.Id == customerId);
-            Addresses = await query.Include(x => x.State).OrderByDescending(x => x.Id).ToListAsync();
+
+            Addresses = await query
+                .Include(x => x.Country)
+                .Include(x => x.State)
+                .OrderByDescending(x => x.Id)
+                .ToListAsync();
         }
     }
 }

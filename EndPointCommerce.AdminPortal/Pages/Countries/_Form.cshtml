@@ -1,0 +1,30 @@
+@model EndPointCommerce.Domain.Entities.Country
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-circle-info"></i>
+        Info
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col mb-3">
+                <label asp-for="Code" class="form-label"></label>
+                <input asp-for="Code" class="form-control" disabled />
+            </div>
+            <div class="col mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" disabled />
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input asp-for="IsEnabled" class="form-check-input">
+                <label asp-for="IsEnabled" class="form-check-label"></label>
+            </div>
+            <span asp-validation-for="IsEnabled" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+

@@ -15,6 +15,8 @@ public class AddressTest
             Street = "123 Main St",
             City = "Anytown",
             ZipCode = "12345",
+            Country = new Country { Name = "United States", Code = "US" },
+            CountryId = 1,
             State = new State { Name = "New York", Abbreviation = "NY" },
             StateId = 1
         };
@@ -23,7 +25,7 @@ public class AddressTest
         var fullAddress = address.FullAddress;
 
         // Assert
-        Assert.Equal("123 Main St, Anytown, New York, 12345", fullAddress);
+        Assert.Equal("123 Main St, Anytown, New York, 12345, United States", fullAddress);
     }
 
     [Fact]
@@ -37,6 +39,8 @@ public class AddressTest
             Street = "123 Main St",
             City = "Anytown",
             ZipCode = "12345",
+            Country = new Country { Name = "United States", Code = "US" },
+            CountryId = 1,
             State = new State { Name = "New York", Abbreviation = "NY" },
             StateId = 1
         };
@@ -62,6 +66,8 @@ public class AddressTest
             StreetTwo = "Apt 4",
             City = "Anytown",
             ZipCode = "12345",
+            Country = new Country { Name = "United States", Code = "US" },
+            CountryId = 1,
             State = new State { Name = "New York", Abbreviation = "NY" },
             StateId = 1
         };
@@ -77,6 +83,8 @@ public class AddressTest
         Assert.Equal(address.StreetTwo, clonedAddress.StreetTwo);
         Assert.Equal(address.City, clonedAddress.City);
         Assert.Equal(address.ZipCode, clonedAddress.ZipCode);
+        Assert.Equal(address.Country, clonedAddress.Country);
+        Assert.Equal(address.CountryId, clonedAddress.CountryId);
         Assert.Equal(address.State, clonedAddress.State);
         Assert.Equal(address.StateId, clonedAddress.StateId);
     }

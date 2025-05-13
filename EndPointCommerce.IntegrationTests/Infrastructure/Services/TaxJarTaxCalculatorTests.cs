@@ -41,6 +41,8 @@ public class TaxJarTaxCalculatorTests : IClassFixture<DatabaseFixture>
                     Name = "John",
                     LastName = "Doe",
                     ZipCode = "55304",
+                    CountryId = 1,
+                    Country = new Country() { Name = "United States", Code = "US" },
                     StateId = 0,
                     State = new State() { Name = "Minnesota", Abbreviation = "MN" },
                     City = "Ham Lake",

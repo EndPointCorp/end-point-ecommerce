@@ -11,13 +11,18 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
     public class EditModel : PageModel
     {
         private readonly IAddressRepository _addressRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IStateRepository _stateRepository;
         private readonly ICustomerRepository _customerRepository;
 
-        public EditModel(IAddressRepository addressRepository, IStateRepository stateRepository, 
-            ICustomerRepository customerRepository)
-        {
+        public EditModel(
+            IAddressRepository addressRepository,
+            ICountryRepository countryRepository,
+            IStateRepository stateRepository,
+            ICustomerRepository customerRepository
+        ){
             _addressRepository = addressRepository;
+            _countryRepository = countryRepository;
             _stateRepository = stateRepository;
             _customerRepository = customerRepository;
         }
@@ -37,7 +42,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
             {
                 return NotFound();
             }
-            Address = await AddressViewModel.FromModel(address, _stateRepository, _customerRepository);
+            Address = await AddressViewModel.FromModel(address, _countryRepository, _stateRepository, _customerRepository);
             return Page();
         }
 
@@ -48,11 +53,12 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(Page);
+            return await HandlePost(() => RedirectToPage("./Edit", new { Address.Id }));
         }
 
         private async Task<IActionResult> HandlePost(Func<IActionResult> onSuccess)
         {
+            await Address.FillCountries(_countryRepository);
             await Address.FillStates(_stateRepository);
             await Address.FillCustomers(_customerRepository);
 

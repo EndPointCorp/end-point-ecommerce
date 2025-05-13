@@ -36,6 +36,13 @@ public class OrderTests
                 Street = "123 Main St",
                 City = "test_city",
                 ZipCode = "12345",
+                CountryId = 1,
+                Country = new Country
+                {
+                    Id = 1,
+                    Name = "test_country",
+                    Code = "TC"
+                },
                 StateId = 1,
                 State = new State
                 {
@@ -52,6 +59,13 @@ public class OrderTests
                 Street = "456 Main St",
                 City = "test_city",
                 ZipCode = "54321",
+                CountryId = 1,
+                Country = new Country
+                {
+                    Id = 1,
+                    Name = "test_country",
+                    Code = "TC"
+                },
                 StateId = 1,
                 State = new State
                 {

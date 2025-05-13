@@ -43,6 +43,7 @@ namespace EndPointCommerce.UnitTests.Domain.Services
                     Street = "123 Main St",
                     City = "Anytown",
                     ZipCode = "12345",
+                    CountryId = 1,
                     StateId = 1
                 }
             };

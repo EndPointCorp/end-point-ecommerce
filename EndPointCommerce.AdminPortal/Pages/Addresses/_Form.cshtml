@@ -9,10 +9,15 @@
     </div>
     <div class="card-body">
         <div class="row mb-3">
-            <div class="col">
+            <div class="col-6">
                 <label asp-for="CustomerId" class="form-label"></label>
                 <select asp-for="CustomerId" class="form-control" asp-items="Model.Customers"></select>
                 <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="col-6">
+                <label asp-for="PhoneNumber" class="form-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="row mb-3">
@@ -51,14 +56,14 @@
         </div>
         <div class="row mb-3">
             <div class="col-6">
+                <label asp-for="CountryId" class="form-label"></label>
+                <select asp-for="CountryId" class="form-control" asp-items="Model.Countries"></select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+            <div class="col-6">
                 <label asp-for="StateId" class="form-label"></label>
                 <select asp-for="StateId" class="form-control" asp-items="Model.States"></select>
                 <span asp-validation-for="StateId" class="text-danger"></span>
-            </div>
-            <div class="col-6">
-                <label asp-for="PhoneNumber" class="form-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
     </div>

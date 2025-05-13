@@ -48,7 +48,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Categories
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(Page);
+            return await HandlePost(() => RedirectToPage("./Edit", new { Category.Id }));
         }
 
         public async Task<IActionResult> OnPostDeleteMainImageAsync()

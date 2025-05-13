@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ICountryRepository, CountryRepository>();
         services.AddScoped<IStateRepository, StateRepository>();
         services.AddScoped<IQuoteRepository, QuoteRepository>();
         services.AddScoped<IQuoteItemRepository, QuoteItemRepository>();

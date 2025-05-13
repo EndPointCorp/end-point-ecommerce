@@ -21,6 +21,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             {
                 Name = "test_name_01", LastName = "test_last_name_01",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "AL").Id
             }
         });
@@ -32,6 +33,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             {
                 Name = "test_name_02", LastName = "test_last_name_02",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "CA").Id
             }
         });
@@ -43,6 +45,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             {
                 Name = "test_name_03", LastName = "test_last_name_03",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "DE").Id
             }
         });
@@ -54,6 +57,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             {
                 Name = "test_name_04", LastName = "test_last_name_04",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "FL").Id
             }
         });
@@ -65,6 +69,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             {
                 Name = "test_name_05", LastName = "test_last_name_05",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "GA").Id
             }
         });

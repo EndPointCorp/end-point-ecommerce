@@ -10,13 +10,18 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
     public class CreateModel : PageModel
     {
         private readonly IAddressRepository _addressRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IStateRepository _stateRepository;
         private readonly ICustomerRepository _customerRepository;
 
-        public CreateModel(IAddressRepository addressRepository, IStateRepository stateRepository,
-            ICustomerRepository customerRepository)
-        {
+        public CreateModel(
+            IAddressRepository addressRepository,
+            ICountryRepository countryRepository,
+            IStateRepository stateRepository,
+            ICustomerRepository customerRepository
+        ) {
             _addressRepository = addressRepository;
+            _countryRepository = countryRepository;
             _stateRepository = stateRepository;
             _customerRepository = customerRepository;
         }
@@ -24,10 +29,9 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
         [BindProperty]
         public AddressViewModel Address { get; set; } = default!;
 
-
         public async Task<IActionResult> OnGet(int customerId)
         {
-            Address = await AddressViewModel.CreateDefault(customerId, _stateRepository, _customerRepository);
+            Address = await AddressViewModel.CreateDefault(customerId, _countryRepository, _stateRepository, _customerRepository);
             return Page();
         }
 
@@ -43,6 +47,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Addresses
 
         private async Task<IActionResult> HandlePost(Func<IActionResult> onSuccess)
         {
+            await Address.FillCountries(_countryRepository);
             await Address.FillStates(_stateRepository);
             await Address.FillCustomers(_customerRepository);
 

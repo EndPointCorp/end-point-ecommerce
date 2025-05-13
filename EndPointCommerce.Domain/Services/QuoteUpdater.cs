@@ -31,6 +31,7 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
 {
     private readonly ICouponRepository _couponRepository;
     private readonly IAddressRepository _addressRepository;
+    private readonly ICountryRepository _countryRepository;
     private readonly IStateRepository _stateRepository;
 
     public QuoteUpdater(
@@ -39,11 +40,13 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
         IQuoteTaxCalculator quoteTaxCalculator,
         ICouponRepository couponRepository,
         IAddressRepository addressRepository,
+        ICountryRepository countryRepository,
         IStateRepository stateRepository
     ) : base(quoteRepository, quoteItemRepository, quoteTaxCalculator)
     {
         _couponRepository = couponRepository;
         _addressRepository = addressRepository;
+        _countryRepository = countryRepository;
         _stateRepository = stateRepository;
     }
 
@@ -98,8 +101,12 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
             (await _addressRepository.FindByIdWithStateAsync(addressId!.Value))?.Clone() ??
                 throw new EntityNotFoundException();
 
-        resolvedAddress.State ??= await _stateRepository.FindByIdAsync(resolvedAddress.StateId) ??
+        resolvedAddress.Country ??= await _countryRepository.FindByIdAsync(resolvedAddress.CountryId) ??
                 throw new EntityNotFoundException();
+
+        if (resolvedAddress.StateId != null)
+            resolvedAddress.State ??= await _stateRepository.FindByIdAsync(resolvedAddress.StateId.Value) ??
+                    throw new EntityNotFoundException();
 
         if (quote.IsFromCustomer)
             resolvedAddress.CustomerId = quote.CustomerId;

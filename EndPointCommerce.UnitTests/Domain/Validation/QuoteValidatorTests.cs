@@ -19,6 +19,12 @@ namespace EndPointCommerce.UnitTests.Domain.Validation
                     Street = "123 Main St",
                     City = "Anytown",
                     ZipCode = "12345",
+                    Country = new Country
+                    {
+                        Name = "United States",
+                        Code = "US"
+                    },
+                    CountryId = 1,
                     State = new State
                     {
                         Name = "New York",
@@ -33,6 +39,12 @@ namespace EndPointCommerce.UnitTests.Domain.Validation
                     Street = "123 Main St",
                     City = "Anytown",
                     ZipCode = "12345",
+                    Country = new Country
+                    {
+                        Name = "United States",
+                        Code = "US"
+                    },
+                    CountryId = 1,
                     State = new State
                     {
                         Name = "New York",

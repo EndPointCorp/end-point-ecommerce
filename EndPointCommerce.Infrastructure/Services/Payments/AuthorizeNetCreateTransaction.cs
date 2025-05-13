@@ -11,7 +11,6 @@ namespace EndPointCommerce.Infrastructure.Services.Payments;
 /// </summary>
 internal static class AuthorizeNetCreateTransaction
 {
-    private const string PAYMENT_COUNTRY_CODE = "US";
     private const int LINE_ITEM_MAX_LENGTH = 30;
 
     internal static PaymentTransactionResult Run(Order order)
@@ -55,7 +54,8 @@ internal static class AuthorizeNetCreateTransaction
             address = order.BillingAddress.Street,
             city = order.BillingAddress.City,
             zip = order.BillingAddress.ZipCode,
-            country = PAYMENT_COUNTRY_CODE
+            state = order.BillingAddress.State?.Abbreviation,
+            country = order.BillingAddress.Country!.Code
         };
 
     private static lineItemType[] BuildLineItems(Order order) =>

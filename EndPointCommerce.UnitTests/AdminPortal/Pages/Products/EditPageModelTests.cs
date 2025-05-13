@@ -359,7 +359,10 @@ public class EditPageModelTests
         var result = await pageModel.OnPostSaveAndContinueAsync();
 
         // Assert
-        Assert.IsType<PageResult>(result);
+        Assert.IsType<RedirectToPageResult>(result);
+        Assert.Equal("./Edit", ((RedirectToPageResult)result).PageName);
+        Assert.Equal(10, ((RedirectToPageResult)result).RouteValues!["Id"]);
+
     }
 
     [Fact]
