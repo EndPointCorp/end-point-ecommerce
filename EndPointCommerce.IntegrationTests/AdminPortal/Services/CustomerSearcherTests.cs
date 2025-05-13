@@ -16,27 +16,27 @@ public class CustomerSearcherTests : BaseEntitySearcherTests<CustomerSearchResul
         _dbContext.Customers.Add(new Customer
         {
             Id = 1, Name = "test_name_01", LastName = "test_last_name_01", Email = "test_01@email.com",
-            DateCreated = DateTime.Today.AddDays(-5)
+            DateCreated = DateTime.UtcNow.AddDays(-5)
         });
         _dbContext.Customers.Add(new Customer
         {
             Id = 2, Name = "test_name_02", LastName = "test_last_name_02", Email = "test_02@email.com",
-            DateCreated = DateTime.Today.AddDays(-4)
+            DateCreated = DateTime.UtcNow.AddDays(-4)
         });
         _dbContext.Customers.Add(new Customer
         {
             Id = 3, Name = "test_name_03", LastName = "test_last_name_03", Email = "test_03@email.com",
-            DateCreated = DateTime.Today.AddDays(-3)
+            DateCreated = DateTime.UtcNow.AddDays(-3)
         });
         _dbContext.Customers.Add(new Customer
         {
             Id = 4, Name = "test_name_04", LastName = "test_last_name_04", Email = "test_04@email.com",
-            DateCreated = DateTime.Today.AddDays(-2)
+            DateCreated = DateTime.UtcNow.AddDays(-2)
         });
         _dbContext.Customers.Add(new Customer
         {
             Id = 5, Name = "test_name_05", LastName = "test_last_name_05", Email = "test_05@email.com",
-            DateCreated = DateTime.Today.AddDays(-1)
+            DateCreated = DateTime.UtcNow.AddDays(-1)
         });
 
         _dbContext.SaveChanges();
@@ -104,7 +104,7 @@ public class CustomerSearcherTests : BaseEntitySearcherTests<CustomerSearchResul
             Assert.Equal("test_name_01", result.Data.First().Name);
             Assert.Equal("test_last_name_01", result.Data.First().LastName);
             Assert.Equal("test_01@email.com", result.Data.First().Email);
-            Assert.Equal(DateTime.Today.AddDays(-5).ToString("G"), result.Data.First().DateCreated);
+            Assert.True((DateTime.UtcNow.AddDays(-5) - DateTime.Parse(result.Data.First().DateCreated!)).TotalSeconds < 2);
             Assert.Equal("test_edit_url", result.Data.First().EditUrl);
         });
     }

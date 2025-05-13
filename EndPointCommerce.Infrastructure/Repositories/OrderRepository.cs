@@ -41,8 +41,8 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     protected List<CountPerGroup> AddMissingDaysToGenericCountListResult(List<CountPerGroup> list)
     {
         var index = 0;
-        var startDate = DateTime.Today.AddDays(-7);
-        for (var day = startDate; day.Date <= DateTime.Today; day = day.AddDays(1))
+        var startDate = DateTime.UtcNow.Date.AddDays(-7);
+        for (var day = startDate; day.Date <= DateTime.UtcNow.Date; day = day.AddDays(1))
         {
             if (!list.Where(x => x.Group.Equals(day.ToString("yyyy-MM-dd"))).Any())
             {
@@ -62,7 +62,7 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     /// </summary>
     public async Task<List<CountPerGroup>> FetchOrderCountsFromLastSevenDaysAsync()
     {
-        var startDate = DateTime.Today.AddDays(-7);
+        var startDate = DateTime.UtcNow.Date.AddDays(-7);
 
         var listQuery = DbSet()
             .Include(x => x.Coupon)
@@ -92,7 +92,7 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     /// </summary>
     public async Task<List<CountPerGroup>> FetchOrderAmountsFromLastSevenDaysAsync()
     {
-        var startDate = DateTime.Today.AddDays(-7);
+        var startDate = DateTime.UtcNow.Date.AddDays(-7);
         var listQuery = DbSet()
             .Include(x => x.Coupon)
             .Where(x => x.Deleted != true && x.DateCreated >= startDate);
@@ -123,7 +123,7 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     {
         var listQuery = DbSet()
             .Include(x => x.Coupon)
-            .Where(x => x.Deleted != true && x.DateCreated!.Value.Date == DateTime.Today);
+            .Where(x => x.Deleted != true && x.DateCreated!.Value.Date == DateTime.UtcNow.Date);
 
         return await listQuery.SumAsync(x => x.Total);
     }
@@ -137,8 +137,8 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
             .Include(x => x.Coupon)
             .Where(x =>
                 x.Deleted != true &&
-                x.DateCreated!.Value.Month == DateTime.Today.Month &&
-                x.DateCreated!.Value.Year == DateTime.Today.Year
+                x.DateCreated!.Value.Month == DateTime.UtcNow.Date.Month &&
+                x.DateCreated!.Value.Year == DateTime.UtcNow.Date.Year
             );
 
         return await listQuery.SumAsync(x => x.Total);

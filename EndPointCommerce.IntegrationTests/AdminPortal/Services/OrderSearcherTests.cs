@@ -16,7 +16,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         _dbContext.Orders.Add(new Order
         {
             Id = 10001,
-            DateCreated = DateTime.Today.AddDays(-5),
+            DateCreated = DateTime.UtcNow.AddDays(-5),
             Customer = new() { Name = "test_name_01", Email = "test_01@email.com" },
             Status = _dbContext.OrderStatuses.First(os => os.Name == OrderStatus.PENDING),
             PaymentMethod = _dbContext.PaymentMethods.First(os => os.Name == PaymentMethod.CREDIT_CARD),
@@ -37,7 +37,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         _dbContext.Orders.Add(new Order
         {
             Id = 10002,
-            DateCreated = DateTime.Today.AddDays(-4),
+            DateCreated = DateTime.UtcNow.AddDays(-4),
             Customer = new() { Name = "test_name_02", Email = "test_02@email.com" },
             Status = _dbContext.OrderStatuses.First(os => os.Name == OrderStatus.INVOICED),
             PaymentMethod = _dbContext.PaymentMethods.First(os => os.Name == PaymentMethod.CREDIT_CARD),
@@ -58,7 +58,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         _dbContext.Orders.Add(new Order
         {
             Id = 10003,
-            DateCreated = DateTime.Today.AddDays(-3),
+            DateCreated = DateTime.UtcNow.AddDays(-3),
             Customer = new() { Name = "test_name_03", Email = "test_03@email.com" },
             Status = _dbContext.OrderStatuses.First(os => os.Name == OrderStatus.PROCESSING),
             PaymentMethod = _dbContext.PaymentMethods.First(os => os.Name == PaymentMethod.CREDIT_CARD),
@@ -79,7 +79,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         _dbContext.Orders.Add(new Order
         {
             Id = 10004,
-            DateCreated = DateTime.Today.AddDays(-2),
+            DateCreated = DateTime.UtcNow.AddDays(-2),
             Customer = new() { Name = "test_name_04", Email = "test_04@email.com" },
             Status = _dbContext.OrderStatuses.First(os => os.Name == OrderStatus.CANCELLED),
             PaymentMethod = _dbContext.PaymentMethods.First(os => os.Name == PaymentMethod.CREDIT_CARD),
@@ -100,7 +100,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
         _dbContext.Orders.Add(new Order
         {
             Id = 10005,
-            DateCreated = DateTime.Today.AddDays(-1),
+            DateCreated = DateTime.UtcNow.AddDays(-1),
             Customer = new() { Name = "test_name_05", Email = "test_05@email.com" },
             Status = _dbContext.OrderStatuses.First(os => os.Name == OrderStatus.PENDING),
             PaymentMethod = _dbContext.PaymentMethods.First(os => os.Name == PaymentMethod.CREDIT_CARD),
@@ -186,7 +186,7 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             Assert.Equal(1, result.Draw);
             Assert.Equal(5, result.Data.Count);
             Assert.Equal(10005, result.Data.First().Id);
-            Assert.Equal(DateTime.Today.AddDays(-1).ToString("G"), result.Data.First().DateCreated);
+            Assert.True((DateTime.UtcNow.AddDays(-1) - DateTime.Parse(result.Data.First().DateCreated!)).TotalSeconds < 2);
             Assert.Equal("test_name_05", result.Data.First().CustomerFullName);
             Assert.Equal("Pending", result.Data.First().StatusName);
             Assert.Equal("Georgia", result.Data.First().BillingAddressStateName);

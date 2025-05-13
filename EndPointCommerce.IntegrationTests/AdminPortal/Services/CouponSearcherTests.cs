@@ -16,27 +16,27 @@ public class CouponSearcherTests : BaseEntitySearcherTests<CouponSearchResultIte
         _dbContext.Coupons.Add(new Coupon
         {
             Id = 1, Code = "test_code_01", Discount = 10, IsDiscountFixed = true,
-            DateCreated = DateTime.Today.AddDays(-5), DateModified = DateTime.Today.AddDays(-5)
+            DateCreated = DateTime.UtcNow.AddDays(-5), DateModified = DateTime.UtcNow.AddDays(-5)
         });
         _dbContext.Coupons.Add(new Coupon
         {
             Id = 2, Code = "test_code_02", Discount = 20, IsDiscountFixed = false,
-            DateCreated = DateTime.Today.AddDays(-4), DateModified = DateTime.Today.AddDays(-4)
+            DateCreated = DateTime.UtcNow.AddDays(-4), DateModified = DateTime.UtcNow.AddDays(-4)
         });
         _dbContext.Coupons.Add(new Coupon
         {
             Id = 3, Code = "test_code_03", Discount = 30, IsDiscountFixed = true,
-            DateCreated = DateTime.Today.AddDays(-3), DateModified = DateTime.Today.AddDays(-3)
+            DateCreated = DateTime.UtcNow.AddDays(-3), DateModified = DateTime.UtcNow.AddDays(-3)
         });
         _dbContext.Coupons.Add(new Coupon
         {
             Id = 4, Code = "test_code_04", Discount = 40, IsDiscountFixed = false,
-            DateCreated = DateTime.Today.AddDays(-2), DateModified = DateTime.Today.AddDays(-2)
+            DateCreated = DateTime.UtcNow.AddDays(-2), DateModified = DateTime.UtcNow.AddDays(-2)
         });
         _dbContext.Coupons.Add(new Coupon
         {
             Id = 5, Code = "test_code_05", Discount = 50, IsDiscountFixed = true,
-            DateCreated = DateTime.Today.AddDays(-1), DateModified = DateTime.Today.AddDays(-1)
+            DateCreated = DateTime.UtcNow.AddDays(-1), DateModified = DateTime.UtcNow.AddDays(-1)
         });
 
         _dbContext.SaveChanges();
@@ -102,8 +102,8 @@ public class CouponSearcherTests : BaseEntitySearcherTests<CouponSearchResultIte
             Assert.Equal("test_code_01", result.Data.First().Code);
             Assert.Equal(10, result.Data.First().Discount);
             Assert.Equal(true, result.Data.First().IsDiscountFixed);
-            Assert.Equal(DateTime.Today.AddDays(-5).ToString("G"), result.Data.First().DateCreated);
-            Assert.Equal(DateTime.Today.AddDays(-5).ToString("G"), result.Data.First().DateModified);
+            Assert.True((DateTime.UtcNow.AddDays(-5) - DateTime.Parse(result.Data.First().DateCreated!)).TotalSeconds < 2);
+            Assert.True((DateTime.UtcNow.AddDays(-5) - DateTime.Parse(result.Data.First().DateModified!)).TotalSeconds < 2);
             Assert.Equal("test_edit_url", result.Data.First().EditUrl);
         });
     }
