@@ -22,7 +22,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Users
         }
 
         [BindProperty]
-        public new UserViewModel User { get; set; } = default!;
+        public new UserEditViewModel User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,7 +36,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Users
             {
                 return NotFound();
             }
-            User = await UserViewModel.FromModel(user, _identityService, _customerRepository);
+            User = await UserEditViewModel.FromModel(user, _identityService, _customerRepository);
             return Page();
         }
 
@@ -61,10 +61,11 @@ namespace EndPointCommerce.AdminPortal.Pages.Users
             }
 
             var user = User.ToModel();
+            var password = string.IsNullOrEmpty(User.Password) ? null : User.Password;
 
             try
             {
-                var result = await _identityService.UpdateAsync(user, User.Password, User.RoleName);
+                var result = await _identityService.UpdateAsync(user, password, User.RoleName);
                 if (!result.Succeeded)
                 {
                     ModelState.AddModelError("User.Password", string.Join(" ", result.Errors.Select(x => x.Description)));
