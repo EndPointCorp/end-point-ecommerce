@@ -20,11 +20,6 @@
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label class="form-label">Repeat Password</label>
-            <input id="User_RepeatPassword" class="form-control" type="password" />
-            <span id="User_RepeatPasswordValidation" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
             <label asp-for="RoleName" class="form-label"></label>
             <select asp-for="RoleName" class="form-control" asp-items="Model.Roles"></select>
             <span asp-validation-for="RoleName" class="text-danger"></span>

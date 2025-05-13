@@ -21,11 +21,11 @@ namespace EndPointCommerce.AdminPortal.Pages.Users
         }
 
         [BindProperty]
-        public new UserViewModel User { get; set; } = default!;
+        public new UserCreateViewModel User { get; set; } = default!;
 
         public async Task<IActionResult> OnGet()
         {
-            User = await UserViewModel.CreateDefault(_identityService, _customerRepository);
+            User = await UserCreateViewModel.CreateDefault(_identityService, _customerRepository);
             return Page();
         }
 

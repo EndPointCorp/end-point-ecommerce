@@ -5,16 +5,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EndPointCommerce.AdminPortal.ViewModels;
 
-/// <summary>
-/// View model for users.
-/// </summary>
-public class UserViewModel : User
+public abstract class UserViewModel : User
 {
     [Required]
     public override string? Email { get; set; }
 
-    [Required]
-    public string Password { get; set; } = default!;
+    public abstract string? Password { get; set; }
 
     [Required]
     public string RoleName { get; set; } = default!;
@@ -54,28 +50,5 @@ public class UserViewModel : User
                 Text = x.FullName,
                 Value = x.Id.ToString()
             }).ToList();
-    }
-
-    public static async Task<UserViewModel> CreateDefault(
-        IIdentityService identityService,
-        ICustomerRepository customerRepository
-    ) {
-        var userViewModel = new UserViewModel() { Email = "" };
-        await userViewModel.FillRoles(identityService);
-        await userViewModel.FillCustomers(customerRepository);
-        return userViewModel;
-    }
-
-    public static async Task<UserViewModel> FromModel(
-        User model,
-        IIdentityService identityService,
-        ICustomerRepository customerRepository
-    ) {
-        var userViewModel = await CreateDefault(identityService, customerRepository);
-        userViewModel.Id = model.Id;
-        userViewModel.Email = model.UserName!;
-        userViewModel.CustomerId = model.CustomerId;
-        userViewModel.RoleName = (await identityService.GetRoleAsync(model)).Name!;
-        return userViewModel;
     }
 }
