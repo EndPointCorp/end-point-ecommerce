@@ -25,7 +25,7 @@ dotnet test:
     TaxJarFromState: MN
     TaxJarFromZip: 55304
   script:
-    - mkdir -p /images/category-images /images/product-images
+    - mkdir -p /workspaces/end-point-commerce/images/category-images /workspaces/end-point-commerce/images/product-images
     - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
     - dotnet test --filter 'FullyQualifiedName!=EndPointCommerce.IntegrationTests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
   services:

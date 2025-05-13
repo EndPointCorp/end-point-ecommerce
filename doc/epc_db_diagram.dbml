@@ -1,0 +1,162 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table quotes [note: "Stores the carts."] {
+  id integer [primary key]
+  customer_id integer
+  is_open boolean
+  email string
+  shipping_address_id integer
+  billing_address_id integer
+  coupon_id integer
+  tax numeric
+}
+
+Table quote_items {
+  id integer [primary key]
+  quote_id integer
+  product_id integer
+  quantity integer
+}
+
+Table coupon {
+  id integer [primary key]
+  code string
+  discount numeric
+  is_discount_fixed boolean
+}
+
+Table products {
+  id integer [primary key]
+  sku text
+  name text
+  description text
+  short_description text
+  weight numeric
+
+  url_key text
+  meta_title text
+  meta_description text
+  meta_keywords text
+
+  is_enabled boolean
+  is_in_stock boolean
+  is_discounted boolean
+
+  base_price numeric
+  discount_amount numeric
+  
+  category_id integer
+
+  main_image_id integer
+  thumbnail_image_id integer
+
+  search_vector tsvector
+}
+
+Table categories {
+  id integer [primary key]
+  name text
+  is_enabled boolean
+  main_image_id integer
+
+  url_key text
+  meta_title text
+  meta_keywords text
+  meta_description text
+}
+
+Table images {
+  id integer [primary key]
+  file_name text
+  discriminator character_varying(13) [note: "Can be one of ProductImage, CategoryImage or OrganizationImage"]
+  product_id integer
+}
+
+Table orders {
+  id integer [primary key]
+  quote_id integer
+  customer_id integer
+  status_id integer
+  subtotal numeric
+  discount numeric
+  tax numeric
+  total numeric
+  shipping_address_id integer
+  billing_address_id integer
+  coupon_id integer
+  payment_method_id integer
+  payment_method_nonce_value text
+  payment_method_nonce_descriptor text
+  payment_transaction_id text
+  tracking_number text
+}
+
+Table order_items {
+  id integer [primary key]
+  order_id integer
+  quote_item_id integer
+  product_id integer
+  quantity integer
+  unit_price numeric
+  total_price numeric
+  discount numeric
+  total numeric
+}
+
+Table addresses {
+  id integer [primary key]
+  name text
+  last_name text
+  phone_number text
+  street text
+  street_two text
+  city text
+  zip_code text
+  state_id integer
+}
+
+Table states {
+  id integer [primary key]
+  name text
+  abbreviation text
+}
+
+Table customers [note: "Basic customer information."] {
+  id integer [primary key]
+  name text
+  last_name text
+  email text
+}
+
+Table users [note: "A customer with a login account."] {
+  id integer [primary key]
+  customer_id integer
+  user_name text
+}
+
+Ref: quote_items.quote_id > quotes.id
+Ref: quote_items.product_id > products.id
+
+Ref: products.category_id > categories.id
+Ref: products.main_image_id > images.id
+Ref: products.thumbnail_image_id > images.id
+Ref: categories.main_image_id > images.id
+
+Ref: orders.quote_id > quotes.id
+Ref: order_items.order_id > orders.id
+Ref: order_items.quote_item_id > quote_items.id
+Ref: order_items.product_id > products.id
+
+Ref: addresses.state_id > states.id
+Ref: quotes.shipping_address_id > addresses.id
+Ref: quotes.billing_address_id > addresses.id
+Ref: orders.shipping_address_id > addresses.id
+Ref: orders.billing_address_id > addresses.id
+
+Ref: quotes.customer_id > customers.id
+Ref: orders.customer_id > customers.id
+Ref: users.customer_id > customers.id
+
+Ref: quotes.coupon_id > coupon.id
+Ref: orders.coupon_id > coupon.id
