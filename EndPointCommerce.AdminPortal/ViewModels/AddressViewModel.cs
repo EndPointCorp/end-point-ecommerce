@@ -14,6 +14,7 @@ public class AddressViewModel : Address
     [Display(Name = "Customer")]
     public new int? CustomerId { get; set; }
 
+    public IEnumerable<SelectListItem>? Countries { get; set; }
     public IEnumerable<SelectListItem>? States { get; set; }
     public IEnumerable<SelectListItem>? Customers { get; set; }
 
@@ -30,8 +31,21 @@ public class AddressViewModel : Address
             ZipCode = ZipCode,
             PhoneNumber = PhoneNumber,
             CustomerId = CustomerId,
+            CountryId = CountryId,
             StateId = StateId
         };
+    }
+
+    public async Task FillCountries(ICountryRepository countryRepository)
+    {
+        var countries = await countryRepository.FetchAllAsync();
+        Countries = countries
+            .Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            })
+            .ToList();
     }
 
     public async Task FillStates(IStateRepository stateRepository)
@@ -58,25 +72,35 @@ public class AddressViewModel : Address
             .ToList();
     }
 
-    public static async Task<AddressViewModel> CreateDefault(int? customerId, IStateRepository stateRepository, ICustomerRepository customerRepository)
-    {
+    public static async Task<AddressViewModel> CreateDefault(
+        int? customerId,
+        ICountryRepository countryRepository,
+        IStateRepository stateRepository,
+        ICustomerRepository customerRepository
+    ) {
         var addressViewModel = new AddressViewModel() {
             Name = "",
             LastName = "",
             City = "",
             CustomerId = customerId,
+            CountryId = (await countryRepository.FetchAllAsync()).First().Id,
             StateId = (await stateRepository.FetchAllAsync()).First().Id,
             Street = "",
             ZipCode = ""
         };
+        await addressViewModel.FillCountries(countryRepository);
         await addressViewModel.FillStates(stateRepository);
         await addressViewModel.FillCustomers(customerRepository);
         return addressViewModel;
     }
 
-    public static async Task<AddressViewModel> FromModel(Address model, IStateRepository stateRepository, ICustomerRepository customerRepository)
-    {
-        var addressViewModel = await CreateDefault(model.CustomerId, stateRepository, customerRepository);
+    public static async Task<AddressViewModel> FromModel(
+        Address model,
+        ICountryRepository countryRepository,
+        IStateRepository stateRepository,
+        ICustomerRepository customerRepository
+    ) {
+        var addressViewModel = await CreateDefault(model.CustomerId, countryRepository, stateRepository, customerRepository);
         addressViewModel.Id = model.Id;
         addressViewModel.Name = model.Name;
         addressViewModel.LastName = model.LastName;
@@ -86,6 +110,7 @@ public class AddressViewModel : Address
         addressViewModel.ZipCode = model.ZipCode;
         addressViewModel.PhoneNumber = model.PhoneNumber;
         addressViewModel.CustomerId = model.CustomerId;
+        addressViewModel.CountryId = model.CountryId;
         addressViewModel.StateId = model.StateId;
         return addressViewModel;
     }

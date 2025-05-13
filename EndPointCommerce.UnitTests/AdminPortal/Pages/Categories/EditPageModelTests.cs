@@ -222,7 +222,7 @@ public class EditPageModelTests
     }
 
     [Fact]
-    public async Task OnPostSaveAndContinueAsync_RendersThePage()
+    public async Task OnPostSaveAndContinueAsync_RedirectsToThePage()
     {
         // Arrange
         var pageModel = BuildSubject();
@@ -231,7 +231,9 @@ public class EditPageModelTests
         var result = await pageModel.OnPostSaveAndContinueAsync();
 
         // Assert
-        Assert.IsType<PageResult>(result);
+        Assert.IsType<RedirectToPageResult>(result);
+        Assert.Equal("./Edit", ((RedirectToPageResult)result).PageName);
+        Assert.Equal(10, ((RedirectToPageResult)result).RouteValues!["Id"]);
     }
 
     [Fact]

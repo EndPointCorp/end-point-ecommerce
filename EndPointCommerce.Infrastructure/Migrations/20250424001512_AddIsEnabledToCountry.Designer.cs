@@ -3,6 +3,7 @@ using System;
 using EndPointCommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using NpgsqlTypes;
 namespace EndPointCommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EndPointCommerceDbContext))]
-    partial class EndPointCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250424001512_AddIsEnabledToCountry")]
+    partial class AddIsEnabledToCountry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,15 +53,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -134,15 +137,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -1930,15 +1933,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -1985,15 +1988,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2021,6 +2024,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<string>("Organization")
+                        .HasColumnType("text")
+                        .HasColumnName("organization");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
@@ -2084,15 +2091,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2106,6 +2113,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric")
                         .HasColumnName("discount");
+
+                    b.Property<bool>("IsSubscription")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_subscription");
 
                     b.Property<int?>("ModifiedBy")
                         .HasColumnType("integer")
@@ -2334,15 +2345,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2418,6 +2429,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("thumbnail_image_id");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
                     b.Property<string>("UrlKey")
                         .HasColumnType("text")
                         .HasColumnName("url_key");
@@ -2480,15 +2495,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2949,6 +2964,70 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EndPointCommerce.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_modified");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("deleted");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("modified_by");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_subscriptions");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_subscriptions_customer_id");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_subscriptions_order_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_subscriptions_product_id");
+
+                    b.ToTable("subscriptions", (string)null);
+                });
+
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -3386,6 +3465,36 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Quote");
+                });
+
+            modelBuilder.Entity("EndPointCommerce.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("EndPointCommerce.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_customers_customer_id");
+
+                    b.HasOne("EndPointCommerce.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_orders_order_id");
+
+                    b.HasOne("EndPointCommerce.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_products_product_id");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.User", b =>

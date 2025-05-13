@@ -10,7 +10,6 @@ namespace EndPointCommerce.Infrastructure.Services;
 /// </summary>
 public class TaxJarTaxCalculator: ITaxCalculator
 {
-    private const string TAX_COUNTRY_CODE = "US";
     private const decimal SHIPPING_COST = 0.0M;
     private const string TAX_CODE = "31000";
 
@@ -62,11 +61,11 @@ public class TaxJarTaxCalculator: ITaxCalculator
             from_city = _fromCity,
             from_street = _fromStreet,
 
-            to_country = TAX_COUNTRY_CODE,
+            to_country = quote.ShippingAddress!.Country!.Code,
             to_zip = quote.ShippingAddress!.ZipCode,
-            to_state = quote.ShippingAddress.State.Abbreviation,
+            to_state = quote.ShippingAddress.State?.Abbreviation,
             to_city = quote.ShippingAddress.City,
-            tp_street = quote.ShippingAddress.Street,
+            to_street = quote.ShippingAddress.Street,
 
             shipping = SHIPPING_COST,
 

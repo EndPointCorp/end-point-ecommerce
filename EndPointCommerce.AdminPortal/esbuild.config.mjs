@@ -15,6 +15,7 @@ await esbuild.build({
 const jsFiles = [
   { entry: './JavaScript/addresses.index.js', outfile: './wwwroot/js/addresses.index.js' },
   { entry: './JavaScript/categories.index.js', outfile: './wwwroot/js/categories.index.js' },
+  { entry: './JavaScript/countries.index.js', outfile: './wwwroot/js/countries.index.js' },
   { entry: './JavaScript/coupons.index.js', outfile: './wwwroot/js/coupons.index.js' },
   { entry: './JavaScript/customers.index.js', outfile: './wwwroot/js/customers.index.js' },
   { entry: './JavaScript/dashboard.js', outfile: './wwwroot/js/dashboard.js' },

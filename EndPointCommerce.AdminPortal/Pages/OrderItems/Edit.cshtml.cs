@@ -53,7 +53,7 @@ namespace EndPointCommerce.AdminPortal.Pages.OrderItems
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(Page);
+            return await HandlePost(() => RedirectToPage("./Edit", new { OrderItem.Id }));
         }
 
         private async Task<IActionResult> HandlePost(Func<IActionResult> onSuccess)

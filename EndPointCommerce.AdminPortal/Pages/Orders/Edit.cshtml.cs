@@ -55,22 +55,15 @@ namespace EndPointCommerce.AdminPortal.Pages.Orders
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
-            return await HandlePost(() =>
-                Task.FromResult<IActionResult>(
-                    RedirectToPage("./Index")
-                )
-            );
+            return await HandlePost(() => RedirectToPage("./Index"));
         }
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(async () => {
-                await PopulateFormOptions();
-                return Page();
-            });
+            return await HandlePost(() => RedirectToPage("./Edit", new { Order.Id }));
         }
 
-        private async Task<IActionResult> HandlePost(Func<Task<IActionResult>> onSuccess)
+        private async Task<IActionResult> HandlePost(Func<IActionResult> onSuccess)
         {
             if (!ModelState.IsValid)
             {
@@ -94,7 +87,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Orders
                 }
             }
 
-            return await onSuccess.Invoke();
+            return onSuccess.Invoke();
         }
 
         protected async Task PopulateFormOptions()

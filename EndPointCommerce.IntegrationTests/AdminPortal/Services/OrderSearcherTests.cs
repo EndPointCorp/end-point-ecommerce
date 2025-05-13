@@ -24,12 +24,14 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             {
                 Name = "test_name_01", LastName = "test_last_name_01",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "AL").Id
             },
             BillingAddress = new()
             {
                 Name = "test_name_01", LastName = "test_last_name_01",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "AL").Id
             },
             Total = 100.00M
@@ -45,12 +47,14 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             {
                 Name = "test_name_02", LastName = "test_last_name_02",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "CA").Id
             },
             BillingAddress = new()
             {
                 Name = "test_name_02", LastName = "test_last_name_02",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "CA").Id
             },
             Total = 200.00M
@@ -66,12 +70,14 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             {
                 Name = "test_name_03", LastName = "test_last_name_03",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "DE").Id
             },
             BillingAddress = new()
             {
                 Name = "test_name_03", LastName = "test_last_name_03",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "DE").Id
             },
             Total = 300.00M
@@ -87,12 +93,14 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             {
                 Name = "test_name_04", LastName = "test_last_name_04",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "FL").Id
             },
             BillingAddress = new()
             {
                 Name = "test_name_04", LastName = "test_last_name_04",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "FL").Id
             },
             Total = 400.00M
@@ -108,12 +116,14 @@ public class OrderSearcherTests : BaseEntitySearcherTests<OrderSearchResultItem,
             {
                 Name = "test_name_05", LastName = "test_last_name_05",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "GA").Id
             },
             BillingAddress = new()
             {
                 Name = "test_name_05", LastName = "test_last_name_05",
                 ZipCode = "12345", City = "test_city", Street = "test_street",
+                CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                 StateId = _dbContext.States.First(s => s.Abbreviation == "GA").Id
             },
             Total = 500.00M

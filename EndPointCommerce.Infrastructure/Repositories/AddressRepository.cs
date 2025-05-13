@@ -18,6 +18,7 @@ public class AddressRepository : BaseAuditRepository<Address>, IAddressRepositor
     public async Task<IList<Address>> FetchAllByCustomerIdAsync(int customerId)
     {
         return await DbSet()
+            .Include(a => a.Country)
             .Include(a => a.State)
             .Where(a => !a.Deleted && a.CustomerId == customerId)
             .OrderBy(a => a.Id)
@@ -27,6 +28,7 @@ public class AddressRepository : BaseAuditRepository<Address>, IAddressRepositor
     public async Task<Address?> FindByIdWithStateAsync(int id)
     {
         return await DbSet()
+            .Include(a => a.Country)
             .Include(a => a.State)
             .FirstOrDefaultAsync(a => a.Id == id);
     }

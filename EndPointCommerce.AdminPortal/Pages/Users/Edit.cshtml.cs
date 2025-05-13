@@ -47,7 +47,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Users
 
         public async Task<IActionResult> OnPostSaveAndContinueAsync()
         {
-            return await HandlePost(Page);
+            return await HandlePost(() => RedirectToPage("./Edit", new { User.Id }));
         }
 
         private async Task<IActionResult> HandlePost(Func<IActionResult> onSuccess)

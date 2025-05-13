@@ -9,7 +9,8 @@ public class QuoteAddress
     public required string Street { get; set; }
     public string? StreetTwo { get; set; }
     public required string City { get; set; }
-    public required int StateId { get; set; }
+    public required int CountryId { get; set; }
+    public int? StateId { get; set; }
     public required string ZipCode { get; set; }
     public string? PhoneNumber { get; set; }
 
@@ -22,6 +23,7 @@ public class QuoteAddress
             Street = Street,
             StreetTwo = StreetTwo,
             City = City,
+            CountryId = CountryId,
             StateId = StateId,
             ZipCode = ZipCode,
             PhoneNumber = PhoneNumber
@@ -39,6 +41,7 @@ public class QuoteAddress
             Street = entity.Street,
             StreetTwo = entity.StreetTwo,
             City = entity.City,
+            CountryId = entity.CountryId,
             StateId = entity.StateId,
             ZipCode = entity.ZipCode,
             PhoneNumber = entity.PhoneNumber

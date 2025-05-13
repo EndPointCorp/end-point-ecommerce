@@ -44,8 +44,11 @@ public class OrderSearcher : BaseEntitySearcher<OrderSearchResultItem, Order>, I
                 o.Customer.LastName != null &&
                 o.Customer.LastName.ToLower().Contains(searchValue)
             ) ||
+            (
+                o.BillingAddress!.State != null &&
+                o.BillingAddress.State.Name.ToLower().Contains(searchValue)
+            ) ||
             o.Status.Name.ToLower().Contains(searchValue) ||
-            o.BillingAddress.State.Name.ToLower().Contains(searchValue) ||
             o.Total.ToString().Contains(searchValue)
         );
 
@@ -57,14 +60,14 @@ public class OrderSearcher : BaseEntitySearcher<OrderSearchResultItem, Order>, I
                 [("dateCreated", "asc")] = q => q.OrderBy(o => o.DateCreated),
                 [("customerFullName", "asc")] = q => q.OrderBy(o => o.Customer.Name),
                 [("statusName", "asc")] = q => q.OrderBy(o => o.Status.Name),
-                [("billingAddressStateName", "asc")] = q => q.OrderBy(o => o.BillingAddress.State.Name),
+                [("billingAddressStateName", "asc")] = q => q.OrderBy(o => o.BillingAddress.State!.Name),
                 [("total", "asc")] = q => q.OrderBy(o => o.Total),
 
                 [("id", "desc")] = q => q.OrderByDescending(o => o.Id),
                 [("dateCreated", "desc")] = q => q.OrderByDescending(o => o.DateCreated),
                 [("customerFullName", "desc")] = q => q.OrderByDescending(o => o.Customer.Name),
                 [("statusName", "desc")] = q => q.OrderByDescending(o => o.Status.Name),
-                [("billingAddressStateName", "desc")] = q => q.OrderByDescending(o => o.BillingAddress.State.Name),
+                [("billingAddressStateName", "desc")] = q => q.OrderByDescending(o => o.BillingAddress.State!.Name),
                 [("total", "desc")] = q => q.OrderByDescending(o => o.Total),
             };
 
@@ -79,7 +82,7 @@ public class OrderSearcher : BaseEntitySearcher<OrderSearchResultItem, Order>, I
                 DateCreated = entity.DateCreated!.Value.ToString("G"),
                 CustomerFullName = entity.Customer.FullName,
                 StatusName = entity.Status.Name,
-                BillingAddressStateName = entity.BillingAddress.State.Name,
+                BillingAddressStateName = entity.BillingAddress.State!.Name,
                 Total = string.Format("{0:C}", entity.Total),
                 EditUrl = url.Build("./Edit", new { entity.Id })
             }

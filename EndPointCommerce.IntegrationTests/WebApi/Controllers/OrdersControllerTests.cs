@@ -53,6 +53,7 @@ public class OrdersControllerTests : IntegrationTestFixture
             Street = "test_street_one",
             StreetTwo = "test_street_two",
             City = "test_city",
+            CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
             StateId = state.Id,
             ZipCode = "12345",
             PhoneNumber = "1234567890"
@@ -121,6 +122,7 @@ public class OrdersControllerTests : IntegrationTestFixture
                     Street = "test_street_one",
                     StreetTwo = "test_street_two",
                     City = "test_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.First().Id,
                     ZipCode = "12345",
                     PhoneNumber = "1234567890",
@@ -134,6 +136,7 @@ public class OrdersControllerTests : IntegrationTestFixture
                     Street = "test_street_one",
                     StreetTwo = "test_street_two",
                     City = "test_city",
+                    CountryId = _dbContext.Countries.First(c => c.Code == "US").Id,
                     StateId = _dbContext.States.First().Id,
                     ZipCode = "12345",
                     PhoneNumber = "1234567890",

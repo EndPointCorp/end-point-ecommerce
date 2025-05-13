@@ -3,6 +3,7 @@ using System;
 using EndPointCommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using NpgsqlTypes;
 namespace EndPointCommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EndPointCommerceDbContext))]
-    partial class EndPointCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422204329_CreateCountries")]
+    partial class CreateCountries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,10 +40,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("city");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer")
-                        .HasColumnName("country_id");
-
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("integer")
                         .HasColumnName("created_by");
@@ -50,15 +49,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -87,7 +86,7 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("phone_number");
 
-                    b.Property<int?>("StateId")
+                    b.Property<int>("StateId")
                         .HasColumnType("integer")
                         .HasColumnName("state_id");
 
@@ -107,9 +106,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_addresses");
-
-                    b.HasIndex("CountryId")
-                        .HasDatabaseName("ix_addresses_country_id");
 
                     b.HasIndex("CustomerId")
                         .HasDatabaseName("ix_addresses_customer_id");
@@ -134,15 +130,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -217,10 +213,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("code");
 
-                    b.Property<bool>("IsEnabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_enabled");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
@@ -240,1673 +232,1434 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         {
                             Id = 1,
                             Code = "AF",
-                            IsEnabled = true,
                             Name = "Afghanistan"
                         },
                         new
                         {
                             Id = 2,
                             Code = "AL",
-                            IsEnabled = true,
                             Name = "Albania"
                         },
                         new
                         {
                             Id = 3,
                             Code = "DZ",
-                            IsEnabled = true,
                             Name = "Algeria"
                         },
                         new
                         {
                             Id = 4,
                             Code = "AS",
-                            IsEnabled = true,
                             Name = "American Samoa"
                         },
                         new
                         {
                             Id = 5,
                             Code = "AD",
-                            IsEnabled = true,
                             Name = "Andorra"
                         },
                         new
                         {
                             Id = 6,
                             Code = "AO",
-                            IsEnabled = true,
                             Name = "Angola"
                         },
                         new
                         {
                             Id = 7,
                             Code = "AI",
-                            IsEnabled = true,
                             Name = "Anguilla"
                         },
                         new
                         {
                             Id = 8,
                             Code = "AQ",
-                            IsEnabled = true,
                             Name = "Antarctica"
                         },
                         new
                         {
                             Id = 9,
                             Code = "AG",
-                            IsEnabled = true,
                             Name = "Antigua And Barbuda"
                         },
                         new
                         {
                             Id = 10,
                             Code = "AR",
-                            IsEnabled = true,
                             Name = "Argentina"
                         },
                         new
                         {
                             Id = 11,
                             Code = "AM",
-                            IsEnabled = true,
                             Name = "Armenia"
                         },
                         new
                         {
                             Id = 12,
                             Code = "AW",
-                            IsEnabled = true,
                             Name = "Aruba"
                         },
                         new
                         {
                             Id = 13,
                             Code = "AU",
-                            IsEnabled = true,
                             Name = "Australia"
                         },
                         new
                         {
                             Id = 14,
                             Code = "AT",
-                            IsEnabled = true,
                             Name = "Austria"
                         },
                         new
                         {
                             Id = 15,
                             Code = "AZ",
-                            IsEnabled = true,
                             Name = "Azerbaijan"
                         },
                         new
                         {
                             Id = 16,
                             Code = "BS",
-                            IsEnabled = true,
                             Name = "Bahamas"
                         },
                         new
                         {
                             Id = 17,
                             Code = "BH",
-                            IsEnabled = true,
                             Name = "Bahrain"
                         },
                         new
                         {
                             Id = 18,
                             Code = "BD",
-                            IsEnabled = true,
                             Name = "Bangladesh"
                         },
                         new
                         {
                             Id = 19,
                             Code = "BB",
-                            IsEnabled = true,
                             Name = "Barbados"
                         },
                         new
                         {
                             Id = 20,
                             Code = "BY",
-                            IsEnabled = true,
                             Name = "Belarus"
                         },
                         new
                         {
                             Id = 21,
                             Code = "BE",
-                            IsEnabled = true,
                             Name = "Belgium"
                         },
                         new
                         {
                             Id = 22,
                             Code = "BZ",
-                            IsEnabled = true,
                             Name = "Belize"
                         },
                         new
                         {
                             Id = 23,
                             Code = "BJ",
-                            IsEnabled = true,
                             Name = "Benin"
                         },
                         new
                         {
                             Id = 24,
                             Code = "BM",
-                            IsEnabled = true,
                             Name = "Bermuda"
                         },
                         new
                         {
                             Id = 25,
                             Code = "BT",
-                            IsEnabled = true,
                             Name = "Bhutan"
                         },
                         new
                         {
                             Id = 26,
                             Code = "BO",
-                            IsEnabled = true,
                             Name = "Bolivia"
                         },
                         new
                         {
                             Id = 27,
                             Code = "BA",
-                            IsEnabled = true,
                             Name = "Bosnia And Herzegowina"
                         },
                         new
                         {
                             Id = 28,
                             Code = "BW",
-                            IsEnabled = true,
                             Name = "Botswana"
                         },
                         new
                         {
                             Id = 29,
                             Code = "BV",
-                            IsEnabled = true,
                             Name = "Bouvet Island"
                         },
                         new
                         {
                             Id = 30,
                             Code = "BR",
-                            IsEnabled = true,
                             Name = "Brazil"
                         },
                         new
                         {
                             Id = 31,
                             Code = "IO",
-                            IsEnabled = true,
                             Name = "British Indian Ocean Territory"
                         },
                         new
                         {
                             Id = 32,
                             Code = "BN",
-                            IsEnabled = true,
                             Name = "Brunei Darussalam"
                         },
                         new
                         {
                             Id = 33,
                             Code = "BG",
-                            IsEnabled = true,
                             Name = "Bulgaria"
                         },
                         new
                         {
                             Id = 34,
                             Code = "BF",
-                            IsEnabled = true,
                             Name = "Burkina Faso"
                         },
                         new
                         {
                             Id = 35,
                             Code = "BI",
-                            IsEnabled = true,
                             Name = "Burundi"
                         },
                         new
                         {
                             Id = 36,
                             Code = "KH",
-                            IsEnabled = true,
                             Name = "Cambodia"
                         },
                         new
                         {
                             Id = 37,
                             Code = "CM",
-                            IsEnabled = true,
                             Name = "Cameroon"
                         },
                         new
                         {
                             Id = 38,
                             Code = "CA",
-                            IsEnabled = true,
                             Name = "Canada"
                         },
                         new
                         {
                             Id = 39,
                             Code = "CV",
-                            IsEnabled = true,
                             Name = "Cape Verde"
                         },
                         new
                         {
                             Id = 40,
                             Code = "KY",
-                            IsEnabled = true,
                             Name = "Cayman Islands"
                         },
                         new
                         {
                             Id = 41,
                             Code = "CF",
-                            IsEnabled = true,
                             Name = "Central African Republic"
                         },
                         new
                         {
                             Id = 42,
                             Code = "TD",
-                            IsEnabled = true,
                             Name = "Chad"
                         },
                         new
                         {
                             Id = 43,
                             Code = "CL",
-                            IsEnabled = true,
                             Name = "Chile"
                         },
                         new
                         {
                             Id = 44,
                             Code = "CN",
-                            IsEnabled = true,
                             Name = "China"
                         },
                         new
                         {
                             Id = 45,
                             Code = "CX",
-                            IsEnabled = true,
                             Name = "Christmas Island"
                         },
                         new
                         {
                             Id = 46,
                             Code = "CC",
-                            IsEnabled = true,
                             Name = "Cocos (Keeling) Islands"
                         },
                         new
                         {
                             Id = 47,
                             Code = "CO",
-                            IsEnabled = true,
                             Name = "Colombia"
                         },
                         new
                         {
                             Id = 48,
                             Code = "KM",
-                            IsEnabled = true,
                             Name = "Comoros"
                         },
                         new
                         {
                             Id = 49,
                             Code = "CG",
-                            IsEnabled = true,
                             Name = "Congo"
                         },
                         new
                         {
                             Id = 50,
                             Code = "CD",
-                            IsEnabled = true,
                             Name = "Congo, The Democratic Republic Of The"
                         },
                         new
                         {
                             Id = 51,
                             Code = "CK",
-                            IsEnabled = true,
                             Name = "Cook Islands"
                         },
                         new
                         {
                             Id = 52,
                             Code = "CR",
-                            IsEnabled = true,
                             Name = "Costa Rica"
                         },
                         new
                         {
                             Id = 53,
                             Code = "CI",
-                            IsEnabled = true,
                             Name = "Cote D'ivoire"
                         },
                         new
                         {
                             Id = 54,
                             Code = "HR",
-                            IsEnabled = true,
                             Name = "Croatia (Local Name: Hrvatska)"
                         },
                         new
                         {
                             Id = 55,
                             Code = "CU",
-                            IsEnabled = true,
                             Name = "Cuba"
                         },
                         new
                         {
                             Id = 56,
                             Code = "CY",
-                            IsEnabled = true,
                             Name = "Cyprus"
                         },
                         new
                         {
                             Id = 57,
                             Code = "CZ",
-                            IsEnabled = true,
                             Name = "Czech Republic"
                         },
                         new
                         {
                             Id = 58,
                             Code = "DK",
-                            IsEnabled = true,
                             Name = "Denmark"
                         },
                         new
                         {
                             Id = 59,
                             Code = "DJ",
-                            IsEnabled = true,
                             Name = "Djibouti"
                         },
                         new
                         {
                             Id = 60,
                             Code = "DM",
-                            IsEnabled = true,
                             Name = "Dominica"
                         },
                         new
                         {
                             Id = 61,
                             Code = "DO",
-                            IsEnabled = true,
                             Name = "Dominican Republic"
                         },
                         new
                         {
                             Id = 62,
                             Code = "TP",
-                            IsEnabled = true,
                             Name = "East Timor"
                         },
                         new
                         {
                             Id = 63,
                             Code = "EC",
-                            IsEnabled = true,
                             Name = "Ecuador"
                         },
                         new
                         {
                             Id = 64,
                             Code = "EG",
-                            IsEnabled = true,
                             Name = "Egypt"
                         },
                         new
                         {
                             Id = 65,
                             Code = "SV",
-                            IsEnabled = true,
                             Name = "El Salvador"
                         },
                         new
                         {
                             Id = 66,
                             Code = "GQ",
-                            IsEnabled = true,
                             Name = "Equatorial Guinea"
                         },
                         new
                         {
                             Id = 67,
                             Code = "ER",
-                            IsEnabled = true,
                             Name = "Eritrea"
                         },
                         new
                         {
                             Id = 68,
                             Code = "EE",
-                            IsEnabled = true,
                             Name = "Estonia"
                         },
                         new
                         {
                             Id = 69,
                             Code = "ET",
-                            IsEnabled = true,
                             Name = "Ethiopia"
                         },
                         new
                         {
                             Id = 70,
                             Code = "FK",
-                            IsEnabled = true,
                             Name = "Falkland Islands (Malvinas)"
                         },
                         new
                         {
                             Id = 71,
                             Code = "FO",
-                            IsEnabled = true,
                             Name = "Faroe Islands"
                         },
                         new
                         {
                             Id = 72,
                             Code = "FJ",
-                            IsEnabled = true,
                             Name = "Fiji"
                         },
                         new
                         {
                             Id = 73,
                             Code = "FI",
-                            IsEnabled = true,
                             Name = "Finland"
                         },
                         new
                         {
                             Id = 74,
                             Code = "FR",
-                            IsEnabled = true,
                             Name = "France"
                         },
                         new
                         {
                             Id = 75,
                             Code = "FX",
-                            IsEnabled = true,
                             Name = "France, Metropolitan"
                         },
                         new
                         {
                             Id = 76,
                             Code = "GF",
-                            IsEnabled = true,
                             Name = "French Guiana"
                         },
                         new
                         {
                             Id = 77,
                             Code = "PF",
-                            IsEnabled = true,
                             Name = "French Polynesia"
                         },
                         new
                         {
                             Id = 78,
                             Code = "TF",
-                            IsEnabled = true,
                             Name = "French Southern Territories"
                         },
                         new
                         {
                             Id = 79,
                             Code = "GA",
-                            IsEnabled = true,
                             Name = "Gabon"
                         },
                         new
                         {
                             Id = 80,
                             Code = "GM",
-                            IsEnabled = true,
                             Name = "Gambia"
                         },
                         new
                         {
                             Id = 81,
                             Code = "GE",
-                            IsEnabled = true,
                             Name = "Georgia"
                         },
                         new
                         {
                             Id = 82,
                             Code = "DE",
-                            IsEnabled = true,
                             Name = "Germany"
                         },
                         new
                         {
                             Id = 83,
                             Code = "GH",
-                            IsEnabled = true,
                             Name = "Ghana"
                         },
                         new
                         {
                             Id = 84,
                             Code = "GI",
-                            IsEnabled = true,
                             Name = "Gibraltar"
                         },
                         new
                         {
                             Id = 85,
                             Code = "GR",
-                            IsEnabled = true,
                             Name = "Greece"
                         },
                         new
                         {
                             Id = 86,
                             Code = "GL",
-                            IsEnabled = true,
                             Name = "Greenland"
                         },
                         new
                         {
                             Id = 87,
                             Code = "GD",
-                            IsEnabled = true,
                             Name = "Grenada"
                         },
                         new
                         {
                             Id = 88,
                             Code = "GP",
-                            IsEnabled = true,
                             Name = "Guadeloupe"
                         },
                         new
                         {
                             Id = 89,
                             Code = "GU",
-                            IsEnabled = true,
                             Name = "Guam"
                         },
                         new
                         {
                             Id = 90,
                             Code = "GT",
-                            IsEnabled = true,
                             Name = "Guatemala"
                         },
                         new
                         {
                             Id = 91,
                             Code = "GN",
-                            IsEnabled = true,
                             Name = "Guinea"
                         },
                         new
                         {
                             Id = 92,
                             Code = "GW",
-                            IsEnabled = true,
                             Name = "Guinea-bissau"
                         },
                         new
                         {
                             Id = 93,
                             Code = "GY",
-                            IsEnabled = true,
                             Name = "Guyana"
                         },
                         new
                         {
                             Id = 94,
                             Code = "HT",
-                            IsEnabled = true,
                             Name = "Haiti"
                         },
                         new
                         {
                             Id = 95,
                             Code = "HM",
-                            IsEnabled = true,
                             Name = "Heard And Mc Donald Islands"
                         },
                         new
                         {
                             Id = 96,
                             Code = "VA",
-                            IsEnabled = true,
                             Name = "Holy See (Vatican City State)"
                         },
                         new
                         {
                             Id = 97,
                             Code = "HN",
-                            IsEnabled = true,
                             Name = "Honduras"
                         },
                         new
                         {
                             Id = 98,
                             Code = "HK",
-                            IsEnabled = true,
                             Name = "Hong Kong"
                         },
                         new
                         {
                             Id = 99,
                             Code = "HU",
-                            IsEnabled = true,
                             Name = "Hungary"
                         },
                         new
                         {
                             Id = 100,
                             Code = "IS",
-                            IsEnabled = true,
                             Name = "Iceland"
                         },
                         new
                         {
                             Id = 101,
                             Code = "IN",
-                            IsEnabled = true,
                             Name = "India"
                         },
                         new
                         {
                             Id = 102,
                             Code = "ID",
-                            IsEnabled = true,
                             Name = "Indonesia"
                         },
                         new
                         {
                             Id = 103,
                             Code = "IR",
-                            IsEnabled = true,
                             Name = "Iran (Islamic Republic Of)"
                         },
                         new
                         {
                             Id = 104,
                             Code = "IQ",
-                            IsEnabled = true,
                             Name = "Iraq"
                         },
                         new
                         {
                             Id = 105,
                             Code = "IE",
-                            IsEnabled = true,
                             Name = "Ireland"
                         },
                         new
                         {
                             Id = 106,
                             Code = "IL",
-                            IsEnabled = true,
                             Name = "Israel"
                         },
                         new
                         {
                             Id = 107,
                             Code = "IT",
-                            IsEnabled = true,
                             Name = "Italy"
                         },
                         new
                         {
                             Id = 108,
                             Code = "JM",
-                            IsEnabled = true,
                             Name = "Jamaica"
                         },
                         new
                         {
                             Id = 109,
                             Code = "JP",
-                            IsEnabled = true,
                             Name = "Japan"
                         },
                         new
                         {
                             Id = 110,
                             Code = "JO",
-                            IsEnabled = true,
                             Name = "Jordan"
                         },
                         new
                         {
                             Id = 111,
                             Code = "KZ",
-                            IsEnabled = true,
                             Name = "Kazakhstan"
                         },
                         new
                         {
                             Id = 112,
                             Code = "KE",
-                            IsEnabled = true,
                             Name = "Kenya"
                         },
                         new
                         {
                             Id = 113,
                             Code = "KI",
-                            IsEnabled = true,
                             Name = "Kiribati"
                         },
                         new
                         {
                             Id = 114,
                             Code = "KP",
-                            IsEnabled = true,
                             Name = "Korea, Democratic People's Republic Of"
                         },
                         new
                         {
                             Id = 115,
                             Code = "KR",
-                            IsEnabled = true,
                             Name = "Korea, Republic Of"
                         },
                         new
                         {
                             Id = 116,
                             Code = "KW",
-                            IsEnabled = true,
                             Name = "Kuwait"
                         },
                         new
                         {
                             Id = 117,
                             Code = "KG",
-                            IsEnabled = true,
                             Name = "Kyrgyzstan"
                         },
                         new
                         {
                             Id = 118,
                             Code = "LA",
-                            IsEnabled = true,
                             Name = "Lao People's Democratic Republic"
                         },
                         new
                         {
                             Id = 119,
                             Code = "LV",
-                            IsEnabled = true,
                             Name = "Latvia"
                         },
                         new
                         {
                             Id = 120,
                             Code = "LB",
-                            IsEnabled = true,
                             Name = "Lebanon"
                         },
                         new
                         {
                             Id = 121,
                             Code = "LS",
-                            IsEnabled = true,
                             Name = "Lesotho"
                         },
                         new
                         {
                             Id = 122,
                             Code = "LR",
-                            IsEnabled = true,
                             Name = "Liberia"
                         },
                         new
                         {
                             Id = 123,
                             Code = "LY",
-                            IsEnabled = true,
                             Name = "Libyan Arab Jamahiriya"
                         },
                         new
                         {
                             Id = 124,
                             Code = "LI",
-                            IsEnabled = true,
                             Name = "Liechtenstein"
                         },
                         new
                         {
                             Id = 125,
                             Code = "LT",
-                            IsEnabled = true,
                             Name = "Lithuania"
                         },
                         new
                         {
                             Id = 126,
                             Code = "LU",
-                            IsEnabled = true,
                             Name = "Luxembourg"
                         },
                         new
                         {
                             Id = 127,
                             Code = "MO",
-                            IsEnabled = true,
                             Name = "Macau"
                         },
                         new
                         {
                             Id = 128,
                             Code = "MK",
-                            IsEnabled = true,
                             Name = "Macedonia, The Former Yugoslav Republic Of"
                         },
                         new
                         {
                             Id = 129,
                             Code = "MG",
-                            IsEnabled = true,
                             Name = "Madagascar"
                         },
                         new
                         {
                             Id = 130,
                             Code = "MW",
-                            IsEnabled = true,
                             Name = "Malawi"
                         },
                         new
                         {
                             Id = 131,
                             Code = "MY",
-                            IsEnabled = true,
                             Name = "Malaysia"
                         },
                         new
                         {
                             Id = 132,
                             Code = "MV",
-                            IsEnabled = true,
                             Name = "Maldives"
                         },
                         new
                         {
                             Id = 133,
                             Code = "ML",
-                            IsEnabled = true,
                             Name = "Mali"
                         },
                         new
                         {
                             Id = 134,
                             Code = "MT",
-                            IsEnabled = true,
                             Name = "Malta"
                         },
                         new
                         {
                             Id = 135,
                             Code = "MH",
-                            IsEnabled = true,
                             Name = "Marshall Islands"
                         },
                         new
                         {
                             Id = 136,
                             Code = "MQ",
-                            IsEnabled = true,
                             Name = "Martinique"
                         },
                         new
                         {
                             Id = 137,
                             Code = "MR",
-                            IsEnabled = true,
                             Name = "Mauritania"
                         },
                         new
                         {
                             Id = 138,
                             Code = "MU",
-                            IsEnabled = true,
                             Name = "Mauritius"
                         },
                         new
                         {
                             Id = 139,
                             Code = "YT",
-                            IsEnabled = true,
                             Name = "Mayotte"
                         },
                         new
                         {
                             Id = 140,
                             Code = "MX",
-                            IsEnabled = true,
                             Name = "Mexico"
                         },
                         new
                         {
                             Id = 141,
                             Code = "FM",
-                            IsEnabled = true,
                             Name = "Micronesia, Federated States Of"
                         },
                         new
                         {
                             Id = 142,
                             Code = "MD",
-                            IsEnabled = true,
                             Name = "Moldova, Republic Of"
                         },
                         new
                         {
                             Id = 143,
                             Code = "MC",
-                            IsEnabled = true,
                             Name = "Monaco"
                         },
                         new
                         {
                             Id = 144,
                             Code = "MN",
-                            IsEnabled = true,
                             Name = "Mongolia"
                         },
                         new
                         {
                             Id = 145,
                             Code = "MS",
-                            IsEnabled = true,
                             Name = "Montserrat"
                         },
                         new
                         {
                             Id = 146,
                             Code = "MA",
-                            IsEnabled = true,
                             Name = "Morocco"
                         },
                         new
                         {
                             Id = 147,
                             Code = "MZ",
-                            IsEnabled = true,
                             Name = "Mozambique"
                         },
                         new
                         {
                             Id = 148,
                             Code = "MM",
-                            IsEnabled = true,
                             Name = "Myanmar"
                         },
                         new
                         {
                             Id = 149,
                             Code = "NA",
-                            IsEnabled = true,
                             Name = "Namibia"
                         },
                         new
                         {
                             Id = 150,
                             Code = "NR",
-                            IsEnabled = true,
                             Name = "Nauru"
                         },
                         new
                         {
                             Id = 151,
                             Code = "NP",
-                            IsEnabled = true,
                             Name = "Nepal"
                         },
                         new
                         {
                             Id = 152,
                             Code = "NL",
-                            IsEnabled = true,
                             Name = "Netherlands"
                         },
                         new
                         {
                             Id = 153,
                             Code = "AN",
-                            IsEnabled = true,
                             Name = "Netherlands Antilles"
                         },
                         new
                         {
                             Id = 154,
                             Code = "NC",
-                            IsEnabled = true,
                             Name = "New Caledonia"
                         },
                         new
                         {
                             Id = 155,
                             Code = "NZ",
-                            IsEnabled = true,
                             Name = "New Zealand"
                         },
                         new
                         {
                             Id = 156,
                             Code = "NI",
-                            IsEnabled = true,
                             Name = "Nicaragua"
                         },
                         new
                         {
                             Id = 157,
                             Code = "NE",
-                            IsEnabled = true,
                             Name = "Niger"
                         },
                         new
                         {
                             Id = 158,
                             Code = "NG",
-                            IsEnabled = true,
                             Name = "Nigeria"
                         },
                         new
                         {
                             Id = 159,
                             Code = "NU",
-                            IsEnabled = true,
                             Name = "Niue"
                         },
                         new
                         {
                             Id = 160,
                             Code = "NF",
-                            IsEnabled = true,
                             Name = "Norfolk Island"
                         },
                         new
                         {
                             Id = 161,
                             Code = "MP",
-                            IsEnabled = true,
                             Name = "Northern Mariana Islands"
                         },
                         new
                         {
                             Id = 162,
                             Code = "NO",
-                            IsEnabled = true,
                             Name = "Norway"
                         },
                         new
                         {
                             Id = 163,
                             Code = "OM",
-                            IsEnabled = true,
                             Name = "Oman"
                         },
                         new
                         {
                             Id = 164,
                             Code = "PK",
-                            IsEnabled = true,
                             Name = "Pakistan"
                         },
                         new
                         {
                             Id = 165,
                             Code = "PW",
-                            IsEnabled = true,
                             Name = "Palau"
                         },
                         new
                         {
                             Id = 166,
                             Code = "PA",
-                            IsEnabled = true,
                             Name = "Panama"
                         },
                         new
                         {
                             Id = 167,
                             Code = "PG",
-                            IsEnabled = true,
                             Name = "Papua New Guinea"
                         },
                         new
                         {
                             Id = 168,
                             Code = "PY",
-                            IsEnabled = true,
                             Name = "Paraguay"
                         },
                         new
                         {
                             Id = 169,
                             Code = "PE",
-                            IsEnabled = true,
                             Name = "Peru"
                         },
                         new
                         {
                             Id = 170,
                             Code = "PH",
-                            IsEnabled = true,
                             Name = "Philippines"
                         },
                         new
                         {
                             Id = 171,
                             Code = "PN",
-                            IsEnabled = true,
                             Name = "Pitcairn"
                         },
                         new
                         {
                             Id = 172,
                             Code = "PL",
-                            IsEnabled = true,
                             Name = "Poland"
                         },
                         new
                         {
                             Id = 173,
                             Code = "PT",
-                            IsEnabled = true,
                             Name = "Portugal"
                         },
                         new
                         {
                             Id = 174,
                             Code = "PR",
-                            IsEnabled = true,
                             Name = "Puerto Rico"
                         },
                         new
                         {
                             Id = 175,
                             Code = "QA",
-                            IsEnabled = true,
                             Name = "Qatar"
                         },
                         new
                         {
                             Id = 176,
                             Code = "RE",
-                            IsEnabled = true,
                             Name = "Reunion"
                         },
                         new
                         {
                             Id = 177,
                             Code = "RO",
-                            IsEnabled = true,
                             Name = "Romania"
                         },
                         new
                         {
                             Id = 178,
                             Code = "RU",
-                            IsEnabled = true,
                             Name = "Russian Federation"
                         },
                         new
                         {
                             Id = 179,
                             Code = "RW",
-                            IsEnabled = true,
                             Name = "Rwanda"
                         },
                         new
                         {
                             Id = 180,
                             Code = "KN",
-                            IsEnabled = true,
                             Name = "Saint Kitts And Nevis"
                         },
                         new
                         {
                             Id = 181,
                             Code = "LC",
-                            IsEnabled = true,
                             Name = "Saint Lucia"
                         },
                         new
                         {
                             Id = 182,
                             Code = "VC",
-                            IsEnabled = true,
                             Name = "Saint Vincent And The Grenadines"
                         },
                         new
                         {
                             Id = 183,
                             Code = "WS",
-                            IsEnabled = true,
                             Name = "Samoa"
                         },
                         new
                         {
                             Id = 184,
                             Code = "SM",
-                            IsEnabled = true,
                             Name = "San Marino"
                         },
                         new
                         {
                             Id = 185,
                             Code = "ST",
-                            IsEnabled = true,
                             Name = "Sao Tome And Principe"
                         },
                         new
                         {
                             Id = 186,
                             Code = "SA",
-                            IsEnabled = true,
                             Name = "Saudi Arabia"
                         },
                         new
                         {
                             Id = 187,
                             Code = "SN",
-                            IsEnabled = true,
                             Name = "Senegal"
                         },
                         new
                         {
                             Id = 188,
                             Code = "SC",
-                            IsEnabled = true,
                             Name = "Seychelles"
                         },
                         new
                         {
                             Id = 189,
                             Code = "SL",
-                            IsEnabled = true,
                             Name = "Sierra Leone"
                         },
                         new
                         {
                             Id = 190,
                             Code = "SG",
-                            IsEnabled = true,
                             Name = "Singapore"
                         },
                         new
                         {
                             Id = 191,
                             Code = "SK",
-                            IsEnabled = true,
                             Name = "Slovakia (Slovak Republic)"
                         },
                         new
                         {
                             Id = 192,
                             Code = "SI",
-                            IsEnabled = true,
                             Name = "Slovenia"
                         },
                         new
                         {
                             Id = 193,
                             Code = "SB",
-                            IsEnabled = true,
                             Name = "Solomon Islands"
                         },
                         new
                         {
                             Id = 194,
                             Code = "SO",
-                            IsEnabled = true,
                             Name = "Somalia"
                         },
                         new
                         {
                             Id = 195,
                             Code = "ZA",
-                            IsEnabled = true,
                             Name = "South Africa"
                         },
                         new
                         {
                             Id = 196,
                             Code = "GS",
-                            IsEnabled = true,
                             Name = "South Georgia And The South Sandwich Islands"
                         },
                         new
                         {
                             Id = 197,
                             Code = "ES",
-                            IsEnabled = true,
                             Name = "Spain"
                         },
                         new
                         {
                             Id = 198,
                             Code = "LK",
-                            IsEnabled = true,
                             Name = "Sri Lanka"
                         },
                         new
                         {
                             Id = 199,
                             Code = "SH",
-                            IsEnabled = true,
                             Name = "St. Helena"
                         },
                         new
                         {
                             Id = 200,
                             Code = "PM",
-                            IsEnabled = true,
                             Name = "St. Pierre And Miquelon"
                         },
                         new
                         {
                             Id = 201,
                             Code = "SD",
-                            IsEnabled = true,
                             Name = "Sudan"
                         },
                         new
                         {
                             Id = 202,
                             Code = "SR",
-                            IsEnabled = true,
                             Name = "Suriname"
                         },
                         new
                         {
                             Id = 203,
                             Code = "SJ",
-                            IsEnabled = true,
                             Name = "Svalbard And Jan Mayen Islands"
                         },
                         new
                         {
                             Id = 204,
                             Code = "SZ",
-                            IsEnabled = true,
                             Name = "Swaziland"
                         },
                         new
                         {
                             Id = 205,
                             Code = "SE",
-                            IsEnabled = true,
                             Name = "Sweden"
                         },
                         new
                         {
                             Id = 206,
                             Code = "CH",
-                            IsEnabled = true,
                             Name = "Switzerland"
                         },
                         new
                         {
                             Id = 207,
                             Code = "SY",
-                            IsEnabled = true,
                             Name = "Syrian Arab Republic"
                         },
                         new
                         {
                             Id = 208,
                             Code = "TW",
-                            IsEnabled = true,
                             Name = "Taiwan, Province Of China"
                         },
                         new
                         {
                             Id = 209,
                             Code = "TJ",
-                            IsEnabled = true,
                             Name = "Tajikistan"
                         },
                         new
                         {
                             Id = 210,
                             Code = "TZ",
-                            IsEnabled = true,
                             Name = "Tanzania, United Republic Of"
                         },
                         new
                         {
                             Id = 211,
                             Code = "TH",
-                            IsEnabled = true,
                             Name = "Thailand"
                         },
                         new
                         {
                             Id = 212,
                             Code = "TG",
-                            IsEnabled = true,
                             Name = "Togo"
                         },
                         new
                         {
                             Id = 213,
                             Code = "TK",
-                            IsEnabled = true,
                             Name = "Tokelau"
                         },
                         new
                         {
                             Id = 214,
                             Code = "TO",
-                            IsEnabled = true,
                             Name = "Tonga"
                         },
                         new
                         {
                             Id = 215,
                             Code = "TT",
-                            IsEnabled = true,
                             Name = "Trinidad And Tobago"
                         },
                         new
                         {
                             Id = 216,
                             Code = "TN",
-                            IsEnabled = true,
                             Name = "Tunisia"
                         },
                         new
                         {
                             Id = 217,
                             Code = "TR",
-                            IsEnabled = true,
                             Name = "Turkey"
                         },
                         new
                         {
                             Id = 218,
                             Code = "TM",
-                            IsEnabled = true,
                             Name = "Turkmenistan"
                         },
                         new
                         {
                             Id = 219,
                             Code = "TC",
-                            IsEnabled = true,
                             Name = "Turks And Caicos Islands"
                         },
                         new
                         {
                             Id = 220,
                             Code = "TV",
-                            IsEnabled = true,
                             Name = "Tuvalu"
                         },
                         new
                         {
                             Id = 221,
                             Code = "UG",
-                            IsEnabled = true,
                             Name = "Uganda"
                         },
                         new
                         {
                             Id = 222,
                             Code = "UA",
-                            IsEnabled = true,
                             Name = "Ukraine"
                         },
                         new
                         {
                             Id = 223,
                             Code = "AE",
-                            IsEnabled = true,
                             Name = "United Arab Emirates"
                         },
                         new
                         {
                             Id = 224,
                             Code = "GB",
-                            IsEnabled = true,
                             Name = "United Kingdom"
                         },
                         new
                         {
                             Id = 225,
                             Code = "US",
-                            IsEnabled = true,
                             Name = "United States"
                         },
                         new
                         {
                             Id = 226,
                             Code = "UM",
-                            IsEnabled = true,
                             Name = "United States Minor Outlying Islands"
                         },
                         new
                         {
                             Id = 227,
                             Code = "UY",
-                            IsEnabled = true,
                             Name = "Uruguay"
                         },
                         new
                         {
                             Id = 228,
                             Code = "UZ",
-                            IsEnabled = true,
                             Name = "Uzbekistan"
                         },
                         new
                         {
                             Id = 229,
                             Code = "VU",
-                            IsEnabled = true,
                             Name = "Vanuatu"
                         },
                         new
                         {
                             Id = 230,
                             Code = "VE",
-                            IsEnabled = true,
                             Name = "Venezuela"
                         },
                         new
                         {
                             Id = 231,
                             Code = "VN",
-                            IsEnabled = true,
                             Name = "Viet Nam"
                         },
                         new
                         {
                             Id = 232,
                             Code = "VG",
-                            IsEnabled = true,
                             Name = "Virgin Islands (British)"
                         },
                         new
                         {
                             Id = 233,
                             Code = "VI",
-                            IsEnabled = true,
                             Name = "Virgin Islands (U.S.)"
                         },
                         new
                         {
                             Id = 234,
                             Code = "WF",
-                            IsEnabled = true,
                             Name = "Wallis And Futuna Islands"
                         },
                         new
                         {
                             Id = 235,
                             Code = "EH",
-                            IsEnabled = true,
                             Name = "Western Sahara"
                         },
                         new
                         {
                             Id = 236,
                             Code = "YE",
-                            IsEnabled = true,
                             Name = "Yemen"
                         },
                         new
                         {
                             Id = 237,
                             Code = "YU",
-                            IsEnabled = true,
                             Name = "Yugoslavia"
                         },
                         new
                         {
                             Id = 238,
                             Code = "ZM",
-                            IsEnabled = true,
                             Name = "Zambia"
                         },
                         new
                         {
                             Id = 239,
                             Code = "ZW",
-                            IsEnabled = true,
                             Name = "Zimbabwe"
                         });
                 });
@@ -1930,15 +1683,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -1985,15 +1738,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2021,6 +1774,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<string>("Organization")
+                        .HasColumnType("text")
+                        .HasColumnName("organization");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
@@ -2084,15 +1841,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2106,6 +1863,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("numeric")
                         .HasColumnName("discount");
+
+                    b.Property<bool>("IsSubscription")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_subscription");
 
                     b.Property<int?>("ModifiedBy")
                         .HasColumnType("integer")
@@ -2334,15 +2095,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2418,6 +2179,10 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("thumbnail_image_id");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
                     b.Property<string>("UrlKey")
                         .HasColumnType("text")
                         .HasColumnName("url_key");
@@ -2480,15 +2245,15 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("customer_id");
 
                     b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_created");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_deleted");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_modified");
 
                     b.Property<bool>("Deleted")
@@ -2949,6 +2714,70 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EndPointCommerce.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("customer_id");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_created");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_deleted");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_modified");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("deleted");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("deleted_by");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("modified_by");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_subscriptions");
+
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_subscriptions_customer_id");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_subscriptions_order_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_subscriptions_product_id");
+
+                    b.ToTable("subscriptions", (string)null);
+                });
+
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -3188,13 +3017,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
 
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("EndPointCommerce.Domain.Entities.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_addresses_countries_country_id");
-
                     b.HasOne("EndPointCommerce.Domain.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
@@ -3203,9 +3025,9 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     b.HasOne("EndPointCommerce.Domain.Entities.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_addresses_states_state_id");
-
-                    b.Navigation("Country");
 
                     b.Navigation("Customer");
 
@@ -3386,6 +3208,36 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Quote");
+                });
+
+            modelBuilder.Entity("EndPointCommerce.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("EndPointCommerce.Domain.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_customers_customer_id");
+
+                    b.HasOne("EndPointCommerce.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_orders_order_id");
+
+                    b.HasOne("EndPointCommerce.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_subscriptions_products_product_id");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.User", b =>

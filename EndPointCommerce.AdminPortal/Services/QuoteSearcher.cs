@@ -47,7 +47,10 @@ public class QuoteSearcher : BaseEntitySearcher<QuoteSearchResultItem, Quote>, I
                 q.Email != null &&
                 q.Email.ToLower().Contains(searchValue)
             ) ||
-            q.ShippingAddress!.State.Name.ToLower().Contains(searchValue)
+            (
+                q.ShippingAddress!.State != null &&
+                q.ShippingAddress.State.Name.ToLower().Contains(searchValue)
+            )
         );
 
     protected override Dictionary<(string, string), Func<IQueryable<Quote>, IQueryable<Quote>>>
@@ -58,13 +61,13 @@ public class QuoteSearcher : BaseEntitySearcher<QuoteSearchResultItem, Quote>, I
                 [("dateCreated", "asc")] = q => q.OrderBy(q => q.DateCreated),
                 [("email", "asc")] = q => q.OrderBy(q => q.Customer != null ? q.Customer.Email : q.Email),
                 [("isOpen", "asc")] = q => q.OrderBy(q => q.IsOpen),
-                [("shippingAddressStateName", "asc")] = q => q.OrderBy(q => q.ShippingAddress!.State.Name),
+                [("shippingAddressStateName", "asc")] = q => q.OrderBy(q => q.ShippingAddress!.State!.Name),
 
                 [("id", "desc")] = q => q.OrderByDescending(q => q.Id),
                 [("dateCreated", "desc")] = q => q.OrderByDescending(q => q.DateCreated),
                 [("email", "desc")] = q => q.OrderByDescending(q => q.Customer != null ? q.Customer.Email : q.Email),
                 [("isOpen", "desc")] = q => q.OrderByDescending(q => q.IsOpen),
-                [("shippingAddressStateName", "desc")] = q => q.OrderByDescending(q => q.ShippingAddress!.State.Name),
+                [("shippingAddressStateName", "desc")] = q => q.OrderByDescending(q => q.ShippingAddress!.State!.Name),
             };
 
     protected override IQueryable<QuoteSearchResultItem> ApplySelect(
@@ -78,7 +81,7 @@ public class QuoteSearcher : BaseEntitySearcher<QuoteSearchResultItem, Quote>, I
                 DateCreated = entity.DateCreated!.Value.ToString("G"),
                 Email = entity.Customer != null ? entity.Customer.Email : entity.Email,
                 IsOpen = entity.IsOpen,
-                ShippingAddressStateName = entity.ShippingAddress != null ? entity.ShippingAddress.State.Name : null,
+                ShippingAddressStateName = entity.ShippingAddress != null ? entity.ShippingAddress.State!.Name : null,
                 Total = string.Format("{0:C}", entity.Total),
                 DetailsUrl = url.Build("./Details", new { entity.Id })
             }

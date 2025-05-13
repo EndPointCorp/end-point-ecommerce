@@ -11,8 +11,10 @@ public class Address
     public required string City { get; set; }
     public required string ZipCode { get; set; }
     public string? PhoneNumber { get; set; }
+    public Country? Country { get; set; }
+    public required int CountryId { get; set; }
     public State? State { get; set; }
-    public required int StateId { get; set; }
+    public int? StateId { get; set; }
     public string FullAddress => $"{Street}, {City}, {State?.Name}, {ZipCode}";
 
     public static Address FromEntity(Domain.Entities.Address entity)
@@ -25,6 +27,8 @@ public class Address
             City = entity.City,
             ZipCode = entity.ZipCode,
             PhoneNumber = entity.PhoneNumber,
+            Country = Country.FromEntity(entity.Country),
+            CountryId = entity.CountryId,
             State = State.FromEntity(entity.State),
             StateId = entity.StateId,
             Id = entity.Id,
@@ -42,6 +46,7 @@ public class Address
             City = City,
             ZipCode = ZipCode,
             PhoneNumber = PhoneNumber,
+            CountryId = CountryId,
             StateId = StateId,
         };
     }
@@ -55,6 +60,7 @@ public class Address
         entity.City = City;
         entity.ZipCode = ZipCode;
         entity.PhoneNumber = PhoneNumber;
+        entity.CountryId = CountryId;
         entity.StateId = StateId;
         return entity;
     }
