@@ -28,11 +28,7 @@ public class EndPointCommerceDbContext : DbContext
     public DbSet<IdentityRoleClaim<int>> RoleClaims { get; set; }
     public DbSet<IdentityUserRole<int>> UserRoles { get; set; }
 
-    public EndPointCommerceDbContext (DbContextOptions<EndPointCommerceDbContext> options)
-        : base(options)
-    {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    }
+    public EndPointCommerceDbContext (DbContextOptions<EndPointCommerceDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

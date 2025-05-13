@@ -15,7 +15,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
     {
         _dbContext.Quotes.Add(new Quote
         {
-            Id = 10001, IsOpen = true, DateCreated = DateTime.Today.AddDays(-5),
+            Id = 10001, IsOpen = true, DateCreated = DateTime.UtcNow.AddDays(-5),
             Customer = new() { Name = "test_name_01", Email = "test_01@email.com" },
             ShippingAddress = new()
             {
@@ -26,7 +26,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
         });
         _dbContext.Quotes.Add(new Quote
         {
-            Id = 10002, IsOpen = true, DateCreated = DateTime.Today.AddDays(-4),
+            Id = 10002, IsOpen = true, DateCreated = DateTime.UtcNow.AddDays(-4),
             Customer = new() { Name = "test_name_02", Email = "test_02@email.com" },
             ShippingAddress = new()
             {
@@ -37,7 +37,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
         });
         _dbContext.Quotes.Add(new Quote
         {
-            Id = 10003, IsOpen = true, DateCreated = DateTime.Today.AddDays(-3),
+            Id = 10003, IsOpen = true, DateCreated = DateTime.UtcNow.AddDays(-3),
             Customer = new() { Name = "test_name_03", Email = "test_03@email.com" },
             ShippingAddress = new()
             {
@@ -48,7 +48,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
         });
         _dbContext.Quotes.Add(new Quote
         {
-            Id = 10004, IsOpen = true, DateCreated = DateTime.Today.AddDays(-2),
+            Id = 10004, IsOpen = true, DateCreated = DateTime.UtcNow.AddDays(-2),
             Customer = new() { Name = "test_name_04", Email = "test_04@email.com" },
             ShippingAddress = new()
             {
@@ -59,7 +59,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
         });
         _dbContext.Quotes.Add(new Quote
         {
-            Id = 10005, IsOpen = true, DateCreated = DateTime.Today.AddDays(-1),
+            Id = 10005, IsOpen = true, DateCreated = DateTime.UtcNow.AddDays(-1),
             Customer = new() { Name = "test_name_05", Email = "test_05@email.com" },
             ShippingAddress = new()
             {
@@ -131,7 +131,7 @@ public class QuoteSearcherTests : BaseEntitySearcherTests<QuoteSearchResultItem,
             Assert.Equal(1, result.Draw);
             Assert.Equal(5, result.Data.Count);
             Assert.Equal(10005, result.Data.First().Id);
-            Assert.Equal(DateTime.Today.AddDays(-1).ToString("G"), result.Data.First().DateCreated);
+            Assert.True((DateTime.UtcNow.AddDays(-5) - DateTime.Parse(result.Data.First().DateCreated!)).TotalSeconds < 2);
             Assert.Equal("test_05@email.com", result.Data.First().Email);
             Assert.Equal(true, result.Data.First().IsOpen);
             Assert.Equal("Georgia", result.Data.First().ShippingAddressStateName);

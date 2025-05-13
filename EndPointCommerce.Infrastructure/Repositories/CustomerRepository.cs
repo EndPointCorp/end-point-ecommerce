@@ -31,8 +31,8 @@ public class CustomerRepository : BaseAuditRepository<Customer>, ICustomerReposi
     /// </summary>
     public async Task<int> GetMonthCustomersCount()
     {
-        return await DbSet().Where(x => x.Deleted != true && x.DateCreated!.Value.Month == DateTime.Today.Month &&
-            x.DateCreated!.Value.Year == DateTime.Today.Year).CountAsync();
+        return await DbSet().Where(x => x.Deleted != true && x.DateCreated!.Value.Month == DateTime.UtcNow.Date.Month &&
+            x.DateCreated!.Value.Year == DateTime.UtcNow.Date.Year).CountAsync();
     }
 
 }
