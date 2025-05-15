@@ -67,7 +67,8 @@ public class Mailer : IMailer
             emailMessage.Body = emailBodyBuilder.ToMessageBody();
 
             await _smtpClient.ConnectAsync(_mailSettings.Server, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
-            await _smtpClient.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
+            if (!String.IsNullOrEmpty(_mailSettings.UserName) || !String.IsNullOrEmpty(_mailSettings.Password))
+                await _smtpClient.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
             await _smtpClient.SendAsync(emailMessage);
             await _smtpClient.DisconnectAsync(true);
 
