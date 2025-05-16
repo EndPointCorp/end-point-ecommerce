@@ -13,8 +13,8 @@ using NpgsqlTypes;
 namespace EndPointCommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EndPointCommerceDbContext))]
-    [Migration("20250512215403_RemoveDefaultAdminUser")]
-    partial class RemoveDefaultAdminUser
+    [Migration("20250514225713_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
