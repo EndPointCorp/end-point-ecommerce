@@ -272,7 +272,7 @@ You will then also have to configure some of the system settings via the `appset
 - In `EndPointCommerce.WebStore/appsettings.Development.json`, set:
   - The `AuthNet*` settings to that of your Authorize.NET account.
 
-- In `EndPointCommerce.IntegrationTests/appsettings.json`, set:
+- In `EndPointCommerce.Tests/appsettings.json`, set:
   - The `TaxJar*` settings to that of your TaxJar account.
 
 You should configure these to have all the features working.
@@ -289,7 +289,7 @@ On first run, it'll be necessary to create the database and apply all migrations
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
 
-Note that if you did not configure the `TaxJar*` settings on the Integration Tests project, you will see a `TaxJarTaxCalculator` test failure.
+Note that if you did not configure the `TaxJar*` settings on the `EndPointCommerceTests` project, you will see a `TaxJarTaxCalculator` test failure.
 
 You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
@@ -392,7 +392,7 @@ Now you need to update several settings in the various `appsettings.json` files 
   - `WebStoreDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/web-store`.
   - `EndPointCommerceApiUrl` to the URL where the Web API is running. For a local development environment, this should be `http://localhost:5240`. This is the default URL that the Web Store starts up at with `dotnet run`.
 
-- In `EndPointCommerce.IntegrationTests/appsettings.json`, set:
+- In `EndPointCommerce.Tests/appsettings.json`, set:
   - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password`. Notice that `Database` is set to `end_point_commerce_test` in this connection string. This is the database used for integration testing.
 
 And here's the rest of them, which enable other secondary functionality like emails, interactions with TaxJar and Authorize.NET, etc:
@@ -411,7 +411,7 @@ And here's the rest of them, which enable other secondary functionality like ema
 - In `EndPointCommerce.WebStore/appsettings.json`, set:
   - The `AuthNet*` settings to that of your Authorize.NET account.
 
-- In `EndPointCommerce.IntegrationTests/appsettings.json`, set:
+- In `EndPointCommerce.Tests/appsettings.json`, set:
   - The `TaxJar*` settings to that of your TaxJar account.
 
 Considering `REPO_ROOT` as the root directory of this repository; `ADMIN_PORTAL_URL` as the URL where the Admin Portal application is running; `WEB_STORE_URL` as the URL where your frontend is running.
@@ -428,7 +428,7 @@ dotnet ef database update --startup-project ./EndPointCommerce.AdminPortal --pro
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
 
-Note that if you did not configure the `TaxJar*` settings on the Integration Tests project, you will see a `TaxJarTaxCalculator` test failure.
+Note that if you did not configure the `TaxJar*` settings on the `EndPointCommerce.Tests` project, you will see a `TaxJarTaxCalculator` test failure.
 
 You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
@@ -582,7 +582,7 @@ The unused builder cache can also be cleaned with `docker builder prune`.
 
 All tests can be run with `dotnet test`, from the root of this repo. For more verbose output, you can use `dotnet test -l "console;verbosity=normal"`.
 
-This code base contains two separate projects for automated tests: `EndPointCommerce.UnitTests` and `EndPointCommerce.IntegrationTests`. `EndPointCommerce.UnitTests` contains tests which exercise specific classes and methods in isolation or with mocked dependencies. `EndPointCommerce.IntegrationTests` contains tests of wider scope that exercise interactions with external components, like the database, and end-to-end tests that simulate HTTP requests.
+The automated tests can be found in the `EndPointCommerce.Tests` project. There are both unit and integration tests in there. Unit tests exercise specific classes and methods in isolation or with mocked dependencies. Integration tests have a wider scope and exercise interactions with external components, like the database, and end-to-end tests that simulate HTTP requests.
 
 ### Managing frontend assets
 
@@ -626,8 +626,7 @@ The projects are:
 5. **EndPointCommerce.Domain**: A class library project that contains the business logic.
 6. **EndPointCommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
 7. **EndPointCommerce.RazorTemplates**: A class library project that contains utilities for rendering text content using the Razor rendering engine. The system uses this to render HTML emails.
-8. **EndPointCommerce.UnitTests**: An xUnit project that contains unit tests for all the projects in the solution. Every project has its own directory where their respective unit tests live. Unit tests are ones that test the classes and methods in isolation, without interacting with any external components.
-9. **EndPointCommerce.IntegrationTests**: An xUnit project that contains integration tests of any level. All tests that interact with the database, external services, or other system infrastructure go here.
+8. **EndPointCommerce.Tests**: An xUnit project that contains tests of varying granularity for all the projects in the solution. Every project has its own directory where their respective tests live.
 
 ### Conceptual architecture
 
