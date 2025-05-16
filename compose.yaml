@@ -16,12 +16,17 @@ services:
       - ./data-protection-keys:/data-protection-keys
       - ./images:/images
     environment:
-      - DOTNET_GCHighMemPercent = 0x48 # 72%
+      - DOTNET_GCHighMemPercent=0x48 # 72%
       - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
       - AdminPortalDataProtectionKeysPath=/data-protection-keys/admin-portal
       - CategoryImagesPath=/images/category-images
       - ProductImagesPath=/images/product-images
       - TaxJarApiKey=${TAX_JAR_API_KEY}
+      - TaxJarFromCountry=${TAX_JAR_FROM_COUNTRY}
+      - TaxJarFromStreet=${TAX_JAR_FROM_STREET}
+      - TaxJarFromCity=${TAX_JAR_FROM_CITY}
+      - TaxJarFromState=${TAX_JAR_FROM_STATE}
+      - TaxJarFromZip=${TAX_JAR_FROM_ZIP}
     secrets:
       - end-point-commerce-db-connection-string
     entrypoint: [
@@ -31,7 +36,7 @@ services:
     ]
     healthcheck:
       test: 'curl -f -LI http://localhost:8080/healthz'
-      start_period: 30s      
+      start_period: 30s
     depends_on:
       db:
         condition: service_healthy
@@ -46,16 +51,16 @@ services:
       - ${WEB_API_PORT}:8080
     volumes:
       - ./data-protection-keys:/data-protection-keys
+      - ./images:/images
     environment:
-      - DOTNET_GCHighMemPercent = 0x48 # 72%
+      - DOTNET_GCHighMemPercent=0x48 # 72%
       - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
       - WebApiDataProtectionKeysPath=/data-protection-keys/web-api
+      - CategoryImagesPath=/images/category-images
+      - ProductImagesPath=/images/product-images
       - CategoryImagesUrlPath=${CATEGORY_IMAGES_URL_PATH}
       - ProductImagesUrlPath=${PRODUCT_IMAGES_URL_PATH}
-      - WebsiteUrl=${WEBSITE_URL}
-      - WebsiteLogoUrl=${WEBSITE_LOGO_URL}
-      - WebsitePasswordResetUrl=${WEBSITE_PASSWORD_RESET_URL}
-      - WebsiteShippingInfoUrl=${WEBSITE_SHIPPING_INFO_URL}
+      - WebStorePasswordResetUrl=${WEB_STORE_PASSWORD_RESET_URL}
       - MailSettings__Server=${MAIL_SETTINGS_SERVER}
       - MailSettings__Port=${MAIL_SETTINGS_PORT}
       - MailSettings__SenderName=${MAIL_SETTINGS_SENDER_NAME}
@@ -65,6 +70,11 @@ services:
       - MailCcAddresses=${MAIL_CC_ADDRESSES}
       - MailBccAddresses=${MAIL_BCC_ADDRESSES}
       - TaxJarApiKey=${TAX_JAR_API_KEY}
+      - TaxJarFromCountry=${TAX_JAR_FROM_COUNTRY}
+      - TaxJarFromStreet=${TAX_JAR_FROM_STREET}
+      - TaxJarFromCity=${TAX_JAR_FROM_CITY}
+      - TaxJarFromState=${TAX_JAR_FROM_STATE}
+      - TaxJarFromZip=${TAX_JAR_FROM_ZIP}
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
@@ -81,6 +91,26 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    logging: *default-logging
+
+  web-store:
+    build:
+      context: .
+      dockerfile: Dockerfile.WebStore
+    restart: always
+    ports:
+      - ${WEB_STORE_PORT}:8080
+    volumes:
+      - ./data-protection-keys:/data-protection-keys
+    environment:
+      - DOTNET_GCHighMemPercent=0x48 # 72%
+      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
+      - WebStoreDataProtectionKeysPath=/data-protection-keys/web-store
+      - EndPointCommerceApiUrl=http://web-api:8080
+      - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
+      - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
+      - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
+    entrypoint: [ "sh", "-c", "dotnet EndPointCommerce.WebStore.dll" ]
     logging: *default-logging
 
   db:

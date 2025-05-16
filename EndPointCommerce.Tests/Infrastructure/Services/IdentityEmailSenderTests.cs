@@ -27,8 +27,8 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
 
             _mockConfig = new Mock<IConfiguration>();
             _mockConfig
-                .Setup(m => m["WebsitePasswordResetUrl"])
-                .Returns("test_website_password_reset_url");
+                .Setup(m => m["WebStorePasswordResetUrl"])
+                .Returns("test_web_store_password_reset_url");
 
             _subject = new IdentityEmailSender(_mockMailer.Object, _mockRazorViewRenderer.Object, _mockConfig.Object);
         }
@@ -88,7 +88,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
             // Assert
             _mockRazorViewRenderer.Verify(m => m.Render(Templates.PasswordReset, It.Is<IdentityEmailViewModel>(vm =>
                 vm.User == user &&
-                vm.Link == $"test_website_password_reset_url?email={WebUtility.UrlEncode(email)}&resetCode=test_reset_code"
+                vm.Link == $"test_web_store_password_reset_url?email={WebUtility.UrlEncode(email)}&resetCode=test_reset_code"
             )), Times.Once);
 
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>

@@ -120,9 +120,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                             StreetTwo = "Unit A"
                         },
                         PaymentMethod = new PaymentMethod { Name = PaymentMethod.CREDIT_CARD }
-                    },
-
-                    WebsiteShippingInfoUrl = "test_website_shipping_info_url"
+                    }
                 }
             );
 

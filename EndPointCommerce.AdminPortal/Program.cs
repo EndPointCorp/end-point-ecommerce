@@ -103,22 +103,22 @@ public class Program
 
         app.UseStaticFiles();
 
-        var categoryImagesPath = builder.Configuration["CategoryImagesPath"] ??
-            throw new InvalidOperationException("Config setting 'CategoryImagesPath' not found.");
-
         app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(categoryImagesPath),
-            RequestPath = new PathString("/category-images"),
+            FileProvider = new PhysicalFileProvider(
+                builder.Configuration["CategoryImagesPath"] ??
+                    throw new InvalidOperationException("Config setting 'CategoryImagesPath' not found.")
+            ),
+            RequestPath = new PathString("/category-images")
         });
 
-        var productImagesPath = builder.Configuration["ProductImagesPath"] ??
-            throw new InvalidOperationException("Config setting 'ProductImagesPath' not found.");
-
         app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(productImagesPath),
-            RequestPath = new PathString("/product-images"),
+            FileProvider = new PhysicalFileProvider(
+                builder.Configuration["ProductImagesPath"] ??
+                    throw new InvalidOperationException("Config setting 'ProductImagesPath' not found.")
+            ),
+            RequestPath = new PathString("/product-images")
         });
 
         app.UseRouting();
