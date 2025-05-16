@@ -79,25 +79,6 @@ public class EndPointCommerceDbContext : DbContext
             }
         );
 
-        modelBuilder.Entity<User>().HasData(
-            new User {
-                Id = 1,
-                UserName = "epadmin",
-                NormalizedUserName = "EPADMIN",
-                Email = "epadmin@endpointcorp.com",
-                NormalizedEmail = "EPADMIN@ENDPOINTCORP.COM",
-                EmailConfirmed = true,
-                ConcurrencyStamp = "99982048-369f-4174-b277-40c991417169",
-                SecurityStamp = "abd3ee70-301d-4822-9953-69e8b4be3c88",
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = true,
-                AccessFailedCount = 0,
-                // The password is "Password123"
-                PasswordHash = "AQAAAAIAAYagAAAAEGYF8Zctt9SJG5HeU2g1GKqqJxU2tNQkUDgRJzC0BcaeinhhfvRkuQQKsjmoFrrHoQ=="
-            }
-        );
-
         modelBuilder.Entity<IdentityUserRole<int>>().HasData(
             new IdentityUserRole<int> { UserId = 1, RoleId = 1 }
         );

@@ -14,9 +14,6 @@ public class UserSearcherTests : BaseEntitySearcherTests<UserSearchResultItem, U
 
     protected override void PopulateRecords()
     {
-        _dbContext.Users.Remove(_dbContext.Users.First());
-        _dbContext.SaveChanges();
-
         _dbContext.Users.Add(new User { Id = 10, Email = "test_01@email.com" });
         _dbContext.UserRoles.Add(new IdentityUserRole<int> { UserId = 10, RoleId = 1 });
 
