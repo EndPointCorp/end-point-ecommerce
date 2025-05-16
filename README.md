@@ -15,6 +15,7 @@ Minimalist E-Commerce backend that's quick to set up and easy to understand. Mea
       - [2. Start the services](#2-start-the-services)
       - [3. Initialize the database](#3-initialize-the-database)
       - [4. Verify everything works](#4-verify-everything-works)
+      - [5. Log into the Admin Portal](#5-log-into-the-admin-portal)
     - [Updating an existing deployment](#updating-an-existing-deployment)
       - [1. Stop the services](#1-stop-the-services)
       - [2. Pull your changes](#2-pull-your-changes)
@@ -25,12 +26,14 @@ Minimalist E-Commerce backend that's quick to set up and easy to understand. Mea
     - [2. Configure some of the Development app settings](#2-configure-some-of-the-development-app-settings)
     - [3. Run the Development Containers](#3-run-the-development-containers)
     - [4. Run the apps](#4-run-the-apps)
+    - [5. Log into the Admin Portal](#5-log-into-the-admin-portal-1)
   - [With .NET and Node.js installed locally](#with-net-and-nodejs-installed-locally)
     - [1. Install .NET framework and tools, and Node.js](#1-install-net-framework-and-tools-and-nodejs)
     - [2. Create a PostgreSQL database](#2-create-a-postgresql-database)
     - [3. Clone this repository and configure app settings](#3-clone-this-repository-and-configure-app-settings)
     - [4. Initialize the database](#4-initialize-the-database)
     - [5. Run the apps](#5-run-the-apps)
+    - [6. Log into the Admin Portal](#6-log-into-the-admin-portal)
 - [System operation under Docker Compose deployments](#system-operation-under-docker-compose-deployments)
   - [Deployment quick summary](#deployment-quick-summary)
   - [Useful Docker commands](#useful-docker-commands)
@@ -188,7 +191,13 @@ psql -h localhost -d end_point_commerce -U end_point_commerce -W
 
 The password being defined in the `secrets/end-point-commerce-db-password.txt` file.
 
-For the Admin Portal, The default username is `epadmin` and the default password is `Password123`.
+##### 5. Log into the Admin Portal
+
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+
+- Connect to the maintenance container with `docker compose exec maintenance bash`.
+- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
 #### Updating an existing deployment
 
@@ -289,6 +298,13 @@ You can now start any of the apps by running `dotnet run` from within their resp
 - The Web Store at https://localhost:7166/
 
 Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the Web Store with HTTPs, like it is set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
+
+#### 5. Log into the Admin Portal
+
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+
+- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
 ### With .NET and Node.js installed locally
 
@@ -422,6 +438,13 @@ You can now start any of the apps by running `dotnet run` from within their resp
 
 Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the Web Store with HTTPs, like it is set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
 
+#### 6. Log into the Admin Portal
+
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+
+- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
+
 ## System operation under Docker Compose deployments
 
 ### Deployment quick summary
@@ -435,10 +458,12 @@ This is a quick guide on how to deploy changes to an already running system:
 5. Rebuild and restart the system with `docker compose up -d --build`.
 6. If needed, check the pending migrations with `docker compose exec maintenance check-migrations.sh`.
 7. If needed, check the pending migrations with `docker compose exec maintenance run-migrations.sh`.
-8. From time to time, cleanup old dangling images with `docker image prune`.
+8. If needed, create a new Admin Portal user account with `docker compose exec maintenance bash`, `cd EndPointCommerce.Jobs` and `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`.
+9. From time to time, cleanup old dangling images with `docker image prune`.
 
 ### Useful Docker commands
 
+- `docker compose exec maintenance bash` opens a bash session on the maintenance container.
 - `docker compose stop` stops all containers.
 - `docker compose down` deletes all containers.
 - `docker compose logs -f` tails the logs of all containers.
@@ -597,11 +622,12 @@ The projects are:
 1. **EndPointCommerce.WebApi**: An ASP.NET Web API project that contains a REST API meant to be consumed by a frontend, user-facing store application. Exposes the core functionality needed for an E-Commerce site.
 2. **EndPointCommerce.AdminPortal**: An ASP.NET Razor Pages Web app project meant for site administrators to manage various aspects of the store.
 3. **EndPointCommerce.WebStore**: An ASP.NET Razor Pages Web app project which contains a sample implementation of what a frontend web store might look like. Demonstrates some of the functionality that's available in the Web API.
-4. **EndPointCommerce.Domain**: A class library project that contains the business logic.
-5. **EndPointCommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
-6. **EndPointCommerce.RazorTemplates**: A class library project that contains utilities for rendering text content using the Razor rendering engine. The system uses this to render HTML emails.
-7. **EndPointCommerce.UnitTests**: An xUnit project that contains unit tests for all the projects in the solution. Every project has its own directory where their respective unit tests live. Unit tests are ones that test the classes and methods in isolation, without interacting with any external components.
-8. **EndPointCommerce.IntegrationTests**: An xUnit project that contains integration tests of any level. All tests that interact with the database, external services, or other system infrastructure go here.
+4. **EndPointCommerce.Jobs**: A .NET Console Application project which contains backend jobs that can be run on demand. The included `create_admin_user` command creates user accounts that can log into the Admin Portal.
+5. **EndPointCommerce.Domain**: A class library project that contains the business logic.
+6. **EndPointCommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
+7. **EndPointCommerce.RazorTemplates**: A class library project that contains utilities for rendering text content using the Razor rendering engine. The system uses this to render HTML emails.
+8. **EndPointCommerce.UnitTests**: An xUnit project that contains unit tests for all the projects in the solution. Every project has its own directory where their respective unit tests live. Unit tests are ones that test the classes and methods in isolation, without interacting with any external components.
+9. **EndPointCommerce.IntegrationTests**: An xUnit project that contains integration tests of any level. All tests that interact with the database, external services, or other system infrastructure go here.
 
 ### Conceptual architecture
 

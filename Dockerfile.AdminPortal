@@ -15,6 +15,7 @@ COPY EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPoint
 COPY EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
 COPY EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
 COPY EndPointCommerce.IntegrationTests/EndPointCommerce.IntegrationTests.csproj ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.Jobs/EndPointCommerce.Jobs.csproj ./EndPointCommerce.Jobs/
 COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
 COPY EndPointCommerce.UnitTests/EndPointCommerce.UnitTests.csproj ./EndPointCommerce.UnitTests/
 COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
@@ -26,6 +27,7 @@ COPY EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
 COPY EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
 COPY EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
 COPY EndPointCommerce.IntegrationTests/. ./EndPointCommerce.IntegrationTests/
+COPY EndPointCommerce.Jobs/. ./EndPointCommerce.Jobs/
 COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
 COPY EndPointCommerce.UnitTests/. ./EndPointCommerce.UnitTests/
 COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
