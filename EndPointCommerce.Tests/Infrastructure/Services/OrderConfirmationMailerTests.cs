@@ -13,7 +13,6 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
     {
         private readonly Mock<IMailer> _mockMailer;
         private readonly Mock<IRazorViewRenderer> _mockRazorViewRenderer;
-        private readonly Mock<IConfiguration> _mockConfig;
         private readonly OrderConfirmationMailer _subject;
 
         public OrderConfirmationMailerTests()
@@ -25,12 +24,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
                 .Setup(m => m.Render(It.IsAny<string>(), It.IsAny<OrderConfirmationViewModel>()))
                 .ReturnsAsync("test_rendered_body");
 
-            _mockConfig = new Mock<IConfiguration>();
-            _mockConfig
-                .Setup(m => m["WebsiteShippingInfoUrl"])
-                .Returns("test_website_shipping_infp_url");
-
-            _subject = new OrderConfirmationMailer(_mockMailer.Object, _mockRazorViewRenderer.Object, _mockConfig.Object);
+            _subject = new OrderConfirmationMailer(_mockMailer.Object, _mockRazorViewRenderer.Object);
         }
 
         private static Order CreateOrder()
@@ -58,8 +52,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
 
             // Assert
             _mockRazorViewRenderer.Verify(m => m.Render(Templates.OrderConfirmation, It.Is<OrderConfirmationViewModel>(vm =>
-                vm.Order == order &&
-                vm.WebsiteShippingInfoUrl == "test_website_shipping_infp_url"
+                vm.Order == order
             )), Times.Once);
 
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>

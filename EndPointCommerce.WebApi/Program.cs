@@ -5,6 +5,7 @@ using EndPointCommerce.Infrastructure.Startup;
 using EndPointCommerce.WebApi.Startup;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 
 namespace EndPointCommerce.WebApi;
@@ -93,6 +94,24 @@ public class Program
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
         }
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                builder.Configuration["CategoryImagesPath"] ??
+                    throw new InvalidOperationException("Config setting 'CategoryImagesPath' not found.")
+            ),
+            RequestPath = new PathString("/category-images")
+        });
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                builder.Configuration["ProductImagesPath"] ??
+                    throw new InvalidOperationException("Config setting 'ProductImagesPath' not found.")
+            ),
+            RequestPath = new PathString("/product-images")
+        });
 
         // app.UseHttpsRedirection();
 

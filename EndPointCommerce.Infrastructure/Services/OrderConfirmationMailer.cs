@@ -11,13 +11,11 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
 {
     private readonly IMailer _mailer;
     private readonly IRazorViewRenderer _razorViewRenderer;
-    private readonly string _websiteShippingInfoUrl;
 
-    public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer, IConfiguration config)
+    public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer)
     {
         _mailer = mailer;
         _razorViewRenderer = razorViewRenderer;
-        _websiteShippingInfoUrl = config["WebsiteShippingInfoUrl"]!;
     }
 
     public async Task SendAsync(Order order)
@@ -26,8 +24,7 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
             Templates.OrderConfirmation,
             new OrderConfirmationViewModel()
             {
-                Order = order,
-                WebsiteShippingInfoUrl = _websiteShippingInfoUrl
+                Order = order
             }
         );
 

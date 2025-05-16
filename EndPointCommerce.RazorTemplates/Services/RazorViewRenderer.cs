@@ -26,8 +26,6 @@ public class RazorViewRenderer : IRazorViewRenderer
     private readonly IRazorViewEngine _viewEngine;
     private readonly ITempDataProvider _tempDataProvider;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly string _websiteUrl;
-    private readonly string _websiteLogoUrl;
 
     public RazorViewRenderer(
         IRazorViewEngine viewEngine,
@@ -38,8 +36,6 @@ public class RazorViewRenderer : IRazorViewRenderer
         _viewEngine = viewEngine;
         _tempDataProvider = tempDataProvider;
         _serviceScopeFactory = serviceScopeFactory;
-        _websiteUrl = config["WebsiteUrl"]!;
-        _websiteLogoUrl = config["WebsiteLogoUrl"]!;
     }
 
     public async Task<string> Render<TModel>(string viewName, TModel model)
@@ -53,9 +49,7 @@ public class RazorViewRenderer : IRazorViewRenderer
 
         var viewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
         {
-            Model = model,
-            ["WebsiteUrl"] = _websiteUrl,
-            ["WebsiteLogoUrl"] = _websiteLogoUrl
+            Model = model
         };
 
         var tempData = new TempDataDictionary(httpContext, _tempDataProvider);
