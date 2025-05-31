@@ -27,9 +27,9 @@ public class Address
             City = entity.City,
             ZipCode = entity.ZipCode,
             PhoneNumber = entity.PhoneNumber,
-            Country = Country.FromEntity(entity.Country),
+            Country = entity.Country != null ? Country.FromEntity(entity.Country) : null,
             CountryId = entity.CountryId,
-            State = State.FromEntity(entity.State),
+            State = entity.State != null ? State.FromEntity(entity.State) : null,
             StateId = entity.StateId,
             Id = entity.Id,
         };
@@ -65,10 +65,6 @@ public class Address
         return entity;
     }
 
-    public static List<Address> FromListOfEntities(ICollection<Domain.Entities.Address>? entities)
-    {
-        if (entities != null)
-            return entities.Select(FromEntity).ToList();
-        return new List<Address>();
-    }
+    public static List<Address> FromListOfEntities(ICollection<Domain.Entities.Address> entities) =>
+        entities.Select(FromEntity).ToList();
 }

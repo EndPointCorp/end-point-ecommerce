@@ -47,10 +47,6 @@ public class Order
         return order;
     }
 
-    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order>? entities, string? imagesUrlPath = null)
-    {
-        if (entities != null)
-            return entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
-        return new List<Order>();
-    }
+    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order> entities, string? imagesUrlPath = null) =>
+        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
 }

@@ -13,7 +13,7 @@ public class User
             Id = entity.Id,
             PhoneNumber = entity.PhoneNumber,
             Email = entity.Email!,
-            Customer = Customer.FromEntity(entity.Customer)
+            Customer = entity.Customer != null ? Customer.FromEntity(entity.Customer) : null
         };
     }
 }

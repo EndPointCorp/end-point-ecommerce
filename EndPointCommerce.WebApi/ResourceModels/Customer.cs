@@ -8,10 +8,8 @@ public class Customer
     public required string Email { get; set; }
     public string FullName => $"{Name} {LastName}";
 
-    public static Customer? FromEntity(Domain.Entities.Customer? entity)
+    public static Customer FromEntity(Domain.Entities.Customer entity)
     {
-        if (entity == null)
-            return null;
         return new() {
             Id = entity.Id,
             Name = entity.Name,
