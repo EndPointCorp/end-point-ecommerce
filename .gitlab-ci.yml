@@ -1,0 +1,55 @@
+image: docker:27.3.1
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH'  # all branches
+    - if: '$CI_COMMIT_TAG'  # all tags
+
+stages:
+  - test
+  - deploy
+
+variables:
+  POSTGRES_PASSWORD: password
+  POSTGRES_USER: end_point_commerce
+  POSTGRES_DB: end_point_commerce
+
+dotnet test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  script:
+    # temporarily doing this until a proper docker base image with .net + npm + pnpm is prepared
+    - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+    - apt-get -y install --no-install-recommends nodejs
+    - npm install -g pnpm@10
+    #
+    - mkdir -p /workspaces/end-point-commerce/images/category-images /workspaces/end-point-commerce/images/product-images
+    - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+    - dotnet test
+  services:
+    - name: postgres:17.2-alpine
+      alias: db
+
+deploy api:
+  stage: deploy
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build -f Dockerfile.WebApi -t $CI_REGISTRY_IMAGE/webapi:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE/webapi:$CI_COMMIT_REF_SLUG
+
+deploy portal:
+  stage: deploy
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build -f Dockerfile.AdminPortal -t $CI_REGISTRY_IMAGE/adminportal:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE/adminportal:$CI_COMMIT_REF_SLUG
+
+deploy maintenance:
+  stage: deploy
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build -f Dockerfile.Maintenance -t $CI_REGISTRY_IMAGE/maintenance:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE/maintenance:$CI_COMMIT_REF_SLUG
