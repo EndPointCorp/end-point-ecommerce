@@ -3,7 +3,7 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 public class State
 {
     public int Id { get; set; }
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public static State FromEntity(Domain.Entities.State entity)
     {

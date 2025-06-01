@@ -3,8 +3,8 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 public class Country
 {
     public int Id { get; set; }
-    public string Name { get; set; } = default!;
-    public string Code { get; set; } = default!;
+    public string Name { get; set; } = string.Empty;
+    public string Code { get; set; } = string.Empty;
 
     public static Country FromEntity(Domain.Entities.Country entity)
     {

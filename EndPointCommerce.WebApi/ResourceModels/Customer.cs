@@ -3,9 +3,9 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 public class Customer
 {
     public int Id { get; set; }
-    public string Name { get; set; } = "";
+    public string Name { get; set; } = string.Empty;
     public string? LastName { get; set; }
-    public required string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
     public string FullName => $"{Name} {LastName}";
 
     public static Customer FromEntity(Domain.Entities.Customer entity)

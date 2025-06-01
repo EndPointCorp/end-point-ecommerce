@@ -1,11 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EndPointCommerce.WebApi.ResourceModels;
 
 public class UserPost
 {
-    public required string Email { get; set; }
-    public required string Password { get; set; }
-    public required string Name { get; set; }
-    public required string LastName { get; set; }
+    [Required]
+    public string Email { get; set; } = string.Empty;
+    [Required]
+    public string Password { get; set; } = string.Empty;
+    [Required]
+    public string Name { get; set; } = string.Empty;
+    [Required]
+    public string LastName { get; set; } = string.Empty;
 
     public Domain.Entities.User ToEntity()
     {

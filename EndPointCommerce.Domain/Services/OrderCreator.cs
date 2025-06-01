@@ -9,7 +9,7 @@ public interface IOrderCreator
 {
     public class InputPayload
     {
-        public required int QuoteId { get; set; }
+        public int QuoteId { get; set; }
         public string? PaymentMethodNonceValue { get; set; }
         public string? PaymentMethodNonceDescriptor { get; set; }
     }

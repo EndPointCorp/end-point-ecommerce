@@ -1,18 +1,26 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace EndPointCommerce.WebApi.ResourceModels;
 
 public class Address
 {
     public int? Id { get; set; }
 
-    public required string Name { get; set; }
-    public required string LastName { get; set; }
-    public required string Street { get; set; }
+    [Required]
+    public string Name { get; set; } = string.Empty;
+    [Required]
+    public string LastName { get; set; } = string.Empty;
+    [Required]
+    public string Street { get; set; } = string.Empty;
     public string? StreetTwo { get; set; }
-    public required string City { get; set; }
-    public required string ZipCode { get; set; }
+    [Required]
+    public string City { get; set; } = string.Empty;
+    [Required]
+    public string ZipCode { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
     public Country? Country { get; set; }
-    public required int CountryId { get; set; }
+    [Required]
+    public int CountryId { get; set; }
     public State? State { get; set; }
     public int? StateId { get; set; }
     public string FullAddress => $"{Street}, {City}, {State?.Name}, {ZipCode}";

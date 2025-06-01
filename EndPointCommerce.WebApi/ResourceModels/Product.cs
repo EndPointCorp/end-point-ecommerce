@@ -4,17 +4,17 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 
 public class Product
 {
-    public required int Id { get; set; }
-    public required string Name { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public string? UrlKey { get; set; }
     public Metadata? Metadata { get; set; }
 
-    public required bool IsInStock { get; set; }
-    public required bool IsDiscounted { get; set; }
+    public bool IsInStock { get; set; }
+    public bool IsDiscounted { get; set; }
 
-    public required string Sku { get; set; }
-    public required decimal BasePrice { get; set; }
+    public string Sku { get; set; } = string.Empty;
+    public decimal BasePrice { get; set; }
     public decimal? DiscountAmount { get; set; }
 
     public decimal? DiscountedPrice { get; set; }
