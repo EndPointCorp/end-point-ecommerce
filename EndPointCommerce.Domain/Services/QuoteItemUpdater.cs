@@ -11,7 +11,7 @@ public interface IQuoteItemUpdater
         public int QuoteId { get; set; }
         public int QuoteItemId { get; set; }
 
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
     }
 
     Task<QuoteItem?> Run(InputPayload payload);
@@ -57,7 +57,7 @@ public class QuoteItemUpdater : BaseQuoteService, IQuoteItemUpdater
 
     private void ApplyUpdate(QuoteItem quoteItem, InputPayload payload)
     {
-        if (payload.Quantity != null) quoteItem.Quantity = payload.Quantity.Value;
+        quoteItem.Quantity = payload.Quantity;
     }
 
     private static bool ShouldUpdateTax(QuoteItem quoteItem, InputPayload payload) =>
