@@ -8,43 +8,38 @@ namespace EndPointCommerce.Infrastructure.Services;
 /// <summary>
 /// Service class that implements Tax Jar.
 /// </summary>
-public class TaxJarTaxCalculator: ITaxCalculator
+public class TaxJarTaxCalculator : ITaxCalculator
 {
     private const decimal SHIPPING_COST = 0.0M;
     private const string TAX_CODE = "31000";
 
-    private readonly TaxjarApi _taxJar;
+    private readonly TaxjarApi? _taxJar;
 
-    private readonly string _fromCountry;
-    private readonly string _fromZip;
-    private readonly string _fromState;
-    private readonly string _fromCity;
-    private readonly string _fromStreet;
+    private readonly string? _fromCountry;
+    private readonly string? _fromZip;
+    private readonly string? _fromState;
+    private readonly string? _fromCity;
+    private readonly string? _fromStreet;
 
     public TaxJarTaxCalculator(IConfiguration configuration)
     {
-        _taxJar = new TaxjarApi(
-            configuration["TaxJarApiKey"] ??
-                throw new InvalidOperationException("Config setting 'TaxJarApiKey' not found.")
-        );
+        _taxJar = !string.IsNullOrEmpty(configuration["TaxJarApiKey"]) ?
+            new TaxjarApi(configuration["TaxJarApiKey"]) : null;
 
-        _fromCountry = configuration["TaxJarFromCountry"] ??
-            throw new InvalidOperationException("Config setting 'TaxJarFromCountry' not found.");
-        _fromZip = configuration["TaxJarFromZip"] ??
-            throw new InvalidOperationException("Config setting 'TaxJarFromZip' not found.");
-        _fromState = configuration["TaxJarFromState"] ??
-            throw new InvalidOperationException("Config setting 'TaxJarFromState' not found.");
-        _fromCity = configuration["TaxJarFromCity"] ??
-            throw new InvalidOperationException("Config setting 'TaxJarFromCity' not found.");
-        _fromStreet = configuration["TaxJarFromStreet"] ??
-            throw new InvalidOperationException("Config setting 'TaxJarFromStreet' not found.");
+        _fromCountry = configuration["TaxJarFromCountry"];
+        _fromZip = configuration["TaxJarFromZip"];
+        _fromState = configuration["TaxJarFromState"];
+        _fromCity = configuration["TaxJarFromCity"];
+        _fromStreet = configuration["TaxJarFromStreet"];
     }
 
     public async Task<ITaxCalculator.TaxResponse?> Calculate(Quote quote)
     {
+        if (!IsConfigured) return BuildEmptyResponse();
+
         var parameters = BuildParameters(quote);
 
-        var result = await _taxJar.TaxForOrderAsync(parameters);
+        var result = await _taxJar!.TaxForOrderAsync(parameters);
         if (result == null) return null;
 
         var response = BuildResponse(result);
@@ -80,8 +75,16 @@ public class TaxJarTaxCalculator: ITaxCalculator
         };
 
     private static ITaxCalculator.TaxResponse BuildResponse(TaxResponseAttributes attributes) =>
-        new()
-        {
-            AmountToCollect = attributes.AmountToCollect,
-        };
+        new() { AmountToCollect = attributes.AmountToCollect };
+
+    private static ITaxCalculator.TaxResponse BuildEmptyResponse() =>
+        new() { AmountToCollect = 0.0M };
+
+    private bool IsConfigured =>
+        _taxJar != null  &&
+        !string.IsNullOrEmpty(_fromCountry) &&
+        !string.IsNullOrEmpty(_fromZip) &&
+        !string.IsNullOrEmpty(_fromState) &&
+        !string.IsNullOrEmpty(_fromCity) &&
+        !string.IsNullOrEmpty(_fromStreet);
 }
