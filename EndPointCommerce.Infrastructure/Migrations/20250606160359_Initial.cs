@@ -883,11 +883,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                     { 51, "DC", "District of Columbia" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "user_roles",
-                columns: new[] { "role_id", "user_id" },
-                values: new object[] { 1, 1 });
-
             migrationBuilder.CreateIndex(
                 name: "ix_addresses_country_id",
                 table: "addresses",
