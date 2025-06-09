@@ -1,0 +1,25 @@
+{
+  "name": "end-point-commerce-web-store-spa",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node esbuild.config.mjs"
+  },
+  "keywords": [],
+  "author": "End Point Dev",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "5.3.3",
+    "bootstrap-icons": "1.11.3"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.0",
+    "esbuild-sass-plugin": "3.3.1",
+    "sass": "1.77.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

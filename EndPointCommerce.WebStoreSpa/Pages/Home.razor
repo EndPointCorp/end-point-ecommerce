@@ -1,0 +1,269 @@
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+@using System.Text.Json
+@using EndPointCommerce.WebStoreSpa.Identity
+
+@inject IHttpClientFactory HttpClientFactory
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity?.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+<EditForm Model="RegisterInput" method="post" OnValidSubmit="RegisterUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    @if (RegisterErrorMessages.Count > 0)
+    {
+        <ul class="validation-errors">
+            @foreach (var error in RegisterErrorMessages)
+            {
+                <li class="validation-message">@error</li>
+            }
+        </ul>
+    }
+
+    <h2>Register as a new user.</h2>
+    <hr />
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="RegisterInput.Email"
+            id="RegisterInput.Email"
+            class="form-control"
+            autocomplete="username"
+            aria-required="true"
+            placeholder="name@example.com"
+        />
+        <label for="RegisterInput.Email" class="form-label">
+            Email
+        </label>
+        <ValidationMessage For="() => RegisterInput.Email" class="text-danger" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password"
+            @bind-Value="RegisterInput.Password"
+            id="RegisterInput.Password"
+            class="form-control"
+            autocomplete="new-password"
+            aria-required="true"
+            placeholder="password"
+        />
+        <label for="RegisterInput.Password" class="form-label">
+            Password
+        </label>
+        <ValidationMessage For="() => RegisterInput.Password" class="text-danger" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password"
+            @bind-Value="RegisterInput.ConfirmPassword"
+            id="RegisterInput.ConfirmPassword"
+            class="form-control"
+            autocomplete="new-password"
+            aria-required="true"
+            placeholder="confirm password"
+        />
+        <label for="RegisterInput.ConfirmPassword" class="form-label">
+            Confirm Password
+        </label>
+        <ValidationMessage For="() => RegisterInput.ConfirmPassword" class="text-danger" />
+    </div>
+    <div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">
+            Register
+        </button>
+    </div>
+</EditForm>
+
+<EditForm Model="LoginInput" method="post" OnValidSubmit="LoginUser">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <h2>Use a local account to log in.</h2>
+    <hr />
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="LoginInput.Email"
+            id="LoginInput.Email"
+            class="form-control"
+            autocomplete="username"
+            aria-required="true"
+            placeholder="name@example.com"
+        />
+        <label for="LoginInput.Email" class="form-label">
+            Email
+        </label>
+        <ValidationMessage For="() => LoginInput.Email" class="text-danger" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password"
+            @bind-Value="LoginInput.Password"
+            id="LoginInput.Password"
+            class="form-control"
+            autocomplete="current-password"
+            aria-required="true"
+            placeholder="password"
+        />
+        <label for="LoginInput.Password" class="form-label">
+            Password
+        </label>
+        <ValidationMessage For="() => LoginInput.Password" class="text-danger" />
+    </div>
+    <div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">
+            Log in
+        </button>
+    </div>
+</EditForm>
+
+<button class="w-100 btn btn-lg btn-primary" @onclick="LogoutUser">
+    Log out
+</button>
+
+@code {
+    private class RegisterInputModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        [Display(Name = "Confirm Password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+    }
+
+    private sealed class LoginInputModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private RegisterInputModel RegisterInput { get; set; } = new();
+
+    private List<string> RegisterErrorMessages { get; set; } = new();
+
+    private LoginInputModel LoginInput { get; set; } = new();
+
+    public async Task RegisterUser()
+    {
+        Console.WriteLine($"called RegisterUser");
+        Console.WriteLine($"RegisterInput.Email: {RegisterInput.Email}");
+        Console.WriteLine($"RegisterInput.Password: {RegisterInput.Password}");
+        Console.WriteLine($"RegisterInput.ConfirmPassword: {RegisterInput.ConfirmPassword}");
+
+        RegisterErrorMessages.Clear();
+
+        var http = CreateHttpClient();
+
+        var response = await http.PostAsJsonAsync(
+            "/api/User/register",
+            new
+            {
+                RegisterInput.Email,
+                RegisterInput.Password
+            }
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"User {RegisterInput.Email} registered successfully.");
+            RegisterInput = new RegisterInputModel(); // Reset the form
+        }
+        else
+        {
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error registering user: {responseContent}");
+
+            var json = JsonDocument.Parse(responseContent);
+            var errors = json.RootElement.GetProperty("errors");
+
+            RegisterErrorMessages = errors
+                .EnumerateObject()
+                .SelectMany(
+                    error => error.Value
+                        .EnumerateArray()
+                        .Select(e => e.GetString()!)
+                )
+                .ToList();
+        }
+    }
+
+    public async Task LoginUser()
+    {
+        Console.WriteLine($"called LoginUser");
+        Console.WriteLine($"LoginInput.Email: {LoginInput.Email}");
+        Console.WriteLine($"LoginInput.Password: {LoginInput.Password}");
+
+        var http = CreateHttpClient();
+
+        var result = await http.PostAsJsonAsync(
+            "/api/User/login?useCookies=true",
+            new
+            {
+                LoginInput.Email,
+                LoginInput.Password
+            }
+        );
+
+        if (result.IsSuccessStatusCode)
+        {
+            ((ApiAuthenticationStateProvider)AuthenticationStateProvider).UpdateAuthenticationState();
+
+            Console.WriteLine($"User {LoginInput.Email} logged in successfully.");
+            LoginInput = new LoginInputModel(); // Reset the form
+        }
+        else
+        {
+            var errorMessage = await result.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error logging in user: {errorMessage}");
+        }
+    }
+
+    public async Task LogoutUser()
+    {
+        Console.WriteLine($"called LogoutUser");
+
+        var http = CreateHttpClient();
+
+        var response = await http.PostAsJsonAsync(
+            "/api/User/Logout", new { }
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            ((ApiAuthenticationStateProvider)AuthenticationStateProvider).UpdateAuthenticationState();
+            Console.WriteLine("User logged out successfully.");
+        }
+        else
+        {
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Error logging out user: {errorMessage}");
+        }
+    }
+
+    private HttpClient CreateHttpClient() => HttpClientFactory.CreateClient("EndPointCommerce.WebApi");
+}
