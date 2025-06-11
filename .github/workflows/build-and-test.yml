@@ -1,0 +1,55 @@
+name: Build and Test
+
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      LANG: "en_US.UTF-8"
+      LANGUAGE: "en_US:en"
+      LC_ALL: "en_US.UTF-8"
+      CategoryImagesPath: "/home/runner/test/images/category-images"
+      ProductImagesPath: "/home/runner/test/images/product-images"
+      AdminPortalDataProtectionKeysPath: "/home/runner/data-protection-keys/admin-portal"
+      WebApiDataProtectionKeysPath: "/home/runner/test/data-protection-keys/web-api"
+      ConnectionStrings__EndPointCommerceDbContext: "Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password;Include Error Detail=True"
+
+    services:
+      db:
+        image: postgres:17.2-alpine
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: end_point_commerce
+          POSTGRES_DB: end_point_commerce_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0
+
+      - name: PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Tests
+        run: |
+          mkdir -p "$CategoryImagesPath" "$ProductImagesPath" "$AdminPortalDataProtectionKeysPath" "$WebApiDataProtectionKeysPath"
+          dotnet test --no-build --filter 'FullyQualifiedName!=EndPointCommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
