@@ -60,7 +60,7 @@ jobs:
           dotnet test --no-build --filter 'FullyQualifiedName!=EndPointCommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
 
   docker-build-and-push:
-    if: github.ref_name == 'ci-test' || startsWith(github.ref, 'refs/tags/v')
+    if: github.ref_name == 'ci' || startsWith(github.ref, 'refs/tags/v')
     needs: [build-and-test]
     runs-on: ubuntu-latest
     permissions:
