@@ -13,7 +13,7 @@ using NpgsqlTypes;
 namespace EndPointCommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EndPointCommerceDbContext))]
-    [Migration("20250514225713_Initial")]
+    [Migration("20250606160359_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -3141,13 +3141,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasName("pk_user_roles");
 
                     b.ToTable("user_roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 1
-                        });
                 });
 
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.CategoryImage", b =>

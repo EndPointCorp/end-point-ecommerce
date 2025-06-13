@@ -275,9 +275,6 @@ You will then also have to configure some of the system settings via the `appset
 - In `EndPointCommerce.WebStore/appsettings.Development.json`, set:
   - The `AuthNet*` settings to that of your Authorize.NET account.
 
-- In `EndPointCommerce.Tests/appsettings.json`, set:
-  - The `TaxJar*` settings to that of your TaxJar account.
-
 You should configure these to have all the features working.
 
 #### 3. Run the Development Containers
@@ -291,8 +288,6 @@ On first run, it'll be necessary to create the database and apply all migrations
 #### 4. Run the apps
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
-
-Note that if you did not configure the `TaxJar*` settings on the `EndPointCommerceTests` project, you will see a `TaxJarTaxCalculator` test failure.
 
 You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
@@ -415,9 +410,6 @@ And here's the rest of them, which enable other secondary functionality like ema
 - In `EndPointCommerce.WebStore/appsettings.json`, set:
   - The `AuthNet*` settings to that of your Authorize.NET account.
 
-- In `EndPointCommerce.Tests/appsettings.json`, set:
-  - The `TaxJar*` settings to that of your TaxJar account.
-
 Considering `REPO_ROOT` as the root directory of this repository; `ADMIN_PORTAL_URL` as the URL where the Admin Portal application is running; `WEB_API_URL` as the URL where the Web API is running; `WEB_STORE_URL` as the URL where your frontend is running.
 
 #### 4. Initialize the database
@@ -431,8 +423,6 @@ dotnet ef database update --startup-project ./EndPointCommerce.AdminPortal --pro
 #### 5. Run the apps
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
-
-Note that if you did not configure the `TaxJar*` settings on the `EndPointCommerce.Tests` project, you will see a `TaxJarTaxCalculator` test failure.
 
 You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
@@ -673,19 +663,3 @@ Following is an overview of the data model, including the most notable tables an
 5. **`coupons`**: This table stores available coupon codes. Coupons apply discounts to quotes and orders. The discount can be a fixed amount or based on a percentage of the total value of the shopping cart.
 
 6. **`addresses`**: This table stores billing and shipping addresses associated with quotes and orders.
-
-## CI
-
-CI is setup with GitLab CI. The pipeline is defined in the `.gitlab-ci.yml` file. For pushes to branches and tags, the pipeline runs tests, builds docker images from `Dockerfile.{AdminPortal,Maintenance,Webapi}`, and pushes them to gitlab container registry associated with this repo.
-
-### Variables
-
-Gitlab CI/CD variables are used to store sensitive info like API keys, the following should be defined in `Settings -> CI/CD -> Variables`:
-- `TAX_JAR_API_KEY` - Sandbox API key for TaxJar for use by tests
-
-### Container Registry
-
-CI pushes the following docker images to the gitlab container registry at `bits.endpointdev.com:5050/end-point-open-source/end-point-commerce/`:
-- `webapi` - The WebApi project running on port 8080
-- `adminportal` - The AdminPortal running on port 8080
-- `maintenance` - For dev related tasks

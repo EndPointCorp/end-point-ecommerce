@@ -13,16 +13,14 @@ public class QuoteItemProduct
 
     public static QuoteItemProduct FromEntity(Domain.Entities.Product entity, string? imagesUrlPath = null)
     {
-        var product = new QuoteItemProduct()
+        return new()
         {
             Id = entity.Id,
             Name = entity.Name,
             Sku = entity.Sku,
             UrlKey = entity.UrlKey,
             ThumbnailImageUrl = ImageUrlBuilder.GetImageUrl(entity.ThumbnailImage, imagesUrlPath),
+            Category = entity.Category != null ? Category.FromEntity(entity.Category) : null
         };
-        if (entity.Category != null)
-            product.Category = Category.FromEntity(entity.Category);
-        return product;
     }
 }
