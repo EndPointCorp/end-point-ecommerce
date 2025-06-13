@@ -82,7 +82,6 @@ jobs:
           eval $(ssh-agent)
           ssh-add ~/.ssh/private_key
           ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }};
-            docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} $REGISTRY;
             docker compose pull;
             docker compose down;
             docker compose up -d --force-recreate;
