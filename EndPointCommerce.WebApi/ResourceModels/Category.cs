@@ -4,8 +4,8 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 
 public class Category
 {
-    public required int Id { get; set; }
-    public required string Name { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public string? UrlKey { get; set; }
     public Metadata? Metadata { get; set; }

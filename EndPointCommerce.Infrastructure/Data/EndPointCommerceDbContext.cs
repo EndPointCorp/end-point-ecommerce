@@ -6,28 +6,32 @@ namespace EndPointCommerce.Infrastructure.Data;
 
 public class EndPointCommerceDbContext : DbContext
 {
-    public DbSet<Address> Addresses { get; set; }
-    public DbSet<Coupon> Coupons { get; set; }
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Image> Images { get; set; }
+    public DbSet<CategoryImage> CategoryImages { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+
+    public DbSet<Quote> Quotes { get; set; }
+    public DbSet<QuoteItem> QuoteItems { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<OrderStatus> OrderStatuses { get; set; }
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Country> Countries { get; set; }
-    public DbSet<State> States { get; set; }
-    public DbSet<Quote> Quotes { get; set; }
-    public DbSet<QuoteItem> QuoteItems { get; set; }
-    public DbSet<SiteContent> SiteContents { get; set; }
-    public DbSet<Image> Images { get; set; }
-    public DbSet<CategoryImage> CategoryImages { get; set; }
-    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
+
+    public DbSet<Customer> Customers { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<IdentityUserClaim<int>> UserClaims { get; set; }
     public DbSet<IdentityRole<int>> Roles { get; set; }
     public DbSet<IdentityRoleClaim<int>> RoleClaims { get; set; }
     public DbSet<IdentityUserRole<int>> UserRoles { get; set; }
+
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<Country> Countries { get; set; }
+    public DbSet<State> States { get; set; }
+
+    public DbSet<SiteContent> SiteContents { get; set; }
 
     public EndPointCommerceDbContext (DbContextOptions<EndPointCommerceDbContext> options) : base(options) { }
 
@@ -77,10 +81,6 @@ public class EndPointCommerceDbContext : DbContext
                 Id = 2, Name = User.CUSTOMER_ROLE, NormalizedName = User.CUSTOMER_ROLE.ToUpper(),
                 ConcurrencyStamp = "8a80a6c6-dae7-48a0-9b5b-841564ba537d"
             }
-        );
-
-        modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-            new IdentityUserRole<int> { UserId = 1, RoleId = 1 }
         );
 
         modelBuilder.Entity<Country>().HasData(

@@ -17,13 +17,6 @@ variables:
 dotnet test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:9.0
-  variables:
-    TaxJarApiKey: $TAX_JAR_API_KEY
-    TaxJarFromCountry: US
-    TaxJarFromStreet: 14630 MN-65
-    TaxJarFromCity: Ham Lake
-    TaxJarFromState: MN
-    TaxJarFromZip: 55304
   script:
     # temporarily doing this until a proper docker base image with .net + npm + pnpm is prepared
     - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
@@ -32,7 +25,7 @@ dotnet test:
     #
     - mkdir -p /workspaces/end-point-commerce/images/category-images /workspaces/end-point-commerce/images/product-images
     - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
-    - dotnet test --filter 'FullyQualifiedName!=EndPointCommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
+    - dotnet test
   services:
     - name: postgres:17.2-alpine
       alias: db
