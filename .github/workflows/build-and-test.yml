@@ -106,6 +106,8 @@ jobs:
           tags: |
             type=ref,event=tag
             type=sha,format=long
+            # explicitly set latest tag for main branch (because the "auto" behaviour isn't working?)
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Docker build and push
         id: push
