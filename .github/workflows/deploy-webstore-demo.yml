@@ -21,6 +21,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gettext-base
 
+      - name: Ensure IMAGE_NAME is lowercase
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+
       - name: Prepare Environment
         run: |
           echo "IMAGE_ADMINPORTAL_COMMIT=$REGISTRY/$IMAGE_NAME/adminportal:sha-${{ github.sha }}" >> $GITHUB_ENV
