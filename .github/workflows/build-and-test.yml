@@ -43,7 +43,7 @@ jobs:
         with:
           dotnet-version: 9.0
 
-      - name: PNPM
+      - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           version: 10

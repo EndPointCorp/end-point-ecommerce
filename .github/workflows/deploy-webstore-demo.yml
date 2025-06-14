@@ -35,7 +35,7 @@ jobs:
           cp -r ./data-protection-keys $ARTIFACTS_PATH/
           cp -r ./images $ARTIFACTS_PATH/
 
-      - name: Cache Prepared Deployment Artifacts
+      - name: Save Deployment Artifacts
         uses: actions/cache/save@v4
         with:
           path: ${{ env.ARTIFACTS_PATH }}
@@ -47,7 +47,7 @@ jobs:
     environment: demo
 
     steps:
-      - name: Restore Prepared Deployment Artifacts
+      - name: Fetch Deployment Artifacts
         uses: actions/cache/restore@v4
         with:
           path: ${{ env.ARTIFACTS_PATH }}
@@ -70,7 +70,7 @@ jobs:
         run: |
           rsync -av $ARTIFACTS_PATH/ ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }}:${{ secrets.DEPLOY_TARGET_DIR }}
 
-      - name: Restart the app on the target server
+      - name: Restart the deployment on the target server
         run: |
           ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }};
             docker compose pull;
