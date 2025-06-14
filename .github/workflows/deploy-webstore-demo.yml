@@ -16,11 +16,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gettext-base
-
       - name: Ensure IMAGE_NAME is lowercase
         run: |
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
@@ -59,11 +54,6 @@ jobs:
           key: prepared-artifacts-${{ github.sha }}
           fail-on-cache-miss: true
 
-      - name: Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rsync openssh-client
-
       - name: Setup SSH connectivity to target server
         run: |
           mkdir -p ~/.ssh
@@ -72,19 +62,16 @@ jobs:
           touch ~/.ssh/private_key
           chmod 600 ~/.ssh/known_hosts
           chmod 600 ~/.ssh/private_key
+          echo "IdentityFile ~/.ssh/private_key" > ~/.ssh/config
           echo "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key
           echo "${{ secrets.DEPLOY_SSH_HOST_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Copy deployment artifacts to target server
         run: |
-          eval $(ssh-agent)
-          ssh-add ~/.ssh/private_key
           rsync -av $ARTIFACTS_PATH/ ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }}:${{ secrets.DEPLOY_TARGET_DIR }}
 
       - name: Restart the app on the target server
         run: |
-          eval $(ssh-agent)
-          ssh-add ~/.ssh/private_key
           ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }};
             docker compose pull;
             docker compose down;
