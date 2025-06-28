@@ -31,9 +31,11 @@ jobs:
       - name: Prepare Deployment Artifacts
         run: |
           mkdir -p $ARTIFACTS_PATH
-          envsubst '$IMAGE_ADMINPORTAL_COMMIT $IMAGE_WEBAPI_COMMIT $IMAGE_WEBSTORE_COMMIT $IMAGE_DB_COMMIT $IMAGE_MAINTENANCE_COMMIT' < ./template.compose.webstore-demo-deploy.yaml > $ARTIFACTS_PATH/compose.yml
+          envsubst '$IMAGE_ADMINPORTAL_COMMIT $IMAGE_WEBAPI_COMMIT $IMAGE_WEBSTORE_COMMIT $IMAGE_DB_COMMIT $IMAGE_MAINTENANCE_COMMIT' < ./demo/template.compose.yaml > $ARTIFACTS_PATH/compose.yml
           cp -r ./data-protection-keys $ARTIFACTS_PATH/
-          cp -r ./images $ARTIFACTS_PATH/
+          cp ./demo/reset.sh $ARTIFACTS_PATH/
+          cp ./demo/demo-data.sql $ARTIFACTS_PATH/
+          cp -r ./demo/images/ $ARTIFACTS_PATH/reference-images
 
       - name: Save Deployment Artifacts
         uses: actions/cache/save@v4
@@ -72,9 +74,8 @@ jobs:
 
       - name: Restart the deployment on the target server
         run: |
-          ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }};
-            docker compose pull;
-            docker compose down;
-            docker compose up -d --force-recreate;
-            docker compose exec maintenance run-migrations.sh"
+          ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }} &&
+            docker compose pull &&
+            docker compose down &&
+            ./reset.sh"
 
