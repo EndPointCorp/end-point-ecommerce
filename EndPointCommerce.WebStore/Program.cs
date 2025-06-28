@@ -64,8 +64,11 @@ app.UseAuthorization();
 
 app.UseSession();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+// app.MapStaticAssets();
+// app.MapRazorPages()
+//    .WithStaticAssets();
+
+app.UseStaticFiles();
+app.MapRazorPages();
 
 app.Run();
