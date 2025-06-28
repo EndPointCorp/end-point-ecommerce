@@ -42,3 +42,4 @@ COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 # helper scripts
 COPY maintenance/check-migrations.sh ./bin/
 COPY maintenance/run-migrations.sh ./bin/
+COPY maintenance/run-job.sh ./bin/
