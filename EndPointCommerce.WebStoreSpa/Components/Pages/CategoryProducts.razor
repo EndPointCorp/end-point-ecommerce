@@ -1,0 +1,32 @@
+@page "/category/{CategoryId:int}"
+
+@using EndPointCommerce.WebStoreSpa.Api
+
+@inject NavigationManager Navigation
+@inject IApiClient ApiClient;
+
+<PageTitle>@Category?.Name - End Point Commerce</PageTitle>
+
+<ProductList Products="@Products" />
+
+@code {
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    public Category Category { get; set; } = default!;
+
+    private List<Product> Products { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Category = (await ApiClient.GetCategories()).FirstOrDefault(c => c.Id == CategoryId)!;
+
+        if (Category == null)
+        {
+            Navigation.NavigateTo("/notfound");
+            return;
+        }
+
+        Products = await ApiClient.GetProductsByCategoryId(CategoryId);
+    }
+}
