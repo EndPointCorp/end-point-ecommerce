@@ -1,0 +1,115 @@
+@page "/checkout/payment"
+
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.State
+
+@implements IAsyncDisposable
+
+@inject IConfiguration Config;
+@inject NavigationManager Navigation;
+@inject IJSRuntime JS;
+@inject IApiClient ApiClient;
+@inject QuoteStateContainer QuoteState;
+
+<PageTitle>Payment - End Point Commerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1>Checkout</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-circle-info"></i>
+                Payment Information
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" name="cardNumber" id="cardNumber" class="form-control" />
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="expMonth" class="form-label">Expiration Month</label>
+                            <input type="text" name="expMonth" id="expMonth" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="expYear" class="form-label">Expiration Year</label>
+                            <input type="text" name="expYear" id="expYear" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="cardCode" class="form-label">CVV</label>
+                            <input type="text" name="cardCode" id="cardCode" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button id="SubmitOrderButton" type="button" class="btn btn-outline-dark">
+                Place Order
+            </button>
+        </div>
+
+        <ul id="AuthNetErrors" class="validation-errors"></ul>
+    </div>
+</section>
+
+@code {
+    private DotNetObjectReference<Payment>? objRef;
+    private IJSObjectReference? module;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await QuoteState.LoadQuote();
+
+        if (QuoteState.IsQuoteEmpty)
+        {
+            Navigation.NavigateTo("/cart");
+            return;
+        }
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+
+            module = await JS.InvokeAsync<IJSObjectReference>(
+                "import", "./Components/Pages/Checkout/Payment.razor.js"
+            );
+
+            await module.InvokeVoidAsync(
+                "initializeAuthNetAcceptJs",
+                objRef,
+                Config["AuthNetEnvironment"] ?? "Sandbox",
+                Config["AuthNetLoginId"],
+                Config["AuthNetClientKey"]
+            );
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        objRef?.Dispose();
+
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+
+    [JSInvokable]
+    public void SubmitOrder(string PaymentMethodNonceValue, string PaymentMethodNonceDescriptor)
+    {
+        Console.WriteLine($"SubmitOrder({PaymentMethodNonceValue}, {PaymentMethodNonceDescriptor}) called.");
+        @* Navigation.NavigateTo("/checkout/confirmation"); *@
+    }
+}
