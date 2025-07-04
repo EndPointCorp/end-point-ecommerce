@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using EndPointCommerce.WebStore.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EndPointCommerce.WebStore.Pages.Checkout;
 
 public class ShippingModel : BasePageModel
 {
     public ShippingModel(IApiClient apiClient) : base(apiClient) { }
+
+    private const int US_COUNTRY_ID = 225;
 
     [BindProperty]
     [Required]
@@ -41,6 +42,9 @@ public class ShippingModel : BasePageModel
         await FetchQuote();
         if (QuoteIsEmpty) return RedirectToPage("/Cart");
 
+        ShippingAddress.CountryId = US_COUNTRY_ID;
+        BillingAddress.CountryId = US_COUNTRY_ID;
+
         ResolveBillingAddress();
 
         if (!ModelState.IsValid)
@@ -67,6 +71,7 @@ public class ShippingModel : BasePageModel
                 Street = ShippingAddress.Street,
                 StreetTwo = ShippingAddress.StreetTwo,
                 City = ShippingAddress.City,
+                CountryId = ShippingAddress.CountryId,
                 StateId = ShippingAddress.StateId,
                 ZipCode = ShippingAddress.ZipCode,
                 PhoneNumber = ShippingAddress.PhoneNumber
