@@ -26,6 +26,9 @@ public class Address
     [Display(Name = "State")]
     public int StateId { get; set; }
 
+    private const int US_COUNTRY_ID = 225;
+    public int CountryId { get; set; } = US_COUNTRY_ID;
+
     [Required]
     [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid Zip Code format.")]
     [Display(Name = "Zip Code")]
