@@ -1,0 +1,110 @@
+﻿@page "/product/{ProductId:int}"
+
+@using System.ComponentModel.DataAnnotations
+@using EndPointCommerce.WebStoreSpa.Api
+@using System.Net
+
+@inject NavigationManager Navigation;
+@inject IApiClient ApiClient;
+
+<PageTitle>@Product?.Name - End Point Commerce</PageTitle>
+
+@if (Product != null)
+{
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6">
+                    @if (!string.IsNullOrEmpty(Product.ThumbnailImageUrl))
+                    {
+                        <img
+                            class="card-img-top mb-5 mb-md-0"
+                            src="@Product.ThumbnailImageUrl"
+                            alt="@Product.Name"
+                        />
+                    }
+                    else
+                    {
+                        <img
+                            class="card-img-top mb-5 mb-md-0"
+                            src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg"
+                            alt="@Product.Name"
+                        />
+                    }
+                </div>
+                <div class="col-md-6">
+                    <div class="small mb-1">SKU: @Product.Sku</div>
+                    <h1 class="display-5 fw-bolder">@Product.Name</h1>
+                    <div class="fs-5 mb-5">
+                        @if (Product.IsDiscounted)
+                        {
+                            <span class="text-decoration-line-through">$@Product.BasePrice</span>
+                            <span>$@Product.DiscountedPrice</span>
+                        }
+                        else
+                        {
+                            <span>$@Product.BasePrice</span>
+                        }
+                    </div>
+                    <p class="lead">
+                        @((MarkupString)Product.Description)
+                    </p>
+
+                    <EditForm Model="AddToCartInput" method="post" OnValidSubmit="AddToCart">
+                        <DataAnnotationsValidator />
+
+                        <div class="d-flex">
+                            <InputNumber
+                                @bind-Value="AddToCartInput.Quantity"
+                                min="1"
+                                class="form-control text-center me-3"
+                                style="max-width: 5rem"
+                            />
+                            <button type="submit" class="btn btn-outline-dark flex-shrink-0">
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
+
+                        <div>
+                            <ValidationMessage For="() => AddToCartInput.Quantity" class="text-danger" />
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@code {
+    private class AddToCartInputModel
+    {
+        [Required]
+        [Range(1, 100)]
+        public int Quantity { get; set; } = 1;
+    }
+
+    [Parameter]
+    public int ProductId { get; set; }
+
+    public Product Product { get; set; } = default!;
+
+    private AddToCartInputModel AddToCartInput { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Product = await ApiClient.GetProduct(ProductId);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            Navigation.NavigateTo("/notfound");
+        }
+    }
+
+    public async Task AddToCart()
+    {
+        await ApiClient.PostQuoteItem(ProductId, AddToCartInput.Quantity);
+    }
+}
