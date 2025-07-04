@@ -17,7 +17,7 @@ public interface IApiClient
     Task<QuoteItem> PostQuoteItem(int productId, int quantity);
     Task<QuoteItem> PutQuoteItem(int id, int quantity);
     Task<NoContent> DeleteQuoteItem(int id);
-    // Task<ResponseWithCookie<Order>> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor, string? quoteCookie);
+    Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
 }
 
 // public class ResponseWithCookie<T>
@@ -144,23 +144,32 @@ public class ApiClient : IApiClient
         return new NoContent();
     }
 
-    // public async Task<ResponseWithCookie<Order>> PostOrder(
-    //     string paymentMethodNonceValue, string paymentMethodNonceDescriptor, string? quoteCookie
-    // ) {
-    //     return await WithCookie(quoteCookie, async httpClient => {
-    //         using var response = await httpClient.PostAsJsonAsync(
-    //             "api/Orders",
-    //             new
-    //             {
-    //                 PaymentMethodNonceValue = paymentMethodNonceValue,
-    //                 PaymentMethodNonceDescriptor = paymentMethodNonceDescriptor
-    //             }
-    //         );
-    //         response.EnsureSuccessStatusCode();
+    public async Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor)
+    {
+        return await Task.FromResult(
+            new Order(
+                Id: 123456,
+                Status: "test_order_status",
+                TrackingNumber: "123456789",
+                Total: 100.00m,
+                Items: null!,
+                ShippingAddress: null!,
+                BillingAddress: null!
+            )
+        );
 
-    //         return (await response.Content.ReadFromJsonAsync<Order>())!;
-    //     });
-    // }
+        // using var response = await _httpClient.PostAsJsonAsync(
+        //     "api/Orders",
+        //     new
+        //     {
+        //         PaymentMethodNonceValue = paymentMethodNonceValue,
+        //         PaymentMethodNonceDescriptor = paymentMethodNonceDescriptor
+        //     }
+        // );
+        // response.EnsureSuccessStatusCode();
+
+        // return (await response.Content.ReadFromJsonAsync<Order>())!;
+    }
 
     // private async Task<ResponseWithCookie<T>> WithCookie<T>(
     //     string? quoteCookie,

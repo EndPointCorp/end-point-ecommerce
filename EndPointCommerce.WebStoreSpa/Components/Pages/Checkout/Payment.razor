@@ -107,9 +107,10 @@
     }
 
     [JSInvokable]
-    public void SubmitOrder(string PaymentMethodNonceValue, string PaymentMethodNonceDescriptor)
+    public async void SubmitOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor)
     {
-        Console.WriteLine($"SubmitOrder({PaymentMethodNonceValue}, {PaymentMethodNonceDescriptor}) called.");
-        @* Navigation.NavigateTo("/checkout/confirmation"); *@
+        var order = await ApiClient.PostOrder(paymentMethodNonceValue, paymentMethodNonceDescriptor);
+
+        Navigation.NavigateTo($"/checkout/confirmation/{order.Id}");
     }
 }
