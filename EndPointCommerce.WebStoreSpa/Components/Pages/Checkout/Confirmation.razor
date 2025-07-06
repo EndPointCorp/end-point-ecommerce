@@ -1,4 +1,4 @@
-@page "/checkout/confirmation/{OrderId:int}"
+@page "/checkout/confirmation/{OrderId}"
 
 @using System.Net
 @using EndPointCommerce.WebStoreSpa.Api
@@ -110,7 +110,7 @@
 
 @code {
     [Parameter]
-    public int OrderId { get; set; }
+    public string OrderId { get; set; } = string.Empty;
 
     public Order Order { get; set; } = default!;
 
