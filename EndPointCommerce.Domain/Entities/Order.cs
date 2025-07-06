@@ -7,6 +7,9 @@ namespace EndPointCommerce.Domain.Entities;
 /// </summary>
 public class Order : BaseAuditEntity
 {
+    [Required]
+    public Guid OrderGuid { get; set; }
+
     public Customer Customer { get; set; } = default!;
     [Display(Name = "Customer")]
     public int CustomerId { get; set; }
@@ -61,6 +64,8 @@ public class Order : BaseAuditEntity
     ) =>
         new()
         {
+            OrderGuid = Guid.NewGuid(),
+
             CustomerId = customer.Id,
             QuoteId = quote.Id,
 
