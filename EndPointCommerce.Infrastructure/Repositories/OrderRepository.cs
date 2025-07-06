@@ -34,6 +34,7 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
             .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
             .Include(x => x.ShippingAddress).ThenInclude(x => x.State)
             .Include(x => x.BillingAddress).ThenInclude(x => x.State)
+            .Include(x => x.Status)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();
     }
