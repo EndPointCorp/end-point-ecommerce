@@ -57,7 +57,6 @@ namespace EndPointCommerce.WebApi.Controllers
 
         // GET: api/Orders/{id}
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<ResourceModels.Order>> GetOrder(int id)
         {
             var order = await _orderRepository.FindByIdWithItemsAsync(id);
