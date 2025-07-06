@@ -37,8 +37,8 @@ public class Program
 
         builder.Services.AddIdentityCore<User>(opt =>
         {
-            opt.Password.RequiredLength = 8;
             opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 8;
             opt.Password.RequireNonAlphanumeric = false;
             opt.SignIn.RequireConfirmedEmail = false;
         }).AddRoles<IdentityRole<int>>()
