@@ -10,6 +10,7 @@
 @inject IJSRuntime JS;
 @inject IApiClient ApiClient;
 @inject QuoteStateContainer QuoteState;
+@inject AlertStateContainer AlertState;
 
 <PageTitle>Payment - End Point Commerce</PageTitle>
 
@@ -110,6 +111,8 @@
     public async void SubmitOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor)
     {
         var order = await ApiClient.PostOrder(paymentMethodNonceValue, paymentMethodNonceDescriptor);
+
+        _ = AlertState.SetMessage("Order placed successfully.");
 
         Navigation.NavigateTo($"/checkout/confirmation/{order.Id}");
     }

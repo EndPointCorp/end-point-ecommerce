@@ -23,6 +23,7 @@ public class Address
 
     [Required]
     public int StateId { get; set; } = 1;
+    public State? State { get; set; }
 
     [Required]
     [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid Zip Code format.")]
@@ -30,6 +31,8 @@ public class Address
 
     [Phone(ErrorMessage = "Invalid Phone Number format.")]
     public string? PhoneNumber { get; set; }
+
+    public string FullName => $"{Name} {LastName}";
 
     public Address Clone()
     {

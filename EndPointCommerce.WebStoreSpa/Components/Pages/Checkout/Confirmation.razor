@@ -1,7 +1,7 @@
 @page "/checkout/confirmation/{OrderId:int}"
 
-@using EndPointCommerce.WebStoreSpa.Api
 @using System.Net
+@using EndPointCommerce.WebStoreSpa.Api
 
 @inject NavigationManager Navigation;
 @inject IApiClient ApiClient;
@@ -10,7 +10,104 @@
 
 @if (Order != null)
 {
-    <p>Confirmation for Order @Order.Id</p>
+    <section class="py-1">
+        <div class="container px-4 px-lg-5 my-5">
+            <h1>Thank you for your order!</h1>
+
+            <h1>Order details</h1>
+
+            <div class="card mb-3 p-3">
+                <div class="row">
+                    <div class="col">
+                        Order #: @Order.Id
+                    </div>
+                    <div class="col">
+                        Order placed on: @AsLongDate(Order.DateCreated)
+                    </div>
+                    <div class="col">
+                        Status: @Order.Status
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3 p-3">
+                <div class="row">
+                    <div class="col">
+                        <h3>Shipping Address</h3>
+                        <p class="my-0">@Order.ShippingAddress.FullName</p>
+                        <p class="my-0">@Order.ShippingAddress.Street</p>
+                        @if (!string.IsNullOrEmpty(Order.ShippingAddress.StreetTwo))
+                        {
+                            <p class="my-0">@Order.ShippingAddress.StreetTwo</p>
+                        }
+                        <p class="my-0">@Order.ShippingAddress.City, @Order.ShippingAddress.State?.Abbreviation @Order.ShippingAddress.ZipCode</p>
+                        @if (!string.IsNullOrEmpty(Order.ShippingAddress.PhoneNumber))
+                        {
+                            <p class="my-0">@Order.ShippingAddress.PhoneNumber</p>
+                        }
+                    </div>
+                    <div class="col">
+                        <h3>Billing Address</h3>
+                        <p class="my-0">@Order.BillingAddress.FullName</p>
+                        <p class="my-0">@Order.BillingAddress.Street</p>
+                        @if (!string.IsNullOrEmpty(Order.BillingAddress.StreetTwo))
+                        {
+                            <p class="my-0">@Order.BillingAddress.StreetTwo</p>
+                        }
+                        <p class="my-0">@Order.BillingAddress.City, @Order.BillingAddress.State?.Abbreviation @Order.BillingAddress.ZipCode</p>
+                        @if (!string.IsNullOrEmpty(Order.BillingAddress.PhoneNumber))
+                        {
+                            <p class="my-0">@Order.BillingAddress.PhoneNumber</p>
+                        }
+                    </div>
+                    <div class="col">
+                        <h3>Summary</h3>
+
+                        <p class="my-0">Subtotal: @AsCurrency(Order.Subtotal)</p>
+                        @if (Order.Discount > 0)
+                        {
+                            <p class="my-0">Discount: @AsCurrency(Order.Discount)</p>
+                        }
+                        <p class="my-0">Tax: @AsCurrency(Order.Tax)</p>
+                        <p class="my-0">Grand Total: @AsCurrency(Order.Total)</p>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var item in Order.Items)
+            {
+                <div class="card mb-3 p-3">
+                    <div class="row g-0">
+                        <div class="col-md-4 text-center">
+                            @if (!string.IsNullOrEmpty(item.Product.ThumbnailImageUrl))
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="@item.Product.ThumbnailImageUrl"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                            else
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="https://dummyimage.com/300x300/dee2e6/6c757d.jpg"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text fs-4">@item.Quantity x @item.Product.Name</p>
+                                <p class="card-text">SKU: @item.Product.Sku</p>
+                                <p class="card-text">$@item.Total</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
 }
 
 @code {
@@ -21,23 +118,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Order = new Order(
-            Id: OrderId,
-            Status: "test_order_status",
-            TrackingNumber: "123456789",
-            Total: 100.00m,
-            Items: null!,
-            ShippingAddress: null!,
-            BillingAddress: null!
-        );
-
-        @* try
+        try
         {
-            Order = await ApiClient.GetOrder(ProductId);
+            Order = await ApiClient.GetOrder(OrderId);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
             Navigation.NavigateTo("/notfound");
-        } *@
+        }
     }
+
+    protected string AsLongDate(DateTime? value) =>
+        value?.ToString("D", System.Globalization.CultureInfo.GetCultureInfo("en-US")) ?? string.Empty;
+
+    protected string AsCurrency(decimal value) =>
+        value.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 }
