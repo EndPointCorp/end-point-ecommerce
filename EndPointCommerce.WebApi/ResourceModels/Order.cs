@@ -3,6 +3,7 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 public class Order
 {
     public int Id { get; set; }
+    public string Guid { get; set; } = string.Empty;
     public DateTime? DateCreated { get; set; }
 
     public ICollection<QuoteItem> Items { get; set; } = [];
@@ -25,6 +26,7 @@ public class Order
         var order = new Order()
         {
             Id = entity.Id,
+            Guid = entity.OrderGuid.ToString("N"),
             DateCreated = entity.DateCreated,
             TrackingNumber = entity.TrackingNumber,
 

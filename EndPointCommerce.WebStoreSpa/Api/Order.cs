@@ -2,6 +2,7 @@ namespace EndPointCommerce.WebStoreSpa.Api;
 
 public record Order(
     int Id,
+    string Guid,
     string Status,
     string TrackingNumber,
     decimal Subtotal,

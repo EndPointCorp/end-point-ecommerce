@@ -19,13 +19,18 @@
             <div class="card mb-2 p-3">
                 <div class="row">
                     <div class="col-md">
-                        Order #: @Order.Id
-                    </div>
-                    <div class="col-md">
                         Order placed on: @AsLongDate(Order.DateCreated)
                     </div>
                     <div class="col-md">
+                        Order #: @Order.Guid
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
                         Status: @Order.Status
+                    </div>
+                    <div class="col-md">
+                        Tracking #: @(Order.TrackingNumber ?? "N/A")
                     </div>
                 </div>
             </div>
