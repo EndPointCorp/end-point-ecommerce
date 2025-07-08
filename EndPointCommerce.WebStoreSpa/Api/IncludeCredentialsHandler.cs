@@ -1,11 +1,11 @@
 
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-namespace EndPointCommerce.WebStoreSpa.Identity;
+namespace EndPointCommerce.WebStoreSpa.Api;
 
 /// <summary>
 /// Handler to ensure the "credentials" property is set to "include" in HTTP requests made in the browser.
-/// This makes it so auth cookies and headers are sent with requests.
+/// This makes it so cookies and headers are sent with requests.
 /// https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
 /// </summary>
 public class IncludeCredentialsHandler : DelegatingHandler
@@ -15,7 +15,6 @@ public class IncludeCredentialsHandler : DelegatingHandler
         CancellationToken cancellationToken
     ) {
         request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-        // request.Headers.Add("X-Requested-With", ["XMLHttpRequest"]);
 
         return base.SendAsync(request, cancellationToken);
     }
