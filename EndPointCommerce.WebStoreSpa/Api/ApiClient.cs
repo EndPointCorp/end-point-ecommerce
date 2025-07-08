@@ -17,6 +17,9 @@ public interface IApiClient
     Task<NoContent> DeleteQuoteItem(int id);
     Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
     Task<Order> GetOrder(string guid);
+    Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
+    Task<HttpResponseMessage> PostUserLogin(string email, string password);
+    Task<HttpResponseMessage> PostUserLogout();
 }
 
 public class ApiClient : IApiClient
@@ -146,5 +149,37 @@ public class ApiClient : IApiClient
         response.EnsureSuccessStatusCode();
 
         return (await response.Content.ReadFromJsonAsync<Order>())!;
+    }
+
+    public async Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User",
+            new { email, password, name, lastName }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserLogin(string email, string password)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/login?useCookies=true",
+            new { email, password }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserLogout()
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "/api/User/Logout",
+            new { }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
     }
 }

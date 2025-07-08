@@ -1,8 +1,11 @@
 @using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
 @using EndPointCommerce.WebStoreSpa.State
 
 @implements IDisposable
 
+@inject NavigationManager Navigation;
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IApiClient ApiClient;
 @inject QuoteStateContainer QuoteState;
 
@@ -40,6 +43,19 @@
                 </li>
             </ul>
             <div class="d-flex">
+                <AuthorizeView>
+                    <Authorized>
+                        <button @onclick="Logout" class="btn btn-outline-dark mx-2">
+                            Logout
+                        </button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="/login" class="btn btn-outline-dark mx-2" role="button">
+                            <i class="bi-person-fill me-1"></i>
+                            Sign in
+                        </a>
+                    </NotAuthorized>
+                </AuthorizeView>
                 <a href="/cart" class="btn btn-outline-dark" role="button">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
@@ -57,6 +73,9 @@
 
     private int QuoteItemCount => QuoteState.QuoteItemCount;
 
+    private ApiAuthenticationStateProvider AuthStateProvider =>
+        (ApiAuthenticationStateProvider)AuthenticationStateProvider;
+
     protected override async Task OnInitializedAsync()
     {
         Categories = await ApiClient.GetCategories();
@@ -68,5 +87,12 @@
     public void Dispose()
     {
         QuoteState.QuoteUpdated -= StateHasChanged;
+    }
+
+    public async Task Logout()
+    {
+        await ApiClient.PostUserLogout();
+        AuthStateProvider.UpdateAuthenticationState();
+        Navigation.NavigateTo("/");
     }
 }

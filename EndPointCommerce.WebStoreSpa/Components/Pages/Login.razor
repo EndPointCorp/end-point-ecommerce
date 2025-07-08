@@ -1,0 +1,129 @@
+@page "/login"
+
+@using System.Net
+@using System.ComponentModel.DataAnnotations
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
+
+@inject NavigationManager Navigation;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IApiClient ApiClient;
+
+<PageTitle>Sign in - End Point Commerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row">
+            <div class="col-md">
+                <div class="card mb-2 p-3">
+                    <h3>Already have an account?</h3>
+                    <EditForm Model="LoginInput" method="post" OnValidSubmit="LoginUser">
+                        <DataAnnotationsValidator />
+
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="LoginInput.Email"
+                                id="LoginInput.Email"
+                                class="form-control"
+                                autocomplete="username"
+                                aria-required="true"
+                                placeholder="name@example.com"
+                            />
+                            <label for="LoginInput.Email" class="form-label">
+                                Email
+                            </label>
+                            <ValidationMessage For="() => LoginInput.Email" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="LoginInput.Password"
+                                type="password"
+                                id="LoginInput.Password"
+                                class="form-control"
+                                autocomplete="current-password"
+                                aria-required="true"
+                                placeholder="password"
+                            />
+                            <label for="LoginInput.Password" class="form-label">
+                                Password
+                            </label>
+                            <ValidationMessage For="() => LoginInput.Password" class="text-danger" />
+                        </div>
+
+                        @if (ShowLoginError)
+                        {
+                            <p class="validation-message">
+                                Invalid email or password.
+                            </p>
+                        }
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-outline-dark">
+                                Sign in
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card mb-2 p-3">
+                    <h3>New customer?</h3>
+                    <div>
+                        <a href="/register" class="btn btn-outline-dark" role="button">
+                            Create an account
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private sealed class LoginInputModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private LoginInputModel LoginInput { get; set; } = new();
+
+    private bool ShowLoginError { get; set; } = false;
+
+    private ApiAuthenticationStateProvider AuthStateProvider =>
+        (ApiAuthenticationStateProvider)AuthenticationStateProvider;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private async Task<bool> IsUserAuthenticated()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        return authState.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    public async Task LoginUser()
+    {
+        ShowLoginError = false;
+
+        try
+        {
+            await ApiClient.PostUserLogin(LoginInput.Email, LoginInput.Password);
+
+            AuthStateProvider.UpdateAuthenticationState();
+
+            Navigation.NavigateTo("/");
+        }
+        catch
+        {
+            ShowLoginError = true;
+        }
+    }
+}
