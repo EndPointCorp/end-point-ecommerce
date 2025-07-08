@@ -49,15 +49,10 @@ namespace EndPointCommerce.WebApi.Controllers
             var userEntity = user.ToEntity();
 
             var result = await _identityService.AddAsync(userEntity, user.Password, Domain.Entities.User.CUSTOMER_ROLE);
-            if (!result.Succeeded)
-            {
-                return BadRequest(string.Join(" ", result.Errors.ToList().Select(x => x.Description).ToArray()));
-            }
+            if (!result.Succeeded) return BadRequest(result);
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
-
             var emailLink = $"{_confirmEmailURL}?code={code}";
-
             await _identityEmailSender.SendConfirmationLinkAsync(userEntity, user.Email, emailLink);
 
             return ResourceModels.User.FromEntity(userEntity);
