@@ -22,6 +22,8 @@ public class Address
     [Required]
     public string City { get; set; } = string.Empty;
 
+    public int CountryId { get; set; }
+
     [Required]
     [Display(Name = "State")]
     public int StateId { get; set; }
