@@ -127,20 +127,20 @@
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; } = "test_auth_01@email.com";
+        public string Email { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; } = "Password123";
+        public string Password { get; set; } = string.Empty;
 
         [Required]
         [Compare("Password")]
-        public string ConfirmPassword { get; set; } = "Password123";
+        public string ConfirmPassword { get; set; } = string.Empty;
 
         [Required]
-        public string FirstName { get; set; } = "test_first_name";
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        public string LastName { get; set; } = "test_last_name";
+        public string LastName { get; set; } = string.Empty;
     }
 
     private RegisterInputModel RegisterInput { get; set; } = new();
