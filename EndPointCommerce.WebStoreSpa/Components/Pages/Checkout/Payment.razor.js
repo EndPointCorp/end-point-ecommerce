@@ -42,7 +42,7 @@ function sendPaymentDataToAuthNet(authNetLoginId, authNetClientKey, onDone) {
     };
 
     var cardData = {
-        cardNumber: document.getElementById("cardNumber").value,
+        cardNumber: document.getElementById("cardNumber").value?.replace(/\s+/g, ''),
         month: document.getElementById("expMonth").value,
         year: document.getElementById("expYear").value,
         cardCode: document.getElementById("cardCode").value
