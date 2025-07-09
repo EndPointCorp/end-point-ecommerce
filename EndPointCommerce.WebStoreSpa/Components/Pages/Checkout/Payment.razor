@@ -112,6 +112,8 @@
     {
         var order = await ApiClient.PostOrder(paymentMethodNonceValue, paymentMethodNonceDescriptor);
 
+        await QuoteState.LoadQuote();
+
         _ = AlertState.SetMessage("Order placed successfully.");
 
         Navigation.NavigateTo($"/checkout/confirmation/{order.Guid}");
