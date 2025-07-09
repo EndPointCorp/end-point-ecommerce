@@ -184,7 +184,10 @@ public class UserControllerTests : IntegrationTests
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Passwords must be at least 6 characters. Passwords must have at least one non alphanumeric character. Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
+        Assert.Contains("Passwords must be at least 6 characters.", errorMessage);
+        Assert.Contains("Passwords must have at least one non alphanumeric character.", errorMessage);
+        Assert.Contains("Passwords must have at least one digit ('0'-'9').", errorMessage);
+        Assert.Contains("Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
     }
 
     [Fact]
@@ -222,7 +225,8 @@ public class UserControllerTests : IntegrationTests
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Username 'test@email.com' is already taken. Email 'test@email.com' is already taken.", errorMessage);
+        Assert.Contains("Username 'test@email.com' is already taken.", errorMessage);
+        Assert.Contains("Email 'test@email.com' is already taken.", errorMessage);
     }
 
     [Fact]
