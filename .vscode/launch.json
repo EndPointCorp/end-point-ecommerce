@@ -2,10 +2,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug WebStoreSPA",
+            "name": "Debug WebStoreSpa",
             "type": "blazorwasm",
             "request": "launch",
-            "cwd": "${workspaceFolder}/EndPointCommerce.WebStoreSPA"
+            "cwd": "${workspaceFolder}/EndPointCommerce.WebStoreSpa"
         },
         {
             "name": "Debug AdminPortal",
