@@ -79,7 +79,7 @@ namespace EndPointCommerce.WebApi.Controllers
             }
 
             userEntity = user.UpdateEntity(userEntity);
-            
+
             // Set the new password if requested
             var newPassword = string.Empty;
             if ((!string.IsNullOrEmpty(user.CurrentPassword)) && (!string.IsNullOrEmpty(user.NewPassword)))

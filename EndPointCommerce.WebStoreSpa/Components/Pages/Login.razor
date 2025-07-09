@@ -56,7 +56,7 @@
                         }
 
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-outline-dark">
+                            <button type="submit" class="btn btn-outline-dark" disabled="@(!SubmitButtonEnabled)">
                                 Sign in
                             </button>
                         </div>
@@ -90,6 +90,8 @@
 
     private LoginInputModel LoginInput { get; set; } = new();
 
+    private bool SubmitButtonEnabled { get; set; } = true;
+
     private bool ShowLoginError { get; set; } = false;
 
     private ApiAuthenticationStateProvider AuthStateProvider =>
@@ -112,6 +114,7 @@
     public async Task LoginUser()
     {
         ShowLoginError = false;
+        SubmitButtonEnabled = false;
 
         try
         {
@@ -124,6 +127,7 @@
         catch
         {
             ShowLoginError = true;
+            SubmitButtonEnabled = true;
         }
     }
 }
