@@ -113,7 +113,7 @@
                 }
 
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-dark">
+                    <button type="submit" class="btn btn-outline-dark" disabled="@(!SubmitButtonEnabled)">
                         Register
                     </button>
                 </div>
@@ -145,6 +145,8 @@
 
     private RegisterInputModel RegisterInput { get; set; } = new();
 
+    private bool SubmitButtonEnabled { get; set; } = true;
+
     private List<string> RegisterErrorMessages { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
@@ -164,6 +166,7 @@
     public async Task RegisterUser()
     {
         RegisterErrorMessages.Clear();
+        SubmitButtonEnabled = false;
 
         var response = await ApiClient.PostUser(
             RegisterInput.Email, RegisterInput.Password,
@@ -172,15 +175,17 @@
 
         if (response.IsSuccessStatusCode)
         {
+            _ = AlertState.SetMessage("Registration successful. You can now sign in.");
             Navigation.NavigateTo("/login");
         }
         else
         {
-            await HandleErrorResponse(response);
+            await ShowErrorMessages(response);
+            SubmitButtonEnabled = true;
         }
     }
 
-    private async Task HandleErrorResponse(HttpResponseMessage response)
+    private async Task ShowErrorMessages(HttpResponseMessage response)
     {
         var content = await response.Content.ReadAsStringAsync();
         var json = JsonDocument.Parse(content);
