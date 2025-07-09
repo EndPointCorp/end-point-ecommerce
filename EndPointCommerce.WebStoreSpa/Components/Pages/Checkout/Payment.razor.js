@@ -15,11 +15,12 @@ function loadScript(authNetEnvironment) {
 }
 
 function setUpSubmit(authNetLoginId, authNetClientKey, dotNet) {
-    const submitButton = document.getElementById("SubmitOrderButton");
+    const submitButton = getSubmitButton();
     submitButton.addEventListener("click", () => doSubmit(authNetLoginId, authNetClientKey, dotNet));
 }
 
 function doSubmit(authNetLoginId, authNetClientKey, dotNet) {
+    disableSubmitButton();
     clearErrors();
 
     sendPaymentDataToAuthNet(
@@ -68,10 +69,27 @@ function sendPaymentDataToAuthNet(authNetLoginId, authNetClientKey, onDone) {
 function handleAuthNetResponse(response, onDone) {
     // console.log("Response from Authorize.Net: ", response);
     if (response.messages.resultCode === "Error") {
+        console.log("Error from Authorize.Net: ", response);
+
         displayErrors(response.messages.message);
+        enableSubmitButton();
     } else {
         onDone(response);
     }
+}
+
+function getSubmitButton() {
+    return document.getElementById("SubmitOrderButton");
+}
+
+function enableSubmitButton() {
+    const submitButton = getSubmitButton();
+    submitButton.disabled = false;
+}
+
+function disableSubmitButton() {
+    const submitButton = getSubmitButton();
+    submitButton.disabled = true;
 }
 
 function clearErrors() {
