@@ -73,7 +73,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Account
 
         protected IActionResult RedirectAfterLogin(string? returnUrl = null)
         {
-            var defaultRedirect = "/admin/";
+            var defaultRedirect = "/";
             return LocalRedirect(returnUrl ?? defaultRedirect);
         }
     }
