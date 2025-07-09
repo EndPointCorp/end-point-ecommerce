@@ -57,6 +57,9 @@ public class Program
         builder.Services.AddIdentityApiEndpoints<User>(opt =>
         {
             opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 6;
+            opt.Password.RequireNonAlphanumeric = true;
+            opt.SignIn.RequireConfirmedEmail = false;
         }).AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<EndPointCommerceDbContext>();
 
