@@ -114,6 +114,6 @@
 
         _ = AlertState.SetMessage("Order placed successfully.");
 
-        Navigation.NavigateTo($"/checkout/confirmation/{order.Id}");
+        Navigation.NavigateTo($"/checkout/confirmation/{order.Guid}");
     }
 }
