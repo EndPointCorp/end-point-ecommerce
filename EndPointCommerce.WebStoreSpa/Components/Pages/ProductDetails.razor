@@ -1,11 +1,14 @@
 ﻿@page "/product/{ProductId:int}"
 
 @using System.ComponentModel.DataAnnotations
-@using EndPointCommerce.WebStoreSpa.Api
 @using System.Net
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.State
 
 @inject NavigationManager Navigation;
 @inject IApiClient ApiClient;
+@inject QuoteStateContainer QuoteState;
+@inject AlertStateContainer AlertState;
 
 <PageTitle>@Product?.Name - End Point Commerce</PageTitle>
 
@@ -106,5 +109,8 @@
     public async Task AddToCart()
     {
         await ApiClient.PostQuoteItem(ProductId, AddToCartInput.Quantity);
+        await QuoteState.LoadQuote();
+
+        _ = AlertState.SetMessage("Item added to cart.");
     }
 }
