@@ -103,6 +103,9 @@ services:
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
     entrypoint: [ "sh", "-c", "dotnet EndPointCommerce.WebStore.dll" ]
+    depends_on:
+      web-api:
+        condition: service_healthy
     logging: *default-logging
 
   db:
