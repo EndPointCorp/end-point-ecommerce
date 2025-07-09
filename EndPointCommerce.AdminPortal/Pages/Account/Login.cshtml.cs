@@ -28,8 +28,29 @@ namespace EndPointCommerce.AdminPortal.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return Page();
+
+            var user = await _identityService.FindByUserNameAsync(Login.Email);
+
+            if (user == null)
             {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
+            }
+
+            var isPasswordValid = await _identityService.IsPasswordValid(user, Login.Password);
+
+            if (!isPasswordValid)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
+            }
+
+            var role = await _identityService.GetRoleAsync(user);
+
+            if (role.Name != Domain.Entities.User.ADMIN_ROLE)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return Page();
             }
 
