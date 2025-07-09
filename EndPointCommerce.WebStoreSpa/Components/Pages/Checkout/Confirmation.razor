@@ -1,4 +1,4 @@
-@page "/checkout/confirmation/{OrderId}"
+@page "/checkout/confirmation/{OrderGuid}"
 
 @using System.Net
 @using EndPointCommerce.WebStoreSpa.Api
@@ -22,7 +22,7 @@
                         Order placed on: @AsLongDate(Order.DateCreated)
                     </div>
                     <div class="col-md">
-                        Order #: @Order.Guid
+                        Order #: @Order.Id
                     </div>
                 </div>
                 <div class="row">
@@ -115,7 +115,7 @@
 
 @code {
     [Parameter]
-    public string OrderId { get; set; } = string.Empty;
+    public string OrderGuid { get; set; } = string.Empty;
 
     public Order Order { get; set; } = default!;
 
@@ -123,7 +123,7 @@
     {
         try
         {
-            Order = await ApiClient.GetOrder(OrderId);
+            Order = await ApiClient.GetOrder(OrderGuid);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {
