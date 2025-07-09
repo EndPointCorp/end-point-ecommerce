@@ -84,8 +84,22 @@ function displayErrors(errors) {
 
     errors.forEach(error => {
         const li = document.createElement("li");
-        li.textContent = error.text;
+        li.textContent = getErrorMessage(error.code);
         li.className = "validation-message";
         errorList.appendChild(li);
     });
+}
+
+function getErrorMessage(errorCode) {
+    const map = {
+        "E_WC_04": "Please provide card number, expiration month, year and CVV.",
+        "E_WC_05": "Please provide valid card number.",
+        "E_WC_06": "Please provide valid expiration month.",
+        "E_WC_07": "Please provide valid expiration year.",
+        "E_WC_08": "Please provide a future expiration date.",
+        "E_WC_15": "Please provide valid CVV.",
+        "E_WC_20": "Please provide valid card number."
+    };
+
+    return map[errorCode] || "We couldn't process your card at this time. Please try again.";
 }
