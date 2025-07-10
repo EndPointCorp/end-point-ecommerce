@@ -103,7 +103,7 @@
                             <div class="card-body">
                                 <p class="card-text fs-4">@item.Quantity x @item.Product.Name</p>
                                 <p class="card-text">SKU: @item.Product.Sku</p>
-                                <p class="card-text">$@item.Total</p>
+                                <p class="card-text">$@AsCurrency(item.Total)</p>
                             </div>
                         </div>
                     </div>
