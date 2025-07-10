@@ -12,14 +12,14 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
     private readonly IMailer _mailer;
     private readonly IRazorViewRenderer _razorViewRenderer;
     private readonly string _orderDetailsUrl;
-    private readonly string _productImagesUrlPath;
+    private readonly string _productImagesUrl;
 
     public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer, IConfiguration config)
     {
         _mailer = mailer;
         _razorViewRenderer = razorViewRenderer;
         _orderDetailsUrl = config["OrderDetailsUrl"]!;
-        _productImagesUrlPath = config["ProductImagesUrlPath"]!;
+        _productImagesUrl = config["ProductImagesUrl"]!;
     }
 
     public async Task SendAsync(Order order)
@@ -30,7 +30,7 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
             {
                 Order = order,
                 OrderDetailsUrl = _orderDetailsUrl,
-                ProductImagesUrlPath = _productImagesUrlPath
+                ProductImagesUrl = _productImagesUrl
             }
         );
 

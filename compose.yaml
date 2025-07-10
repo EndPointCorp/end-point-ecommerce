@@ -58,9 +58,9 @@ services:
       - WebApiDataProtectionKeysPath=/data-protection-keys/web-api
       - CategoryImagesPath=/images/category-images
       - ProductImagesPath=/images/product-images
-      - CategoryImagesUrlPath=${CATEGORY_IMAGES_URL_PATH}
-      - ProductImagesUrlPath=${PRODUCT_IMAGES_URL_PATH}
-      - WebStorePasswordResetUrl=${WEB_STORE_PASSWORD_RESET_URL}
+      - CategoryImagesUrl=${CATEGORY_IMAGES_URL}
+      - ProductImagesUrl=${PRODUCT_IMAGES_URL}
+      - PasswordResetUrl=${WEB_STORE_PASSWORD_RESET_URL}
       - MailSettings__Server=${MAIL_SETTINGS_SERVER}
       - MailSettings__Port=${MAIL_SETTINGS_PORT}
       - MailSettings__SenderName=${MAIL_SETTINGS_SENDER_NAME}

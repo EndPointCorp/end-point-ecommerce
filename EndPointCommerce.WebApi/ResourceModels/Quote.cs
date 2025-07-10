@@ -17,7 +17,7 @@ public class Quote
 
     public ICollection<QuoteItem> Items { get; set; } = [];
 
-    public static Quote FromEntity(Domain.Entities.Quote entity, string? imagesUrlPath = null)
+    public static Quote FromEntity(Domain.Entities.Quote entity, string? imagesUrl = null)
     {
         return new() {
             Id = entity.Id,
@@ -34,7 +34,7 @@ public class Quote
             ShippingAddress = entity.ShippingAddress is null ? null : QuoteAddress.FromEntity(entity.ShippingAddress),
             BillingAddress = entity.BillingAddress is null ? null : QuoteAddress.FromEntity(entity.BillingAddress),
 
-            Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrlPath)
+            Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrl)
         };
     }
 }

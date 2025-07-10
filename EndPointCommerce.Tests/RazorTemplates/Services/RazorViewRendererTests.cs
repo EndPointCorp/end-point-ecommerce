@@ -126,7 +126,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                         PaymentMethod = new PaymentMethod { Name = PaymentMethod.CREDIT_CARD }
                     },
                     OrderDetailsUrl = "test_order_details_url",
-                    ProductImagesUrlPath = "test_product_images_url"
+                    ProductImagesUrl = "test_product_images_url"
                 }
             );
 

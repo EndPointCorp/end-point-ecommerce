@@ -30,7 +30,7 @@ public class Product
     public string? ThumbnailImageUrl { get; set; }
     public IEnumerable<string>? AdditionalImagesUrls { get; set; }
 
-    public static Product FromEntity(Domain.Entities.Product entity, string? imagesUrlPath = null)
+    public static Product FromEntity(Domain.Entities.Product entity, string? imagesUrl = null)
     {
         return new() {
             Id = entity.Id,
@@ -55,12 +55,12 @@ public class Product
             CategoryId = entity.CategoryId,
             Category = entity.Category is null ? null : Category.FromEntity(entity.Category),
 
-            MainImageUrl = ImageUrlBuilder.GetImageUrl(entity.MainImage, imagesUrlPath),
-            ThumbnailImageUrl = ImageUrlBuilder.GetImageUrl(entity.ThumbnailImage, imagesUrlPath),
-            AdditionalImagesUrls = entity.AdditionalImages?.Select(i => ImageUrlBuilder.GetImageUrl(i, imagesUrlPath))!
+            MainImageUrl = ImageUrlBuilder.GetImageUrl(entity.MainImage, imagesUrl),
+            ThumbnailImageUrl = ImageUrlBuilder.GetImageUrl(entity.ThumbnailImage, imagesUrl),
+            AdditionalImagesUrls = entity.AdditionalImages?.Select(i => ImageUrlBuilder.GetImageUrl(i, imagesUrl))!
         };
     }
 
-    public static List<Product> FromListOfEntities(IList<Domain.Entities.Product> entities, string? imagesUrlPath = null) =>
-        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
+    public static List<Product> FromListOfEntities(IList<Domain.Entities.Product> entities, string? imagesUrl = null) =>
+        entities.Select(e => FromEntity(e, imagesUrl)).ToList();
 }

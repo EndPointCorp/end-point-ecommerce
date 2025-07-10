@@ -27,8 +27,8 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
 
             _mockConfig = new Mock<IConfiguration>();
             _mockConfig
-                .Setup(m => m["ProductImagesUrlPath"])
-                .Returns("test_product_images_url_path");
+                .Setup(m => m["ProductImagesUrl"])
+                .Returns("test_product_images_url");
 
             _subject = new OrderConfirmationMailer(_mockMailer.Object, _mockRazorViewRenderer.Object, _mockConfig.Object);
         }

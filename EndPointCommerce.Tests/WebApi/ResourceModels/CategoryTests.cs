@@ -19,7 +19,7 @@ public class CategoryTests
             IsEnabled = true
         };
 
-        var result = EndPointCommerce.WebApi.ResourceModels.Category.FromEntity(entity, "test_image_url_path");
+        var result = EndPointCommerce.WebApi.ResourceModels.Category.FromEntity(entity, "test_image_url");
 
         // Act & Assert
         Assert.Equal(10, result.Id);
@@ -48,7 +48,7 @@ public class CategoryTests
             }
         };
 
-        var result = EndPointCommerce.WebApi.ResourceModels.Category.FromListOfEntities(entities, "test_image_url_path");
+        var result = EndPointCommerce.WebApi.ResourceModels.Category.FromListOfEntities(entities, "test_image_url");
 
         // Act & Assert
         Assert.Equal(entities.Count, result.Count);

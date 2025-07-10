@@ -18,7 +18,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
         private readonly ISessionHelper _session;
 
-        private readonly string _imagesUrlPath;
+        private readonly string _imagesUrl;
 
         public OrdersController(
             IOrderCreator orderCreator,
@@ -35,7 +35,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
             _session = session;
 
-            _imagesUrlPath = config["ProductImagesUrlPath"]!;
+            _imagesUrl = config["ProductImagesUrl"]!;
         }
 
         // GET: api/Orders
@@ -84,7 +84,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
                 _quoteCookieManager.DeleteQuoteIdCookie(Response);
 
-                return ResourceModels.Order.FromEntity(result, _imagesUrlPath);
+                return ResourceModels.Order.FromEntity(result, _imagesUrl);
             }
             catch (EntityNotFoundException)
             {

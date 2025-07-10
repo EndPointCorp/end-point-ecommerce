@@ -21,7 +21,7 @@ public class Order
 
     public string? TrackingNumber { get; set; }
 
-    public static Order FromEntity(Domain.Entities.Order entity, string? imagesUrlPath = null)
+    public static Order FromEntity(Domain.Entities.Order entity, string? imagesUrl = null)
     {
         var order = new Order()
         {
@@ -37,7 +37,7 @@ public class Order
         };
 
         if (entity.Items != null)
-            order.Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrlPath);
+            order.Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrl);
 
         if (entity.ShippingAddress != null)
             order.ShippingAddress = QuoteAddress.FromEntity(entity.ShippingAddress);
@@ -51,6 +51,6 @@ public class Order
         return order;
     }
 
-    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order> entities, string? imagesUrlPath = null) =>
-        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
+    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order> entities, string? imagesUrl = null) =>
+        entities.Select(e => FromEntity(e, imagesUrl)).ToList();
 }
