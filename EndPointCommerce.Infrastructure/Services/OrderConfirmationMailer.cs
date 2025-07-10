@@ -11,14 +11,14 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
 {
     private readonly IMailer _mailer;
     private readonly IRazorViewRenderer _razorViewRenderer;
-    private readonly string _orderDetailsUrlPath;
+    private readonly string _orderDetailsUrl;
     private readonly string _productImagesUrlPath;
 
     public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer, IConfiguration config)
     {
         _mailer = mailer;
         _razorViewRenderer = razorViewRenderer;
-        _orderDetailsUrlPath = config["OrderDetailsUrlPath"]!;
+        _orderDetailsUrl = config["OrderDetailsUrl"]!;
         _productImagesUrlPath = config["ProductImagesUrlPath"]!;
     }
 
@@ -29,7 +29,7 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
             new OrderConfirmationViewModel()
             {
                 Order = order,
-                OrderDetailsUrlPath = _orderDetailsUrlPath,
+                OrderDetailsUrl = _orderDetailsUrl,
                 ProductImagesUrlPath = _productImagesUrlPath
             }
         );

@@ -6,7 +6,7 @@ namespace EndPointCommerce.RazorTemplates.ViewModels;
 public class OrderConfirmationViewModel
 {
     public required Order Order { get; set; }
-    public required string OrderDetailsUrlPath { get; set; }
+    public required string OrderDetailsUrl { get; set; }
     public required string ProductImagesUrlPath { get; set; }
 
     public string AsLongDate(DateTime? value) =>
@@ -18,5 +18,5 @@ public class OrderConfirmationViewModel
     public string? GetProductImageUrl(Image? image) =>
         ImageUrlBuilder.GetImageUrl(image, ProductImagesUrlPath);
 
-    public string GetOrderUrl() => $"{OrderDetailsUrlPath}/{Order.OrderGuid}";
+    public string GetOrderUrl() => $"{OrderDetailsUrl}/{Order.OrderGuid}";
 }

@@ -54,10 +54,6 @@ public class IdentityService : IIdentityService
             // Set the user role
             var roleResult = await _userManager.AddToRoleAsync(user, roleName);
             if (!roleResult.Succeeded) return roleResult;
-
-            // Confirm the user's email
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            await _userManager.ConfirmEmailAsync(user, code);
         }
 
         return result;

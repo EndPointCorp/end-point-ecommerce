@@ -125,7 +125,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                         Status = new OrderStatus { Name = OrderStatus.PENDING },
                         PaymentMethod = new PaymentMethod { Name = PaymentMethod.CREDIT_CARD }
                     },
-                    OrderDetailsUrlPath = "test_order_details_url",
+                    OrderDetailsUrl = "test_order_details_url",
                     ProductImagesUrlPath = "test_product_images_url"
                 }
             );

@@ -14,7 +14,7 @@ namespace EndPointCommerce.WebApi.Controllers
         private readonly IIdentityService _identityService;
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender<User> _identityEmailSender;
-        private readonly string _confirmEmailURL;
+        private readonly string _confirmEmailUrl;
 
         public UserController(
             IIdentityService identityService,
@@ -25,7 +25,7 @@ namespace EndPointCommerce.WebApi.Controllers
             _identityService = identityService;
             _userManager = userManager;
             _identityEmailSender = identityEmailSender;
-            _confirmEmailURL = config["WebsiteConfirmEmailURL"]!;
+            _confirmEmailUrl = config["ConfirmEmailUrl"]!;
         }
 
         // GET: api/User
@@ -52,7 +52,7 @@ namespace EndPointCommerce.WebApi.Controllers
             if (!result.Succeeded) return BadRequest(result);
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
-            var emailLink = $"{_confirmEmailURL}?code={code}";
+            var emailLink = $"{_confirmEmailUrl}?code={code}";
             await _identityEmailSender.SendConfirmationLinkAsync(userEntity, user.Email, emailLink);
 
             return ResourceModels.User.FromEntity(userEntity);
