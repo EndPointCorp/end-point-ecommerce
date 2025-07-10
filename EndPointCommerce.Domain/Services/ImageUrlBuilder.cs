@@ -1,6 +1,6 @@
 using EndPointCommerce.Domain.Entities;
 
-namespace EndPointCommerce.WebApi.Services;
+namespace EndPointCommerce.Domain.Services;
 
 public static class ImageUrlBuilder
 {
