@@ -4,41 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    @await Html.PartialAsync("_BootstrapCss")
+
     <title></title>
 </head>
 
-<body style="background:#DCDCDC; font-family:Times New Roman, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;">
-    <div style="background:#DCDCDC; font-family:Times New Roman, Helvetica, sans-serif; font-size:14px; margin:0; padding:0;">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
-            <tr>
-                <td align="center" valign="top" style="padding:20px 0 20px 0">
-                    <table
-                        bgcolor="#FFFFFF"
-                        cellspacing="0" cellpadding="10" border="0" width="650"
-                        style="border:1px solid #E0E0E0;"
-                    >
-                            <td bgcolor="#000000" style="background:#000000;">
-                                <p style="font-size:14px; margin:0;color:white">
-                                    <strong>End Point Commerce</strong>
-                                </p>
-                            </td>
-                        </tr>
-                        @RenderBody()
-                        <tr>
-                            <td bgcolor="#000000" align="center" style="background:#000000; text-align:center;">
-                                <center>
-                                    <p style="font-size:10px; margin:0;color:white">
-                                        <strong>End Point Commerce, @DateTime.Now.Year.ToString()</strong>
-                                    </p>
-                                </center>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a href="/" class="navbar-brand">End Point Commerce</a>
+            </div>
+        </nav>
+
+        @RenderBody()
+
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright © End Point Commerce @DateTime.Now.Year.ToString()</p>
+            </div>
+        </footer>
     </div>
 </body>
 
