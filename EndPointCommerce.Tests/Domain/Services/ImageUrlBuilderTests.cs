@@ -1,5 +1,5 @@
 using EndPointCommerce.Domain.Entities;
-using EndPointCommerce.WebApi.Services;
+using EndPointCommerce.Domain.Services;
 
 namespace EndPointCommerce.Tests.WebApi.Services;
 

@@ -78,6 +78,8 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
         public async Task Render_CanRenderTheOrderConfirmationEmailTemplate()
         {
             // Act
+            var orderGuid = Guid.NewGuid();
+
             var result = await _subject.Render(
                 Templates.OrderConfirmation,
                 new OrderConfirmationViewModel()
@@ -85,6 +87,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                     Order = new Order
                     {
                         Id = 123,
+                        OrderGuid = orderGuid,
                         DateCreated = new DateTime(2010, 10, 10),
                         Customer = new Customer
                         {
@@ -119,15 +122,19 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                             Street = "123 Main St",
                             StreetTwo = "Unit A"
                         },
+                        Status = new OrderStatus { Name = OrderStatus.PENDING },
                         PaymentMethod = new PaymentMethod { Name = PaymentMethod.CREDIT_CARD }
-                    }
+                    },
+                    OrderDetailsUrlPath = "test_order_details_url",
+                    ProductImagesUrlPath = "test_product_images_url"
                 }
             );
 
             // Assert
             Assert.Contains("<!DOCTYPE html>", result);
-            Assert.Contains("Hello test_name test_last_name", result);
-            Assert.Contains("Here are the details for Order #123 that was placed on Sunday, October 10, 2010", result);
+            Assert.Contains("Thank you for your order!", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\">Sunday, October 10, 2010</a>", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\">123</a>", result);
         }
     }
 }
