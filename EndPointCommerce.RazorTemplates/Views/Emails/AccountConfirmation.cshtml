@@ -2,16 +2,16 @@
 
 @model IdentityEmailViewModel
 
-<tr>
-    <td valign="top">
-        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+<section class="py-1">
+    <div class="container px-4 px-lg-5 my-5">
+        <p>
             Hello @Model.User.Greeting,
         </p>
-        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+        <p>
             Thank you for signing up with EndPointCommerce.com.
         </p>
-        <p style="font-size:12px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">
+        <p>
             Please <a href="@Model.Link">click here</a> to confirm your account.
         </p>
-    </td>
-</tr>
+    </div>
+</section>
