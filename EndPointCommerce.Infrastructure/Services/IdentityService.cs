@@ -1,7 +1,9 @@
+using System.Text;
 using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.Domain.Interfaces;
 using EndPointCommerce.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EndPointCommerce.Infrastructure.Services;
@@ -120,5 +122,11 @@ public class IdentityService : IIdentityService
         var role = await _roleManager.FindByNameAsync(roleNames.First());
 
         return role!;
+    }
+
+    public async Task<string> GenerateEmailConfirmationCodeAsync(User user)
+    {
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        return WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
     }
 }

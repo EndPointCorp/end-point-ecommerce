@@ -28,7 +28,7 @@ public class IdentityEmailSender : IEmailSender<User>
             new IdentityEmailViewModel()
             {
                 User = user,
-                Link = confirmationLink
+                Link = WebUtility.HtmlDecode(confirmationLink)
             }
         );
 

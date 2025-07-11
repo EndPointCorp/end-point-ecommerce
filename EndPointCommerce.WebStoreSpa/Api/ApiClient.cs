@@ -20,6 +20,7 @@ public interface IApiClient
     Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
     Task<HttpResponseMessage> PostUserLogin(string email, string password);
     Task<HttpResponseMessage> PostUserLogout();
+    Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code);
 }
 
 public class ApiClient : IApiClient
@@ -177,6 +178,16 @@ public class ApiClient : IApiClient
         var response = await _httpClient.PostAsJsonAsync(
             "/api/User/Logout",
             new { }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code)
+    {
+        var response = await _httpClient.GetAsync(
+            $"/api/User/confirmEmail?userId={userId}&code={code}"
         );
         response.EnsureSuccessStatusCode();
 
