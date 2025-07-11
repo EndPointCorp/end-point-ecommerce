@@ -21,6 +21,8 @@ public interface IApiClient
     Task<HttpResponseMessage> PostUserLogin(string email, string password);
     Task<HttpResponseMessage> PostUserLogout();
     Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code);
+    Task<HttpResponseMessage> PostUserForgotPassword(string email);
+    Task<HttpResponseMessage> PostUserResetPassword(string email, string resetCode, string newPassword);
 }
 
 public class ApiClient : IApiClient
@@ -190,6 +192,27 @@ public class ApiClient : IApiClient
             $"/api/User/confirmEmail?userId={userId}&code={code}"
         );
         response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserForgotPassword(string email)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/forgotPassword",
+            new { email }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserResetPassword(string email, string resetCode, string newPassword)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/resetPassword",
+            new { email, resetCode, newPassword }
+        );
 
         return response;
     }
