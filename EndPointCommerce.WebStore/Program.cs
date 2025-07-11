@@ -5,6 +5,9 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Optional config for local environment overrides, mainly useful during local development
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 

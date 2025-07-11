@@ -500,3 +500,5 @@ images/product-images/*
 */wwwroot/js/*
 !*/wwwroot/css/.keep
 !*/wwwroot/js/.keep
+
+appsettings.Local.json
