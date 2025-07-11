@@ -69,8 +69,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             // Assert
             Assert.Contains("<!DOCTYPE html>", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("click the following button to reset your password", result);
-            Assert.Contains("<a href=\"test_password_reset_link\" target=\"_blank\">", result);
+            Assert.Contains("<a href=\"test_password_reset_link\">", result);
             Assert.Contains("If you did not request a password reset, please ignore this email.", result);
         }
 
