@@ -35,6 +35,8 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>(client => {
     );
 });
 
+builder.Services.AddHealthChecks();
+
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration)
 );
@@ -70,5 +72,7 @@ app.UseSession();
 
 app.UseStaticFiles();
 app.MapRazorPages();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
