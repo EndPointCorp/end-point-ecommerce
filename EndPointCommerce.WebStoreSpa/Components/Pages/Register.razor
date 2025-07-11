@@ -181,25 +181,8 @@
         }
         else
         {
-            await ShowErrorMessages(response);
+            ErrorMessages = await response.GetErrorMessages();
             SubmitButtonEnabled = true;
         }
-    }
-
-    private async Task ShowErrorMessages(HttpResponseMessage response)
-    {
-        var content = await response.Content.ReadAsStringAsync();
-        var json = JsonDocument.Parse(content);
-        var errors = json.RootElement.GetProperty("errors");
-
-        ErrorMessages = errors
-            .EnumerateArray()
-            .Select(e => new {
-                Code = e.GetProperty("code").GetString()!,
-                Description = e.GetProperty("description").GetString()!,
-            })
-            .Where(e => e.Code != "DuplicateUserName")
-            .Select(e => e.Description)
-            .ToList();
     }
 }

@@ -1,8 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using EndPointCommerce.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using EndPointCommerce.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using EndPointCommerce.Domain.Entities;
+using EndPointCommerce.Domain.Interfaces;
+using EndPointCommerce.WebApi.Services;
 
 namespace EndPointCommerce.WebApi.Controllers
 {
@@ -48,7 +49,7 @@ namespace EndPointCommerce.WebApi.Controllers
             var userEntity = user.ToEntity();
 
             var result = await _identityService.AddAsync(userEntity, user.Password, Domain.Entities.User.CUSTOMER_ROLE);
-            if (!result.Succeeded) return BadRequest(result);
+            if (!result.Succeeded) return BadRequest(result.ToHttpValidationProblemDetails());
 
             var code = await _identityService.GenerateEmailConfirmationCodeAsync(userEntity);
             var emailLink = $"{_confirmEmailUrl}?userId={userEntity.Id}&code={code}";
