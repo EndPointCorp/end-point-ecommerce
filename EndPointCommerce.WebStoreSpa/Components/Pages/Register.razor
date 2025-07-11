@@ -103,10 +103,10 @@
                     </div>
                 </div>
 
-                @if (RegisterErrorMessages.Count > 0)
+                @if (ErrorMessages.Count > 0)
                 {
                     <ul class="validation-errors">
-                        @foreach (var error in RegisterErrorMessages)
+                        @foreach (var error in ErrorMessages)
                         {
                             <li class="validation-message">@error</li>
                         }
@@ -148,7 +148,7 @@
 
     private bool SubmitButtonEnabled { get; set; } = true;
 
-    private List<string> RegisterErrorMessages { get; set; } = new();
+    private List<string> ErrorMessages { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -166,7 +166,7 @@
 
     public async Task RegisterUser()
     {
-        RegisterErrorMessages.Clear();
+        ErrorMessages.Clear();
         SubmitButtonEnabled = false;
 
         var response = await ApiClient.PostUser(
@@ -192,7 +192,7 @@
         var json = JsonDocument.Parse(content);
         var errors = json.RootElement.GetProperty("errors");
 
-        RegisterErrorMessages = errors
+        ErrorMessages = errors
             .EnumerateArray()
             .Select(e => new {
                 Code = e.GetProperty("code").GetString()!,
