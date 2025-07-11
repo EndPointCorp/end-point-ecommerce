@@ -116,7 +116,7 @@ public class Program
             RequestPath = new PathString("/product-images")
         });
 
-        // app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
         app.UseCors();
 
