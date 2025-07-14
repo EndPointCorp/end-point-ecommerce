@@ -11,8 +11,6 @@ public class UserPut
     public string Name { get; set; } = string.Empty;
     [Required]
     public string LastName { get; set; } = string.Empty;
-    public string? CurrentPassword { get; set; }
-    public string? NewPassword { get; set; }
 
     public Domain.Entities.User UpdateEntity(Domain.Entities.User entity)
     {
