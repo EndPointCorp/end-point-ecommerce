@@ -25,7 +25,12 @@
                     <a href="/" class="nav-link active" aria-current="page">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                    <a
+                        class="nav-link dropdown-toggle" id="navbarDropdown"
+                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    >
+                        Shop
+                    </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a href="/" class="dropdown-item">All Products</a></li>
                         <li><hr class="dropdown-divider" /></li>
@@ -42,12 +47,27 @@
                     </ul>
                 </li>
             </ul>
+
             <div class="d-flex">
                 <AuthorizeView>
                     <Authorized>
-                        <button @onclick="Logout" class="btn btn-outline-dark mx-2">
-                            Logout
-                        </button>
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                            <li class="nav-item dropdown">
+                                <a
+                                    class="dropdown-toggle btn btn-outline-dark mx-2" id="myAccountDropdown"
+                                    href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                >
+                                    My account
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="myAccountDropdown">
+                                    <li><a href="/my-orders" class="dropdown-item">Orders</a></li>
+                                    <li><a href="/my-profile" class="dropdown-item">Profile</a></li>
+                                    <li><a href="/my-addresses" class="dropdown-item">Addresses</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a @onclick="Logout" href="#" class="dropdown-item">Log out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                     </Authorized>
                     <NotAuthorized>
                         <a href="/login" class="btn btn-outline-dark mx-2" role="button">
