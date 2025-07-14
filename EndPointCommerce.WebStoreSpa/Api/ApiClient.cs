@@ -17,12 +17,15 @@ public interface IApiClient
     Task<NoContent> DeleteQuoteItem(int id);
     Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
     Task<Order> GetOrder(string guid);
+    Task<User> GetUser();
     Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
+    Task<HttpResponseMessage> PutUser(string email, string phoneNumber, string name, string lastName);
     Task<HttpResponseMessage> PostUserLogin(string email, string password);
     Task<HttpResponseMessage> PostUserLogout();
     Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code);
     Task<HttpResponseMessage> PostUserForgotPassword(string email);
     Task<HttpResponseMessage> PostUserResetPassword(string email, string resetCode, string newPassword);
+    Task<HttpResponseMessage> PostUserManageInfo(string oldPassword, string newPassword);
 }
 
 public class ApiClient : IApiClient
@@ -154,11 +157,29 @@ public class ApiClient : IApiClient
         return (await response.Content.ReadFromJsonAsync<Order>())!;
     }
 
+    public async Task<User> GetUser()
+    {
+        using var response = await _httpClient.GetAsync("api/User");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<User>())!;
+    }
+
     public async Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName)
     {
         var response = await _httpClient.PostAsJsonAsync(
             "api/User",
             new { email, password, name, lastName }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PutUser(string email, string phoneNumber, string name, string lastName)
+    {
+        var response = await _httpClient.PutAsJsonAsync(
+            "api/User",
+            new { email, phoneNumber, name, lastName }
         );
 
         return response;
@@ -212,6 +233,16 @@ public class ApiClient : IApiClient
         var response = await _httpClient.PostAsJsonAsync(
             "api/User/resetPassword",
             new { email, resetCode, newPassword }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserManageInfo(string oldPassword, string newPassword)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/manageInfo",
+            new { oldPassword, newPassword }
         );
 
         return response;
