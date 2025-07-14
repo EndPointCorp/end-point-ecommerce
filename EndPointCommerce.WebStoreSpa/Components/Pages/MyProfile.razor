@@ -262,6 +262,7 @@
 
         if (response.IsSuccessStatusCode)
         {
+            UpdatePasswordInput = new UpdatePasswordInputModel();
             _ = AlertState.SetMessage("Password updated successfully.");
         }
         else
