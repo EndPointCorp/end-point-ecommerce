@@ -5,7 +5,7 @@
 @implements IDisposable
 
 @inject NavigationManager Navigation;
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient;
 @inject QuoteStateContainer QuoteState;
 
@@ -93,9 +93,6 @@
 
     private int QuoteItemCount => QuoteState.QuoteItemCount;
 
-    private ApiAuthenticationStateProvider AuthStateProvider =>
-        (ApiAuthenticationStateProvider)AuthenticationStateProvider;
-
     protected override async Task OnInitializedAsync()
     {
         Categories = await ApiClient.GetCategories();
@@ -112,7 +109,7 @@
     public async Task Logout()
     {
         await ApiClient.PostUserLogout();
-        AuthStateProvider.UpdateAuthenticationState();
+        AuthenticationState.UpdateAuthenticationState();
         Navigation.NavigateTo("/");
     }
 }

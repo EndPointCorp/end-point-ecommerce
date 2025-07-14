@@ -25,6 +25,12 @@ public class ApiAuthenticationStateProvider : AuthenticationStateProvider
         return BuildAuthenticatedState(userInfo.Email);
     }
 
+    public async Task<bool> IsUserAuthenticated()
+    {
+        var authState = await GetAuthenticationStateAsync();
+        return authState.User.Identity?.IsAuthenticated ?? false;
+    }
+
     public void UpdateAuthenticationState()
     {
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());

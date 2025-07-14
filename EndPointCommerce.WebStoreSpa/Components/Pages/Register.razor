@@ -8,7 +8,7 @@
 @using EndPointCommerce.WebStoreSpa.State
 
 @inject NavigationManager Navigation;
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationStateProvider AuthenticationState;
 @inject IApiClient ApiClient;
 @inject AlertStateContainer AlertState;
 
@@ -152,16 +152,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (await IsUserAuthenticated())
+        if (await AuthenticationState.IsUserAuthenticated())
         {
             Navigation.NavigateTo("/");
         }
-    }
-
-    private async Task<bool> IsUserAuthenticated()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        return authState.User.Identity?.IsAuthenticated ?? false;
     }
 
     public async Task RegisterUser()
