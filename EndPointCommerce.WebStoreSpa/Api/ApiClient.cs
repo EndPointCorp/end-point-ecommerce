@@ -241,7 +241,7 @@ public class ApiClient : IApiClient
     public async Task<HttpResponseMessage> PostUserManageInfo(string oldPassword, string newPassword)
     {
         var response = await _httpClient.PostAsJsonAsync(
-            "api/User/manageInfo",
+            "api/User/manage/info",
             new { oldPassword, newPassword }
         );
 
