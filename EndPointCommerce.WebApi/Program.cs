@@ -16,6 +16,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Optional config for local environment overrides, mainly useful during local development
+        builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+        
         builder.Services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy =>

@@ -5,6 +5,9 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Optional config for local environment overrides, mainly useful during local development
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -34,6 +37,8 @@ builder.Services.AddHttpClient<IApiClient, ApiClient>(client => {
             throw new InvalidOperationException("Config setting 'EndPointCommerceApiUrl' not found.")
     );
 });
+
+builder.Services.AddHealthChecks();
 
 builder.Host.UseSerilog((context, loggerConfig) =>
     loggerConfig.ReadFrom.Configuration(context.Configuration)
@@ -70,5 +75,7 @@ app.UseSession();
 
 app.UseStaticFiles();
 app.MapRazorPages();
+
+app.MapHealthChecks("/healthz");
 
 app.Run();
