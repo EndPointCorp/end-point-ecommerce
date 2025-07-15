@@ -93,9 +93,13 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
+        }
+
+        if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("SwaggerForceEnable"))
+        {
             app.UseSwagger();
             app.UseSwaggerUI();
-            app.UseDeveloperExceptionPage();
         }
 
         app.UseStaticFiles(new StaticFileOptions
