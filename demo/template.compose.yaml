@@ -72,6 +72,7 @@ services:
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
+      - SwaggerForceEnable=${SWAGGER_FORCE_ENABLE}
     secrets:
       - end-point-commerce-db-connection-string
     entrypoint: [
