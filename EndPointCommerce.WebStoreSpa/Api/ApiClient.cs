@@ -16,6 +16,7 @@ public interface IApiClient
     Task<QuoteItem> PutQuoteItem(int id, int quantity);
     Task<NoContent> DeleteQuoteItem(int id);
     Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
+    Task<List<Order>> GetOrders();
     Task<Order> GetOrder(string guid);
     Task<User> GetUser();
     Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
@@ -147,6 +148,14 @@ public class ApiClient : IApiClient
         response.EnsureSuccessStatusCode();
 
         return (await response.Content.ReadFromJsonAsync<Order>())!;
+    }
+
+    public async Task<List<Order>> GetOrders()
+    {
+        using var response = await _httpClient.GetAsync("api/Orders");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Order>>())!;
     }
 
     public async Task<Order> GetOrder(string guid)
