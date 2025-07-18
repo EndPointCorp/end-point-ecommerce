@@ -2,8 +2,10 @@
 
 @using System.Net
 @using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
 
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient
 
 <PageTitle>Order Details - End Point Commerce</PageTitle>
@@ -119,6 +121,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (!await AuthenticationState.IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/login");
+        }
+
         try
         {
             Order = await ApiClient.GetOrder(OrderGuid);
