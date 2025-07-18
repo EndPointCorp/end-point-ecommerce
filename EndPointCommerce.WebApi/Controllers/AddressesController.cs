@@ -50,7 +50,7 @@ namespace EndPointCommerce.WebApi.Controllers
             return ResourceModels.Address.FromEntity(address!);
         }
 
-        // PUT: api/Addresses
+        // PUT: api/Addresses/{id}
         [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<ResourceModels.Address>> PutAddress(
@@ -90,7 +90,7 @@ namespace EndPointCommerce.WebApi.Controllers
             // Delete the address
             await _repository.DeleteAsync(address);
 
-            return Ok();
+            return NoContent();
         }
     }
 }
