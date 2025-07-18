@@ -33,6 +33,22 @@ namespace EndPointCommerce.WebApi.Controllers
             );
         }
 
+        // GET: api/Addresses/{id}
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ResourceModels.Address>> GetAddress(int id)
+        {
+            var customerId = await _sessionHelper.GetCustomerId(User);
+            if (customerId == null) return NotFound();
+
+            var address = await _repository.FindByIdAsync(id);
+            if (address == null) return NotFound();
+
+            if (address.CustomerId != customerId) return NotFound();
+
+            return ResourceModels.Address.FromEntity(address!);
+        }
+
         // POST: api/Addresses
         [HttpPost]
         public async Task<ActionResult<ResourceModels.Address>> PostAddress([FromBody] ResourceModels.Address payload)
