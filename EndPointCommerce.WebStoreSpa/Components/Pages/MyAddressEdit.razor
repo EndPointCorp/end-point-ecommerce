@@ -1,0 +1,149 @@
+@page "/my-addresses/edit/{AddressId:int}"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Net
+@using System.Text.Json
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
+@using EndPointCommerce.WebStoreSpa.State
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationState
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>My Address - Edit - End Point Commerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1 class="mb-3">Edit address</h1>
+
+        <div class="my-3 d-flex justify-content-start">
+            <a href="/my-addresses">Back to address list</a>
+        </div>
+
+        <EditForm Model="AddressInput" method="post" OnValidSubmit="UpdateAddress">
+            <DataAnnotationsValidator />
+
+            <div class="card mb-4 p-3">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label for="AddressInput_Name" class="form-label">First Name</label>
+                        <InputText
+                            @bind-Value="AddressInput.Name"
+                            id="AddressInput_Name"
+                            class="form-control"
+                        />
+                        <ValidationMessage For="() => AddressInput.Name" class="text-danger" />
+                    </div>
+                    <div class="col-6">
+                        <label for="AddressInput_LastName" class="form-label">Last Name</label>
+                        <InputText
+                            @bind-Value="AddressInput.LastName"
+                            id="AddressInput_LastName"
+                            class="form-control"
+                        />
+                        <ValidationMessage For="() => AddressInput.LastName" class="text-danger" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="AddressInput_Street" class="form-label">Street (line 1)</label>
+                    <InputText
+                        @bind-Value="AddressInput.Street"
+                        id="AddressInput_Street"
+                        class="form-control"
+                    />
+                    <ValidationMessage For="() => AddressInput.Street" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="ShippingAddress_StreetTwo" class="form-label">Street (line 2)</label>
+                    <InputText
+                        @bind-Value="AddressInput.StreetTwo"
+                        id="AddressInput_StreetTwo"
+                        class="form-control"
+                    />
+                    <ValidationMessage For="() => AddressInput.StreetTwo" class="text-danger" />
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label for="AddressInput_City" class="form-label">City</label>
+                        <InputText
+                            @bind-Value="AddressInput.City"
+                            id="AddressInput_City"
+                            class="form-control"
+                        />
+                        <ValidationMessage For="() => AddressInput.City" class="text-danger" />
+                    </div>
+                    <div class="col-6">
+                        <label for="AddressInput_StateId" class="form-label">State</label>
+                        <InputSelect @bind-Value="AddressInput.StateId" class="form-control">
+                            @foreach (var state in States)
+                            {
+                                <option value="@state.Id">@state.Name</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => AddressInput.StateId" class="text-danger" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label for="AddressInput_ZipCode" class="form-label">Zip Code</label>
+                        <InputText
+                            @bind-Value="AddressInput.ZipCode"
+                            id="AddressInput_ZipCode"
+                            class="form-control"
+                        />
+                        <ValidationMessage For="() => AddressInput.ZipCode" class="text-danger" />
+                    </div>
+                    <div class="col-6">
+                        <label for="AddressInput_PhoneNumber" class="form-label">Phone Number</label>
+                        <InputText
+                            @bind-Value="AddressInput.PhoneNumber"
+                            id="AddressInput_PhoneNumber"
+                            class="form-control"
+                        />
+                        <ValidationMessage For="() => AddressInput.PhoneNumber" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-dark">
+                    Update address
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</section>
+
+@code {
+    [Parameter]
+    public int AddressId { get; set; }
+
+    private List<State> States { get; set; } = new();
+
+    private Address AddressInput { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await AuthenticationState.IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/login");
+        }
+
+        States = await ApiClient.GetStates();
+        AddressInput = await ApiClient.GetAddress(AddressId);
+
+        if (AddressInput == null)
+        {
+            Navigation.NavigateTo("/my-addresses");
+        }
+    }
+
+    public async Task UpdateAddress()
+    {
+        var response = await ApiClient.PutAddress(AddressInput);
+
+        _ = AlertState.SetMessage("Address updated successfully.");
+    }
+}
