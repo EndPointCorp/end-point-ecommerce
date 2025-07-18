@@ -18,6 +18,11 @@ public interface IApiClient
     Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
     Task<List<Order>> GetOrders();
     Task<Order> GetOrder(string guid);
+    Task<List<Address>> GetAddresses();
+    Task<Address> GetAddress(int id);
+    Task<Address> PostAddress(Address address);
+    Task<Address> PutAddress(Address address);
+    Task<NoContent> DeleteAddress(int id);
     Task<User> GetUser();
     Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
     Task<HttpResponseMessage> PutUser(string email, string phoneNumber, string name, string lastName);
@@ -164,6 +169,46 @@ public class ApiClient : IApiClient
         response.EnsureSuccessStatusCode();
 
         return (await response.Content.ReadFromJsonAsync<Order>())!;
+    }
+
+    public async Task<List<Address>> GetAddresses()
+    {
+        using var response = await _httpClient.GetAsync("api/Addresses");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Address>>())!;
+    }
+
+    public async Task<Address> GetAddress(int id)
+    {
+        using var response = await _httpClient.GetAsync($"api/Addresses/{id}");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<Address> PostAddress(Address address)
+    {
+        using var response = await _httpClient.PostAsJsonAsync("api/Addresses", address);
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<Address> PutAddress(Address address)
+    {
+        using var response = await _httpClient.PutAsJsonAsync($"api/Addresses/{address.Id}", address);
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<NoContent> DeleteAddress(int id)
+    {
+        using var response = await _httpClient.DeleteAsync($"api/Addresses/{id}");
+        response.EnsureSuccessStatusCode();
+
+        return new NoContent();
     }
 
     public async Task<User> GetUser()
