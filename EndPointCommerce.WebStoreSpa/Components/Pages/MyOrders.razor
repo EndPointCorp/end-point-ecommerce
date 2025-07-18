@@ -76,6 +76,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (!await AuthenticationState.IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/login");
+        }
+
         Orders = await ApiClient.GetOrders();
     }
 
