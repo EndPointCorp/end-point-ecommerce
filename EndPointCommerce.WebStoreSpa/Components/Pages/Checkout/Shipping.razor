@@ -1,10 +1,12 @@
 @page "/checkout/shipping"
 
-@using EndPointCommerce.WebStoreSpa.Api
-@using EndPointCommerce.WebStoreSpa.State
 @using System.ComponentModel.DataAnnotations
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
+@using EndPointCommerce.WebStoreSpa.State
 
 @inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient
 @inject QuoteStateContainer QuoteState
 
@@ -39,6 +41,36 @@
                             Shipping Address
                         </div>
                         <div class="card-body">
+                            <AuthorizeView>
+                                <Authorized Context="auth_context">
+                                    <div class="row mb-3">
+                                        <div class="input-group">
+                                            <InputSelect
+                                                @bind-Value="UseShippingAddressId"
+                                                class="form-select"
+                                                aria-label="Choose from your address book"
+                                            >
+                                                <option selected>Choose from your address book...</option>
+                                                @foreach (var address in Addresses)
+                                                {
+                                                    <option value="@address.Id">
+                                                        @address.FullName, @address.Street, @address.City
+                                                    </option>
+                                                }
+                                            </InputSelect>
+
+                                            <button
+                                                @onclick="UseSelectedShippingAddress"
+                                                class="btn btn-outline-dark"
+                                                type="button"
+                                            >
+                                                Use this address
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Authorized>
+                            </AuthorizeView>
+
                             <div class="row mb-3">
                                 <div class="col-6">
                                     <label for="ShippingAddress_Name" class="form-label">First Name</label>
@@ -145,85 +177,113 @@
 
                             @if (!ShippingInput.UseShippingAsBilling)
                             {
-                                <div>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label for="BillingAddress_Name" class="form-label">First Name</label>
-                                            <InputText
-                                                @bind-Value="ShippingInput.BillingAddress.Name"
-                                                id="BillingAddress_Name"
-                                                class="form-control"
-                                            />
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.Name" class="text-danger" />
+                                <AuthorizeView>
+                                    <Authorized Context="auth_context">
+                                        <div class="row mb-3">
+                                            <div class="input-group">
+                                                <InputSelect
+                                                    @bind-Value="UseBillingAddressId"
+                                                    class="form-select"
+                                                    aria-label="Choose from your address book"
+                                                >
+                                                    <option selected>Choose from your address book...</option>
+                                                    @foreach (var address in Addresses)
+                                                    {
+                                                        <option value="@address.Id">
+                                                            @address.FullName, @address.Street, @address.City
+                                                        </option>
+                                                    }
+                                                </InputSelect>
+
+                                                <button
+                                                    @onclick="UseSelectedBillingAddress"
+                                                    class="btn btn-outline-dark"
+                                                    type="button"
+                                                >
+                                                    Use this address
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="BillingAddress_LastName" class="form-label">Last Name</label>
-                                            <InputText
-                                                @bind-Value="ShippingInput.BillingAddress.LastName"
-                                                id="BillingAddress_LastName"
-                                                class="form-control"
-                                            />
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.LastName" class="text-danger" />
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="BillingAddress_Street" class="form-label">Street (line 1)</label>
+                                    </Authorized>
+                                </AuthorizeView>
+
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label for="BillingAddress_Name" class="form-label">First Name</label>
                                         <InputText
-                                            @bind-Value="ShippingInput.BillingAddress.Street"
-                                            id="BillingAddress_Street"
+                                            @bind-Value="ShippingInput.BillingAddress.Name"
+                                            id="BillingAddress_Name"
                                             class="form-control"
                                         />
-                                        <ValidationMessage For="() => ShippingInput.BillingAddress.Street" class="text-danger" />
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.Name" class="text-danger" />
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="BillingAddress_StreetTwo" class="form-label">Street (line 2)</label>
+                                    <div class="col-6">
+                                        <label for="BillingAddress_LastName" class="form-label">Last Name</label>
                                         <InputText
-                                            @bind-Value="ShippingInput.BillingAddress.StreetTwo"
-                                            id="BillingAddress_StreetTwo"
+                                            @bind-Value="ShippingInput.BillingAddress.LastName"
+                                            id="BillingAddress_LastName"
                                             class="form-control"
                                         />
-                                        <ValidationMessage For="() => ShippingInput.BillingAddress.StreetTwo" class="text-danger" />
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.LastName" class="text-danger" />
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label for="BillingAddress_City" class="form-label">City</label>
-                                            <InputText
-                                                @bind-Value="ShippingInput.BillingAddress.City"
-                                                id="BillingAddress_City"
-                                                class="form-control"
-                                            />
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.City" class="text-danger" />
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="BillingAddress_StateId" class="form-label">State</label>
-                                            <InputSelect @bind-Value="ShippingInput.BillingAddress.StateId" class="form-control">
-                                                @foreach (var state in States)
-                                                {
-                                                    <option value="@state.Id">@state.Name</option>
-                                                }
-                                            </InputSelect>
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.StateId" class="text-danger" />
-                                        </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="BillingAddress_Street" class="form-label">Street (line 1)</label>
+                                    <InputText
+                                        @bind-Value="ShippingInput.BillingAddress.Street"
+                                        id="BillingAddress_Street"
+                                        class="form-control"
+                                    />
+                                    <ValidationMessage For="() => ShippingInput.BillingAddress.Street" class="text-danger" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="BillingAddress_StreetTwo" class="form-label">Street (line 2)</label>
+                                    <InputText
+                                        @bind-Value="ShippingInput.BillingAddress.StreetTwo"
+                                        id="BillingAddress_StreetTwo"
+                                        class="form-control"
+                                    />
+                                    <ValidationMessage For="() => ShippingInput.BillingAddress.StreetTwo" class="text-danger" />
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label for="BillingAddress_City" class="form-label">City</label>
+                                        <InputText
+                                            @bind-Value="ShippingInput.BillingAddress.City"
+                                            id="BillingAddress_City"
+                                            class="form-control"
+                                        />
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.City" class="text-danger" />
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label for="BillingAddress_ZipCode" class="form-label">Zip Code</label>
-                                            <InputText
-                                                @bind-Value="ShippingInput.BillingAddress.ZipCode"
-                                                id="BillingAddress_ZipCode"
-                                                class="form-control"
-                                            />
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.ZipCode" class="text-danger" />
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="BillingAddress_PhoneNumber" class="form-label">Phone Number</label>
-                                            <InputText
-                                                @bind-Value="ShippingInput.BillingAddress.PhoneNumber"
-                                                id="BillingAddress_PhoneNumber"
-                                                class="form-control"
-                                            />
-                                            <ValidationMessage For="() => ShippingInput.BillingAddress.PhoneNumber" class="text-danger" />
-                                        </div>
+                                    <div class="col-6">
+                                        <label for="BillingAddress_StateId" class="form-label">State</label>
+                                        <InputSelect @bind-Value="ShippingInput.BillingAddress.StateId" class="form-control">
+                                            @foreach (var state in States)
+                                            {
+                                                <option value="@state.Id">@state.Name</option>
+                                            }
+                                        </InputSelect>
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.StateId" class="text-danger" />
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <label for="BillingAddress_ZipCode" class="form-label">Zip Code</label>
+                                        <InputText
+                                            @bind-Value="ShippingInput.BillingAddress.ZipCode"
+                                            id="BillingAddress_ZipCode"
+                                            class="form-control"
+                                        />
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.ZipCode" class="text-danger" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="BillingAddress_PhoneNumber" class="form-label">Phone Number</label>
+                                        <InputText
+                                            @bind-Value="ShippingInput.BillingAddress.PhoneNumber"
+                                            id="BillingAddress_PhoneNumber"
+                                            class="form-control"
+                                        />
+                                        <ValidationMessage For="() => ShippingInput.BillingAddress.PhoneNumber" class="text-danger" />
                                     </div>
                                 </div>
                             }
@@ -259,6 +319,11 @@
 
     private ShippingInputModel ShippingInput { get; set; } = new ShippingInputModel();
 
+    private List<Address> Addresses = new();
+
+    private int UseShippingAddressId { get; set; } = 0;
+    private int UseBillingAddressId { get; set; } = 0;
+
     protected override async Task OnInitializedAsync()
     {
         States = await ApiClient.GetStates();
@@ -274,6 +339,27 @@
         ShippingInput.Email = QuoteState.Quote?.Email ?? string.Empty;
         ShippingInput.ShippingAddress = QuoteState.Quote?.ShippingAddress?.Clone() ?? new();
         ShippingInput.BillingAddress = QuoteState.Quote?.BillingAddress?.Clone() ?? new();
+
+        if (await AuthenticationState.IsUserAuthenticated())
+        {
+            Addresses = await ApiClient.GetAddresses();
+        }
+    }
+
+    private void UseSelectedShippingAddress()
+    {
+        var selectedAddress = Addresses.FirstOrDefault(a => a.Id == UseShippingAddressId);
+        if (selectedAddress == null) return;
+
+        ShippingInput.ShippingAddress = selectedAddress.Clone();
+    }
+
+    private void UseSelectedBillingAddress()
+    {
+        var selectedAddress = Addresses.FirstOrDefault(a => a.Id == UseBillingAddressId);
+        if (selectedAddress == null) return;
+
+        ShippingInput.BillingAddress = selectedAddress.Clone();
     }
 
     private async Task HandleOnSubmit(EditContext editContext)
