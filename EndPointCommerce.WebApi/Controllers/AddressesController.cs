@@ -45,7 +45,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
             // Create the address
             await _repository.AddAsync(address);
-            address = await _repository.FindByIdWithStateAsync(address.Id);
+            address = await _repository.FindByIdAsync(address.Id);
 
             return ResourceModels.Address.FromEntity(address!);
         }
@@ -69,7 +69,7 @@ namespace EndPointCommerce.WebApi.Controllers
             address = payload.UpdateEntity(address);
 
             await _repository.UpdateAsync(address);
-            address = await _repository.FindByIdWithStateAsync(address.Id);
+            address = await _repository.FindByIdAsync(address.Id);
 
             return ResourceModels.Address.FromEntity(address!);
         }
