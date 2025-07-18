@@ -1,0 +1,71 @@
+@page "/my-addresses"
+
+@using System.ComponentModel.DataAnnotations
+@using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Identity
+@using EndPointCommerce.WebStoreSpa.State
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationState
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>My Addresses - End Point Commerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1 class="mb-3">Your addresses</h1>
+
+        <div class="my-3 d-flex justify-content-start">
+            <a href="/my-addresses/new">Add a new address</a>
+        </div>
+
+        <div class="row">
+            @foreach (var address in Addresses)
+            {
+                <div class="col-md-4 d-flex">
+                    <div class="card p-3 mb-3 w-100">
+                        <p class="my-0 fw-bold">@address.FullName</p>
+                        <p class="my-0">@address.Street</p>
+                        @if (!string.IsNullOrEmpty(address.StreetTwo))
+                        {
+                            <p class="my-0">@address.StreetTwo</p>
+                        }
+                        <p class="my-0">@address.City, @address.State?.Abbreviation @address.ZipCode</p>
+                        @if (!string.IsNullOrEmpty(address.PhoneNumber))
+                        {
+                            <p class="my-0">@address.PhoneNumber</p>
+                        }
+
+                        <div class="mt-auto d-flex justify-content-end">
+                            <a href="/my-addresses/edit/@address.Id" class="btn btn-link">Edit</a>
+                            <button @onclick="e => RemoveAddress(address.Id)" type="button" class="btn btn-link">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private List<Address> Addresses = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await AuthenticationState.IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/login");
+        }
+
+        Addresses = await ApiClient.GetAddresses();
+    }
+
+    private async Task RemoveAddress(int addressId)
+    {
+        await ApiClient.DeleteAddress(addressId);
+        Addresses = await ApiClient.GetAddresses();
+
+        _ = AlertState.SetMessage("Address removed.");
+    }
+}
