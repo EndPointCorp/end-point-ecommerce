@@ -2,6 +2,7 @@
 
 @using System.Net
 @using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Formatters
 
 @inject NavigationManager Navigation
 @inject IApiClient ApiClient
@@ -19,7 +20,7 @@
             <div class="card mb-2 p-3">
                 <div class="row">
                     <div class="col-md">
-                        Order placed on: @AsLongDate(Order.DateCreated)
+                        Order placed on: @Order.DateCreated.AsLongDate()
                     </div>
                     <div class="col-md">
                         Order #: @Order.Id
@@ -67,13 +68,13 @@
                 <div class="card col-md mb-2 p-3">
                     <h3>Summary</h3>
 
-                    <p class="my-0">Subtotal: @AsCurrency(Order.Subtotal)</p>
+                    <p class="my-0">Subtotal: @Order.Subtotal.AsCurrency()</p>
                     @if (Order.Discount > 0)
                     {
-                        <p class="my-0">Discount: @AsCurrency(Order.Discount)</p>
+                        <p class="my-0">Discount: @Order.Discount.AsCurrency()</p>
                     }
-                    <p class="my-0">Tax: @AsCurrency(Order.Tax)</p>
-                    <p class="my-0">Grand Total: @AsCurrency(Order.Total)</p>
+                    <p class="my-0">Tax: @Order.Tax.AsCurrency()</p>
+                    <p class="my-0">Grand Total: @Order.Total.AsCurrency()</p>
                 </div>
             </div>
 
@@ -103,7 +104,7 @@
                             <div class="card-body">
                                 <p class="card-text fs-4">@item.Quantity x @item.Product.Name</p>
                                 <p class="card-text">SKU: @item.Product.Sku</p>
-                                <p class="card-text">@AsCurrency(item.Total)</p>
+                                <p class="card-text">@item.Total.AsCurrency()</p>
                             </div>
                         </div>
                     </div>
@@ -130,10 +131,4 @@
             Navigation.NavigateTo("/notfound");
         }
     }
-
-    protected string AsLongDate(DateTime? value) =>
-        value?.ToString("D", System.Globalization.CultureInfo.GetCultureInfo("en-US")) ?? string.Empty;
-
-    protected string AsCurrency(decimal value) =>
-        value.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 }

@@ -2,6 +2,7 @@
 
 @using System.ComponentModel.DataAnnotations
 @using EndPointCommerce.WebStoreSpa.Api
+@using EndPointCommerce.WebStoreSpa.Formatters
 @using EndPointCommerce.WebStoreSpa.Identity
 @using EndPointCommerce.WebStoreSpa.State
 
@@ -21,7 +22,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md">
-                            <div>Order placed on: @AsLongDate(order.DateCreated)</div>
+                            <div>Order placed on: @order.DateCreated.AsLongDate()</div>
                             <div>Status: @order.Status</div>
                         </div>
                         <div class="col-md">
@@ -29,7 +30,7 @@
                             <div>Tracking #: @(order.TrackingNumber ?? "N/A")</div>
                         </div>
                         <div class="col-md">
-                            <div>Total: @AsCurrency(order.Total)</div>
+                            <div>Total: @order.Total.AsCurrency()</div>
                             <div><a href="/account/orders/@order.Guid">View details</a></div>
                         </div>
                     </div>
@@ -60,7 +61,7 @@
                                 <div class="col-md-8">
                                     <p class="fs-4">@item.Quantity x @item.Product.Name</p>
                                     <p>SKU: @item.Product.Sku</p>
-                                    <p>@AsCurrency(item.Total)</p>
+                                    <p>@item.Total.AsCurrency()</p>
                                 </div>
                             </div>
                         </div>
@@ -83,10 +84,4 @@
 
         Orders = await ApiClient.GetOrders();
     }
-
-    protected string AsLongDate(DateTime? value) =>
-        value?.ToString("D", System.Globalization.CultureInfo.GetCultureInfo("en-US")) ?? string.Empty;
-
-    protected string AsCurrency(decimal value) =>
-        value.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 }
