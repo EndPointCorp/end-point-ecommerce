@@ -1,4 +1,4 @@
-@page "/register"
+@page "/auth/register"
 
 @using System.ComponentModel.DataAnnotations
 @using System.Net
@@ -171,7 +171,7 @@
         if (response.IsSuccessStatusCode)
         {
             _ = AlertState.SetMessage("Registration successful. You can now sign in.");
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
         else
         {

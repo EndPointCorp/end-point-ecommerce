@@ -1,4 +1,4 @@
-@page "/confirm-email"
+@page "/auth/confirm-email"
 
 @using EndPointCommerce.WebStoreSpa.Api
 
@@ -16,7 +16,7 @@
         else
         {
             <p>
-                Thanks for confirming your account. <a href="/login">You can now sign in.</a>
+                Thanks for confirming your account. <a href="/auth/login">You can now sign in.</a>
             </p>
         }
     </div>
@@ -35,7 +35,7 @@
     {
         if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(Code))
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
             return;
         }
 
@@ -46,7 +46,7 @@
         }
         catch
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
     }
 }

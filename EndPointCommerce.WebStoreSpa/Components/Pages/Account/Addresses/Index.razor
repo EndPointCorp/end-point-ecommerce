@@ -1,4 +1,4 @@
-@page "/my-addresses"
+@page "/account/addresses"
 
 @using System.ComponentModel.DataAnnotations
 @using EndPointCommerce.WebStoreSpa.Api
@@ -10,14 +10,14 @@
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
 
-<PageTitle>My Addresses - End Point Commerce</PageTitle>
+<PageTitle>Your adresses - End Point Commerce</PageTitle>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <h1 class="mb-3">Your address book</h1>
 
         <div class="my-3 d-flex justify-content-start">
-            <a href="/my-addresses/new">Add a new address</a>
+            <a href="/account/addresses/new">Add a new address</a>
         </div>
 
         <div class="row">
@@ -38,7 +38,7 @@
                         }
 
                         <div class="mt-auto d-flex justify-content-end">
-                            <a href="/my-addresses/edit/@address.Id" class="btn btn-link">Edit</a>
+                            <a href="/account/addresses/edit/@address.Id" class="btn btn-link">Edit</a>
                             <button @onclick="e => RemoveAddress(address.Id)" type="button" class="btn btn-link">Remove</button>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
     {
         if (!await AuthenticationState.IsUserAuthenticated())
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
 
         Addresses = await ApiClient.GetAddresses();

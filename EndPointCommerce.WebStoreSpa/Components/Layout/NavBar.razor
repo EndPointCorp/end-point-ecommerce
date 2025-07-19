@@ -38,7 +38,7 @@
                             foreach (var category in Categories)
                             {
                                 <li>
-                                    <a href="/category/@category.Id" class="dropdown-item">
+                                    <a href="/products/by-category/@category.Id" class="dropdown-item">
                                         @category.Name
                                     </a>
                                 </li>
@@ -57,12 +57,12 @@
                                     class="dropdown-toggle btn btn-outline-dark mx-2" id="myAccountDropdown"
                                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 >
-                                    My account
+                                    Your account
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="myAccountDropdown">
-                                    <li><a href="/my-orders" class="dropdown-item">Orders</a></li>
-                                    <li><a href="/my-profile" class="dropdown-item">Profile</a></li>
-                                    <li><a href="/my-addresses" class="dropdown-item">Addresses</a></li>
+                                    <li><a href="/account/orders" class="dropdown-item">Orders</a></li>
+                                    <li><a href="/account/profile" class="dropdown-item">Profile</a></li>
+                                    <li><a href="/account/addresses" class="dropdown-item">Addresses</a></li>
                                     <li><hr class="dropdown-divider" /></li>
                                     <li><a @onclick="Logout" href="#" class="dropdown-item">Log out</a></li>
                                 </ul>
@@ -70,7 +70,7 @@
                         </ul>
                     </Authorized>
                     <NotAuthorized>
-                        <a href="/login" class="btn btn-outline-dark mx-2" role="button">
+                        <a href="/auth/login" class="btn btn-outline-dark mx-2" role="button">
                             <i class="bi-person-fill me-1"></i>
                             Sign in
                         </a>

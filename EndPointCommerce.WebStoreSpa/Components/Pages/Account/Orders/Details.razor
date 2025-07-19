@@ -1,4 +1,4 @@
-@page "/my-orders/{OrderGuid}"
+@page "/account/orders/{OrderGuid}"
 
 @using System.Net
 @using EndPointCommerce.WebStoreSpa.Api
@@ -123,7 +123,7 @@
     {
         if (!await AuthenticationState.IsUserAuthenticated())
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
 
         try

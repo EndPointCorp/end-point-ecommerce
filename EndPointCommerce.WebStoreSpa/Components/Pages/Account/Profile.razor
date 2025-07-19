@@ -1,4 +1,4 @@
-@page "/my-profile"
+@page "/account/profile"
 
 @using System.ComponentModel.DataAnnotations
 @using EndPointCommerce.WebStoreSpa.Api
@@ -10,7 +10,7 @@
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
 
-<PageTitle>My Profile - End Point Commerce</PageTitle>
+<PageTitle>Your profile - End Point Commerce</PageTitle>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
@@ -225,7 +225,7 @@
     {
         if (!await AuthenticationState.IsUserAuthenticated())
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
 
         var user = await ApiClient.GetUser();

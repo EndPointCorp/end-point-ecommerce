@@ -1,4 +1,4 @@
-@page "/my-addresses/new"
+@page "/account/addresses/edit/{AddressId:int}"
 
 @using System.ComponentModel.DataAnnotations
 @using System.Net
@@ -12,17 +12,17 @@
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
 
-<PageTitle>My Address - New - End Point Commerce</PageTitle>
+<PageTitle>Edit an address - Edit - End Point Commerce</PageTitle>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <h1 class="mb-3">Add a new address</h1>
+        <h1 class="mb-3">Edit address</h1>
 
         <div class="my-3 d-flex justify-content-start">
-            <a href="/my-addresses">Back to address list</a>
+            <a href="/account/addresses">Back to address list</a>
         </div>
 
-        <EditForm Model="AddressInput" method="post" OnValidSubmit="CreateAddress">
+        <EditForm Model="AddressInput" method="post" OnValidSubmit="UpdateAddress">
             <DataAnnotationsValidator />
 
             <div class="card mb-4 p-3">
@@ -109,7 +109,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-outline-dark">
-                    Add address
+                    Update address
                 </button>
             </div>
         </EditForm>
@@ -117,6 +117,9 @@
 </section>
 
 @code {
+    [Parameter]
+    public int AddressId { get; set; }
+
     private List<State> States { get; set; } = new();
 
     private Address AddressInput { get; set; } = new();
@@ -125,17 +128,22 @@
     {
         if (!await AuthenticationState.IsUserAuthenticated())
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("/auth/login");
         }
 
         States = await ApiClient.GetStates();
+        AddressInput = await ApiClient.GetAddress(AddressId);
+
+        if (AddressInput == null)
+        {
+            Navigation.NavigateTo("/account/addresses");
+        }
     }
 
-    public async Task CreateAddress()
+    public async Task UpdateAddress()
     {
-        var response = await ApiClient.PostAddress(AddressInput);
+        var response = await ApiClient.PutAddress(AddressInput);
 
-        _ = AlertState.SetMessage("Address created successfully.");
-        Navigation.NavigateTo("/my-addresses");
+        _ = AlertState.SetMessage("Address updated successfully.");
     }
 }
