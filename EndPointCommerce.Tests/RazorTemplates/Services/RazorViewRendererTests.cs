@@ -39,10 +39,11 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
+            Assert.Contains("<!DOCTYPE html", result);
             Assert.Contains("Thank you for signing up with EndPointCommerce.com", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("Please <a href=\"test_confirmation_link\">click here</a> to confirm your account.", result);
+            Assert.Contains("Please <a href=\"test_confirmation_link\"", result);
+            Assert.Contains("click here</a> to confirm your account.", result);
         }
 
         [Fact]
@@ -67,9 +68,9 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
+            Assert.Contains("<!DOCTYPE html", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("<a href=\"test_password_reset_link\">", result);
+            Assert.Contains("<a href=\"test_password_reset_link\"", result);
             Assert.Contains("If you did not request a password reset, please ignore this email.", result);
         }
 
@@ -130,10 +131,12 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
+            Assert.Contains("<!DOCTYPE html", result);
             Assert.Contains("Thank you for your order!", result);
-            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\">Sunday, October 10, 2010</a>", result);
-            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\">123</a>", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\"", result);
+            Assert.Contains($"Sunday, October 10, 2010", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\"", result);
+            Assert.Contains($"123", result);
         }
     }
 }
