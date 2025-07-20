@@ -226,6 +226,7 @@
         if (!await AuthenticationState.IsUserAuthenticated())
         {
             Navigation.NavigateTo("/auth/login");
+            return;
         }
 
         var user = await ApiClient.GetUser();

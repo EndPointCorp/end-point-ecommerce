@@ -33,6 +33,7 @@
         if (!await AuthenticationState.IsUserAuthenticated())
         {
             Navigation.NavigateTo("/auth/login");
+            return;
         }
 
         try

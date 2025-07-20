@@ -56,6 +56,7 @@
         if (!await AuthenticationState.IsUserAuthenticated())
         {
             Navigation.NavigateTo("/auth/login");
+            return;
         }
 
         Addresses = await ApiClient.GetAddresses();

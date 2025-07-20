@@ -48,6 +48,7 @@
         if (!await AuthenticationState.IsUserAuthenticated())
         {
             Navigation.NavigateTo("/auth/login");
+            return;
         }
 
         States = await ApiClient.GetStates();
