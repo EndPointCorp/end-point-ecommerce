@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndPointCommerce.Tests", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.RazorTemplates", "EndPointCommerce.RazorTemplates\EndPointCommerce.RazorTemplates.csproj", "{4D25A620-A868-4DDD-AF53-44CB2087F688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.WebStore", "EndPointCommerce.WebStore\EndPointCommerce.WebStore.csproj", "{7F03A22D-3CE5-4212-99A6-E774996F6CF1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.Jobs", "EndPointCommerce.Jobs\EndPointCommerce.Jobs.csproj", "{141EEFF4-33FA-439C-B7C0-F4C0AC29D148}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.WebStoreSpa", "EndPointCommerce.WebStoreSpa\EndPointCommerce.WebStoreSpa.csproj", "{3BBE3AC7-E728-4AA5-8EF9-E55384DA6368}"
@@ -51,10 +49,6 @@ Global
 		{4D25A620-A868-4DDD-AF53-44CB2087F688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D25A620-A868-4DDD-AF53-44CB2087F688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D25A620-A868-4DDD-AF53-44CB2087F688}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F03A22D-3CE5-4212-99A6-E774996F6CF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F03A22D-3CE5-4212-99A6-E774996F6CF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F03A22D-3CE5-4212-99A6-E774996F6CF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F03A22D-3CE5-4212-99A6-E774996F6CF1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{141EEFF4-33FA-439C-B7C0-F4C0AC29D148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{141EEFF4-33FA-439C-B7C0-F4C0AC29D148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{141EEFF4-33FA-439C-B7C0-F4C0AC29D148}.Release|Any CPU.ActiveCfg = Release|Any CPU
