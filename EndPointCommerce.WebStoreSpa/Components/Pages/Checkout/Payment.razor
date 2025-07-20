@@ -18,35 +18,33 @@
     <div class="container px-4 px-lg-5 my-5">
         <h1>Checkout</h1>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <i class="fa-solid fa-circle-info"></i>
-                Payment Information
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <input type="text" name="cardNumber" id="cardNumber" class="form-control" />
-                </div>
+        <div class="card mb-4 p-3">
+            <h4 class="mb-3">Payment Information</h4>
 
-                <div class="row">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="expMonth" class="form-label">Expiration Month</label>
-                            <input type="text" name="expMonth" id="expMonth" class="form-control" />
-                        </div>
+            <div class="mb-3">
+                <div class="form-floating">
+                    <input type="text" name="cardNumber" id="cardNumber" class="form-control" placeholder="4111111111111111" />
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" name="expMonth" id="expMonth" class="form-control" placeholder="12" />
+                        <label for="expMonth" class="form-label">Expiration Month</label>
                     </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="expYear" class="form-label">Expiration Year</label>
-                            <input type="text" name="expYear" id="expYear" class="form-control" />
-                        </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" name="expYear" id="expYear" class="form-control" placeholder="34" />
+                        <label for="expYear" class="form-label">Expiration Year</label>
                     </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="cardCode" class="form-label">CVV</label>
-                            <input type="text" name="cardCode" id="cardCode" class="form-control" />
-                        </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" name="cardCode" id="cardCode" class="form-control" placeholder="123" />
+                        <label for="cardCode" class="form-label">CVV</label>
                     </div>
                 </div>
             </div>
