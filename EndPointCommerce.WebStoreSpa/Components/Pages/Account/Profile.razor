@@ -1,11 +1,13 @@
 @page "/account/profile"
 
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
 @using EndPointCommerce.WebStoreSpa.Api
 @using EndPointCommerce.WebStoreSpa.Identity
 @using EndPointCommerce.WebStoreSpa.State
 
-@inject NavigationManager Navigation
+@attribute [Authorize]
+
 @inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
@@ -223,12 +225,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!await AuthenticationState.IsUserAuthenticated())
-        {
-            Navigation.NavigateTo("/auth/login");
-            return;
-        }
-
         var user = await ApiClient.GetUser();
 
         ProfileInput = new ProfileInputModel(user);

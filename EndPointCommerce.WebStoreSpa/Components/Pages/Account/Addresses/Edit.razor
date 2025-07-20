@@ -3,12 +3,14 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Net
 @using System.Text.Json
+@using Microsoft.AspNetCore.Authorization
 @using EndPointCommerce.WebStoreSpa.Api
 @using EndPointCommerce.WebStoreSpa.Identity
 @using EndPointCommerce.WebStoreSpa.State
 
+@attribute [Authorize]
+
 @inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
 
@@ -48,12 +50,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!await AuthenticationState.IsUserAuthenticated())
-        {
-            Navigation.NavigateTo("/auth/login");
-            return;
-        }
-
         States = await ApiClient.GetStates();
         Address = await ApiClient.GetAddress(AddressId);
 

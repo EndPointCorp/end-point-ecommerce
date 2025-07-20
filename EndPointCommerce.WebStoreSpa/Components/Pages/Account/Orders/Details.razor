@@ -1,12 +1,14 @@
 @page "/account/orders/{OrderGuid}"
 
 @using System.Net
+@using Microsoft.AspNetCore.Authorization
 @using EndPointCommerce.WebStoreSpa.Api
 @using EndPointCommerce.WebStoreSpa.Formatters
 @using EndPointCommerce.WebStoreSpa.Identity
 
+@attribute [Authorize]
+
 @inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthenticationState
 @inject IApiClient ApiClient
 
 <PageTitle>Order Details - End Point Commerce</PageTitle>
@@ -30,12 +32,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!await AuthenticationState.IsUserAuthenticated())
-        {
-            Navigation.NavigateTo("/auth/login");
-            return;
-        }
-
         try
         {
             Order = await ApiClient.GetOrder(OrderGuid);

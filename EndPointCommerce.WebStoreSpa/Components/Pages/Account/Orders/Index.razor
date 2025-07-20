@@ -1,13 +1,12 @@
 @page "/account/orders"
 
-@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
 @using EndPointCommerce.WebStoreSpa.Api
 @using EndPointCommerce.WebStoreSpa.Formatters
-@using EndPointCommerce.WebStoreSpa.Identity
 @using EndPointCommerce.WebStoreSpa.State
 
-@inject NavigationManager Navigation
-@inject AuthenticationStateProvider AuthenticationState
+@attribute [Authorize]
+
 @inject IApiClient ApiClient
 @inject AlertStateContainer AlertState
 
@@ -77,12 +76,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!await AuthenticationState.IsUserAuthenticated())
-        {
-            Navigation.NavigateTo("/auth/login");
-            return;
-        }
-
         Orders = await ApiClient.GetOrders();
     }
 }

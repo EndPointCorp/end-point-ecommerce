@@ -114,9 +114,7 @@
         try
         {
             await ApiClient.PostUserLogin(LoginInput.Email, LoginInput.Password);
-
             AuthenticationState.UpdateAuthenticationState();
-
             Navigation.NavigateTo("/");
         }
         catch
