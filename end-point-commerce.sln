@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.RazorTempl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.Jobs", "EndPointCommerce.Jobs\EndPointCommerce.Jobs.csproj", "{141EEFF4-33FA-439C-B7C0-F4C0AC29D148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.WebStoreSpa", "EndPointCommerce.WebStoreSpa\EndPointCommerce.WebStoreSpa.csproj", "{3BBE3AC7-E728-4AA5-8EF9-E55384DA6368}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EndPointCommerce.WebStore", "EndPointCommerce.WebStore\EndPointCommerce.WebStore.csproj", "{3BBE3AC7-E728-4AA5-8EF9-E55384DA6368}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
