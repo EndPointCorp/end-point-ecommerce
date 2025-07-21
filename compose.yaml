@@ -17,7 +17,7 @@ services:
       - ./images:/images
     environment:
       - DOTNET_GCHighMemPercent=0x48 # 72%
-      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - AdminPortalDataProtectionKeysPath=/data-protection-keys/admin-portal
       - CategoryImagesPath=/images/category-images
       - ProductImagesPath=/images/product-images
@@ -54,7 +54,7 @@ services:
       - ./images:/images
     environment:
       - DOTNET_GCHighMemPercent=0x48 # 72%
-      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - WebApiDataProtectionKeysPath=/data-protection-keys/web-api
       - CategoryImagesPath=/images/category-images
       - ProductImagesPath=/images/product-images
