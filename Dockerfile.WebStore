@@ -38,7 +38,7 @@ COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 
 # build app
 WORKDIR /source/EndPointCommerce.WebStore
-RUN dotnet publish -c release -o /app
+RUN dotnet publish -c release -o /app --no-restore
 
 COPY deploy-utils/web-store/create-appsettings.sh ./
 RUN chmod +x ./create-appsettings.sh
