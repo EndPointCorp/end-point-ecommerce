@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat <<EOF >/app/wwwroot/appsettings.json
+cat <<EOF >/usr/share/nginx/html/appsettings.json
 {
   "EndPointCommerceApiUrl": "$EndPointCommerceApiUrl",
   "AuthNetEnvironment": "$AuthNetEnvironment",
