@@ -1,0 +1,80 @@
+name: Deploy Webstore Demo
+
+# just for a little bit now, require this to be run manually
+on: workflow_dispatch
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  ARTIFACTS_PATH: "/home/runner/artifacts"
+
+jobs:
+  prepare-artifacts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Ensure IMAGE_NAME is lowercase
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+
+      - name: Prepare Environment
+        run: |
+          echo "IMAGE_ADMINPORTAL_COMMIT=$REGISTRY/$IMAGE_NAME/adminportal:sha-${{ github.sha }}" >> $GITHUB_ENV
+          echo "IMAGE_WEBAPI_COMMIT=$REGISTRY/$IMAGE_NAME/webapi:sha-${{ github.sha }}" >> $GITHUB_ENV
+          echo "IMAGE_WEBSTORE_COMMIT=$REGISTRY/$IMAGE_NAME/webstore:sha-${{ github.sha }}" >> $GITHUB_ENV
+          echo "IMAGE_DB_COMMIT=$REGISTRY/$IMAGE_NAME/db:sha-${{ github.sha }}" >> $GITHUB_ENV
+          echo "IMAGE_MAINTENANCE_COMMIT=$REGISTRY/$IMAGE_NAME/maintenance:sha-${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Prepare Deployment Artifacts
+        run: |
+          mkdir -p $ARTIFACTS_PATH
+          envsubst '$IMAGE_ADMINPORTAL_COMMIT $IMAGE_WEBAPI_COMMIT $IMAGE_WEBSTORE_COMMIT $IMAGE_DB_COMMIT $IMAGE_MAINTENANCE_COMMIT' < ./template.compose.webstore-demo-deploy.yaml > $ARTIFACTS_PATH/compose.yml
+          cp -r ./data-protection-keys $ARTIFACTS_PATH/
+          cp -r ./images $ARTIFACTS_PATH/
+
+      - name: Save Deployment Artifacts
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.ARTIFACTS_PATH }}
+          key: prepared-artifacts-${{ github.sha }}
+
+  deploy:
+    needs: [prepare-artifacts]
+    runs-on: ubuntu-latest
+    environment: demo
+
+    steps:
+      - name: Fetch Deployment Artifacts
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.ARTIFACTS_PATH }}
+          key: prepared-artifacts-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - name: Setup SSH connectivity to target server
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          touch ~/.ssh/known_hosts
+          touch ~/.ssh/private_key
+          chmod 600 ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/private_key
+          echo "IdentityFile ~/.ssh/private_key" > ~/.ssh/config
+          echo "${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/private_key
+          echo "${{ secrets.DEPLOY_SSH_HOST_KEY }}" >> ~/.ssh/known_hosts
+
+      - name: Copy deployment artifacts to target server
+        run: |
+          rsync -av $ARTIFACTS_PATH/ ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }}:${{ secrets.DEPLOY_TARGET_DIR }}
+
+      - name: Restart the deployment on the target server
+        run: |
+          ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }};
+            docker compose pull;
+            docker compose down;
+            docker compose up -d --force-recreate;
+            docker compose exec maintenance run-migrations.sh"
+
