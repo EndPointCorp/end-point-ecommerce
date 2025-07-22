@@ -66,11 +66,20 @@ public class Mailer : IMailer
 
             emailMessage.Body = emailBodyBuilder.ToMessageBody();
 
-            await _smtpClient.ConnectAsync(_mailSettings.Server, _mailSettings.Port, MailKit.Security.SecureSocketOptions.StartTls);
-            if (!String.IsNullOrEmpty(_mailSettings.UserName) || !String.IsNullOrEmpty(_mailSettings.Password))
-                await _smtpClient.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
-            await _smtpClient.SendAsync(emailMessage);
-            await _smtpClient.DisconnectAsync(true);
+            if (String.IsNullOrEmpty(_mailSettings.Server))
+            {
+                _logger.LogWarning($"No mail server configured, not sending email. - To: {emailMessage.To}, Subject: {emailMessage.Subject}");
+                _logger.LogDebug($"\nFrom: {emailMessage.From}\nTo: {emailMessage.To}\nCc: {emailMessage.Cc}\nBcc: {emailMessage.Bcc}\nSubject: {emailMessage.Subject}\nBody: {emailMessage.Body}");
+            }
+            else
+            {
+                await _smtpClient.ConnectAsync(_mailSettings.Server, _mailSettings.Port,
+                    MailKit.Security.SecureSocketOptions.StartTls);
+                if (!String.IsNullOrEmpty(_mailSettings.UserName) || !String.IsNullOrEmpty(_mailSettings.Password))
+                    await _smtpClient.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
+                await _smtpClient.SendAsync(emailMessage);
+                await _smtpClient.DisconnectAsync(true);
+            }
 
             return true;
         }

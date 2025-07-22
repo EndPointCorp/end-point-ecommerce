@@ -1,0 +1,122 @@
+name: Build and Test
+
+on: push
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      LANG: "en_US.UTF-8"
+      LANGUAGE: "en_US:en"
+      LC_ALL: "en_US.UTF-8"
+      CategoryImagesPath: "/home/runner/test/images/category-images"
+      ProductImagesPath: "/home/runner/test/images/product-images"
+      AdminPortalDataProtectionKeysPath: "/home/runner/data-protection-keys/admin-portal"
+      WebApiDataProtectionKeysPath: "/home/runner/test/data-protection-keys/web-api"
+      ConnectionStrings__EndPointCommerceDbContext: "Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password;Include Error Detail=True"
+
+    services:
+      db:
+        image: postgres:17.2-alpine
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_USER: end_point_commerce
+          POSTGRES_DB: end_point_commerce_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Tests
+        run: |
+          mkdir -p "$CategoryImagesPath" "$ProductImagesPath" "$AdminPortalDataProtectionKeysPath" "$WebApiDataProtectionKeysPath"
+          dotnet test --no-build --filter 'FullyQualifiedName!=EndPointCommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
+
+  docker-build-and-push:
+    # if: github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    strategy:
+      matrix:
+        include:
+          - dockerfile: ./Dockerfile.AdminPortal
+            image: adminportal
+          - dockerfile: ./Dockerfile.WebApi
+            image: webapi
+          - dockerfile: ./Dockerfile.DB
+            image: db
+          - dockerfile: ./Dockerfile.Maintenance
+            image: maintenance
+          - dockerfile: ./Dockerfile.WebStore
+            image: webstore
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Ensure IMAGE_NAME is lowercase
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+
+      - name: Extract metadata for the Docker image
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.image }}
+          tags: |
+            type=ref,event=tag
+            type=sha,format=long
+            # explicitly set latest tag for main branch (because the "auto" behaviour isn't working?)
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Docker build and push
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          file: ${{ matrix.dockerfile }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.image }}:latest
+          cache-to: type=inline

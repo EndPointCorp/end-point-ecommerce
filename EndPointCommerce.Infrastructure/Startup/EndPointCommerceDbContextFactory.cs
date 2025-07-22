@@ -31,6 +31,8 @@ public class EndPointCommerceDbContextFactory : IDesignTimeDbContextFactory<EndP
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json")
             .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            // Optional config for local environment overrides, mainly useful during local development
+            .AddJsonFile("appsettings.Local.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
     }
