@@ -100,11 +100,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.WebStore
-      args:
-        - EndPointCommerceApiUrl=${WEB_API_URL}
-        - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
-        - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
-        - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
+    environment:
+      - EndPointCommerceApiUrl=${WEB_API_URL}
+      - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
+      - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
+      - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
     restart: always
     ports:
       - ${WEB_STORE_PORT}:80
