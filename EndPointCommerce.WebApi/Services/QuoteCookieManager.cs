@@ -31,7 +31,10 @@ public class QuoteCookieManager : IQuoteCookieManager
     {
         var options = new CookieOptions()
         {
-            Expires = DateTimeOffset.Now.AddDays(COOKIE_EXPIRATION_DAYS)
+            Expires = DateTimeOffset.Now.AddDays(COOKIE_EXPIRATION_DAYS),
+            SameSite = SameSiteMode.None,
+            Secure = true,
+            HttpOnly = true
         };
 
         response.Cookies.Append(COOKIE_NAME, _protector.Protect(quoteId.ToString()), options);

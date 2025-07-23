@@ -1,0 +1,112 @@
+@using EndPointCommerce.WebStore.Api
+
+<div class="row mb-3">
+    <div class="col-6">
+        <div class="form-floating">
+            <InputText
+                @bind-Value="Address.Name"
+                id="Address_Name"
+                class="form-control"
+                placeholder="John"
+            />
+            <label for="Address_Name" class="form-label">First Name</label>
+        </div>
+        <ValidationMessage For="() => Address.Name" class="text-danger" />
+    </div>
+    <div class="col-6">
+        <div class="form-floating">
+            <InputText
+                @bind-Value="Address.LastName"
+                id="Address_LastName"
+                class="form-control"
+                placeholder="Doe"
+            />
+            <label for="Address_LastName" class="form-label">Last Name</label>
+        </div>
+        <ValidationMessage For="() => Address.LastName" class="text-danger" />
+    </div>
+</div>
+<div class="mb-3">
+    <div class="form-floating">
+        <InputText
+            @bind-Value="Address.Street"
+            id="Address_Street"
+            class="form-control"
+            placeholder="123 Main St"
+        />
+        <label for="Address_Street" class="form-label">Street (line 1)</label>
+    </div>
+    <ValidationMessage For="() => Address.Street" class="text-danger" />
+</div>
+<div class="mb-3">
+    <div class="form-floating">
+        <InputText
+            @bind-Value="Address.StreetTwo"
+            id="Address_StreetTwo"
+            class="form-control"
+            placeholder="Apt 10A"
+        />
+        <label for="Address_StreetTwo" class="form-label">Street (line 2)</label>
+    </div>
+    <ValidationMessage For="() => Address.StreetTwo" class="text-danger" />
+</div>
+<div class="row mb-3">
+    <div class="col-6">
+        <div class="form-floating">
+            <InputText
+                @bind-Value="Address.City"
+                id="Address_City"
+                class="form-control"
+                placeholder="New York"
+            />
+            <label for="Address_City" class="form-label">City</label>
+        </div>
+        <ValidationMessage For="() => Address.City" class="text-danger" />
+    </div>
+    <div class="col-6">
+        <div class="form-floating">
+            <InputSelect @bind-Value="Address.StateId" class="form-control">
+                @foreach (var state in States)
+                {
+                    <option value="@state.Id">@state.Name</option>
+                }
+            </InputSelect>
+            <label for="Address_StateId" class="form-label">State</label>
+        </div>
+        <ValidationMessage For="() => Address.StateId" class="text-danger" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-floating">
+            <InputText
+                @bind-Value="Address.ZipCode"
+                id="Address_ZipCode"
+                class="form-control"
+                placeholder="12345"
+            />
+            <label for="Address_ZipCode" class="form-label">Zip Code</label>
+        </div>
+        <ValidationMessage For="() => Address.ZipCode" class="text-danger" />
+    </div>
+    <div class="col-6">
+        <div class="form-floating">
+            <InputText
+                @bind-Value="Address.PhoneNumber"
+                id="Address_PhoneNumber"
+                class="form-control"
+                placeholder="1234567890"
+            />
+            <label for="Address_PhoneNumber" class="form-label">Phone Number</label>
+        </div>
+        <ValidationMessage For="() => Address.PhoneNumber" class="text-danger" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<State> States { get; set; } = new();
+
+    [Parameter]
+    public Address Address { get; set; } = new();
+}

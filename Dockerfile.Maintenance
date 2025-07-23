@@ -40,5 +40,5 @@ COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
 COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 
 # helper scripts
-COPY maintenance/check-migrations.sh ./bin/
-COPY maintenance/run-migrations.sh ./bin/
+COPY deploy-utils/maintenance/check-migrations.sh ./bin/
+COPY deploy-utils/maintenance/run-migrations.sh ./bin/

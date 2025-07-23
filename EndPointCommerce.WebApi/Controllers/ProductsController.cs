@@ -8,12 +8,12 @@ namespace EndPointCommerce.WebApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _repository;
-        private readonly string _imagesUrlPath;
+        private readonly string _imagesUrl;
 
         public ProductsController(IProductRepository repository, IConfiguration config)
         {
             _repository = repository;
-            _imagesUrlPath = config["ProductImagesUrlPath"]!;
+            _imagesUrl = config["ProductImagesUrl"]!;
         }
 
         // GET: api/Products
@@ -22,7 +22,7 @@ namespace EndPointCommerce.WebApi.Controllers
         {
             return ResourceModels.Product.FromListOfEntities(
                 await _repository.FetchAllAsync(enabledOnly: true),
-                _imagesUrlPath
+                _imagesUrl
             );
         }
 
@@ -32,7 +32,7 @@ namespace EndPointCommerce.WebApi.Controllers
         {
             return ResourceModels.Product.FromListOfEntities(
                 await _repository.FetchAllByCategoryIdAsync(categoryId, enabledOnly: true),
-                _imagesUrlPath
+                _imagesUrl
             );
         }
 
@@ -42,7 +42,7 @@ namespace EndPointCommerce.WebApi.Controllers
         {
             return ResourceModels.Product.FromListOfEntities(
                 await _repository.FetchAllByCategoryUrlKeyAsync(categoryUrlKey, enabledOnly: true),
-                _imagesUrlPath
+                _imagesUrl
             );
         }
 
@@ -54,7 +54,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
             if (product == null) return NotFound();
 
-            return ResourceModels.Product.FromEntity(product, _imagesUrlPath);
+            return ResourceModels.Product.FromEntity(product, _imagesUrl);
         }
 
         // GET: api/Products/UrlKey/{urlKey}
@@ -65,7 +65,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
             if (product == null) return NotFound();
 
-            return ResourceModels.Product.FromEntity(product, _imagesUrlPath);
+            return ResourceModels.Product.FromEntity(product, _imagesUrl);
         }
     }
 }

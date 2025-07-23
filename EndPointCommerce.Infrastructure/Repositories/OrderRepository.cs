@@ -19,11 +19,7 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     public async Task<IList<Order>> FetchAllByCustomerIdAsync(int customerId)
     {
         var query = DbSet()
-            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
-            .Include(x => x.ShippingAddress).ThenInclude(x => x.State)
-            .Include(x => x.BillingAddress).ThenInclude(x => x.State)
-            .Include(x => x.PaymentMethod)
-            .Include(x => x.Status)
+            .IncludeEverything()
             .Where(p => !p.Deleted && p.CustomerId == customerId);
         return await query.OrderBy(p => p.Id).ToListAsync();
     }
@@ -31,10 +27,16 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
     public async Task<Order?> FindByIdWithItemsAsync(int id)
     {
         return await DbSet()
-            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
-            .Include(x => x.ShippingAddress).ThenInclude(x => x.State)
-            .Include(x => x.BillingAddress).ThenInclude(x => x.State)
+            .IncludeEverything()
             .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Order?> FindByGuidWithItemsAsync(Guid guid)
+    {
+        return await DbSet()
+            .IncludeEverything()
+            .Where(x => x.OrderGuid == guid)
             .FirstOrDefaultAsync();
     }
 
@@ -76,7 +78,8 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
                 value = group.Count()
             })
             .OrderBy(x => x.key)
-            .Select(x => new CountPerGroup {
+            .Select(x => new CountPerGroup
+            {
                 Group = x.key.ToString("yyyy-MM-dd"),
                 Value = x.value
             })
@@ -105,7 +108,8 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
                 value = group.Sum(x => x.Total)
             })
             .OrderBy(x => x.key)
-            .Select(x => new CountPerGroup {
+            .Select(x => new CountPerGroup
+            {
                 Group = x.key.ToString("yyyy-MM-dd"),
                 Value = x.value
             })
@@ -143,4 +147,15 @@ public class OrderRepository : BaseAuditRepository<Order>, IOrderRepository
 
         return await listQuery.SumAsync(x => x.Total);
     }
+}
+
+internal static class OrderQueryExtensions
+{
+    public static IQueryable<Order> IncludeEverything(this IQueryable<Order> query) =>
+        query
+            .Include(x => x.Items).ThenInclude(x => x.Product).ThenInclude(x => x.Category)
+            .Include(x => x.ShippingAddress).ThenInclude(x => x.State)
+            .Include(x => x.BillingAddress).ThenInclude(x => x.State)
+            .Include(x => x.PaymentMethod)
+            .Include(x => x.Status);
 }

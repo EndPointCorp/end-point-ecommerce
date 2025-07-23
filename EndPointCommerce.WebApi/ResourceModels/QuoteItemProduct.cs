@@ -1,4 +1,4 @@
-using EndPointCommerce.WebApi.Services;
+using EndPointCommerce.Domain.Services;
 
 namespace EndPointCommerce.WebApi.ResourceModels;
 
@@ -11,7 +11,7 @@ public class QuoteItemProduct
     public string? UrlKey { get; set; }
     public Category? Category { get; set; }
 
-    public static QuoteItemProduct FromEntity(Domain.Entities.Product entity, string? imagesUrlPath = null)
+    public static QuoteItemProduct FromEntity(Domain.Entities.Product entity, string? imagesUrl = null)
     {
         return new()
         {
@@ -19,7 +19,7 @@ public class QuoteItemProduct
             Name = entity.Name,
             Sku = entity.Sku,
             UrlKey = entity.UrlKey,
-            ThumbnailImageUrl = ImageUrlBuilder.GetImageUrl(entity.ThumbnailImage, imagesUrlPath),
+            ThumbnailImageUrl = ImageUrlBuilder.GetImageUrl(entity.ThumbnailImage, imagesUrl),
             Category = entity.Category != null ? Category.FromEntity(entity.Category) : null
         };
     }

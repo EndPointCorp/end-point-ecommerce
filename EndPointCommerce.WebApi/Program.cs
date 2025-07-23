@@ -60,6 +60,9 @@ public class Program
         builder.Services.AddIdentityApiEndpoints<User>(opt =>
         {
             opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 8;
+            opt.Password.RequireNonAlphanumeric = true;
+            opt.SignIn.RequireConfirmedEmail = true;
         }).AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<EndPointCommerceDbContext>();
 
@@ -116,7 +119,7 @@ public class Program
             RequestPath = new PathString("/product-images")
         });
 
-        // app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
         app.UseCors();
 

@@ -3,6 +3,8 @@ namespace EndPointCommerce.WebApi.ResourceModels;
 public class Order
 {
     public int Id { get; set; }
+    public string Guid { get; set; } = string.Empty;
+    public DateTime? DateCreated { get; set; }
 
     public ICollection<QuoteItem> Items { get; set; } = [];
 
@@ -19,11 +21,13 @@ public class Order
 
     public string? TrackingNumber { get; set; }
 
-    public static Order FromEntity(Domain.Entities.Order entity, string? imagesUrlPath = null)
+    public static Order FromEntity(Domain.Entities.Order entity, string? imagesUrl = null)
     {
         var order = new Order()
         {
             Id = entity.Id,
+            Guid = entity.OrderGuid.ToString("N"),
+            DateCreated = entity.DateCreated,
             TrackingNumber = entity.TrackingNumber,
 
             Subtotal = entity.Subtotal,
@@ -33,7 +37,7 @@ public class Order
         };
 
         if (entity.Items != null)
-            order.Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrlPath);
+            order.Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrl);
 
         if (entity.ShippingAddress != null)
             order.ShippingAddress = QuoteAddress.FromEntity(entity.ShippingAddress);
@@ -47,6 +51,6 @@ public class Order
         return order;
     }
 
-    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order> entities, string? imagesUrlPath = null) =>
-        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
+    public static List<Order> FromListOfEntities(ICollection<Domain.Entities.Order> entities, string? imagesUrl = null) =>
+        entities.Select(e => FromEntity(e, imagesUrl)).ToList();
 }

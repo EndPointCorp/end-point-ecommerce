@@ -9,12 +9,12 @@ namespace EndPointCommerce.WebApi.Controllers
     public class SearchController : ControllerBase
     {
         private readonly IProductRepository _repository;
-        private readonly string _imagesUrlPath;
+        private readonly string _imagesUrl;
 
         public SearchController(IProductRepository repository, IConfiguration config)
         {
             _repository = repository;
-            _imagesUrlPath = config["ProductImagesUrlPath"]!;
+            _imagesUrl = config["ProductImagesUrl"]!;
         }
 
         // GET: api/Search/Products/{query}
@@ -22,7 +22,7 @@ namespace EndPointCommerce.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<ResourceModels.Product>>> GetSearchProducts(string query)
         {
             return ResourceModels.Product.FromListOfEntities(
-                await _repository.FetchAllBySearchQueryAsync(query), _imagesUrlPath
+                await _repository.FetchAllBySearchQueryAsync(query), _imagesUrl
             );
         }
 
