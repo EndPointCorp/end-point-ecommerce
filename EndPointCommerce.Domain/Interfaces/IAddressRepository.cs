@@ -8,5 +8,4 @@ namespace EndPointCommerce.Domain.Interfaces;
 public interface IAddressRepository : IBaseRepository<Address>
 {
     public Task<IList<Address>> FetchAllByCustomerIdAsync(int customerId);
-    public Task<Address?> FindByIdWithStateAsync(int id);
 }

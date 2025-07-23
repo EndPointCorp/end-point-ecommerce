@@ -25,7 +25,7 @@ public class AddressRepository : BaseAuditRepository<Address>, IAddressRepositor
             .ToListAsync();
     }
 
-    public async Task<Address?> FindByIdWithStateAsync(int id)
+    public override async Task<Address?> FindByIdAsync(int id)
     {
         return await DbSet()
             .Include(a => a.Country)

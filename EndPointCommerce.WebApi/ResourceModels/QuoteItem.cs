@@ -14,14 +14,14 @@ public class QuoteItem
     public decimal Discount { get; set; }
     public decimal Total { get; set; }
 
-    public static QuoteItem FromEntity(Domain.Interfaces.IQuoteItem entity, string? imagesUrlPath = null)
+    public static QuoteItem FromEntity(Domain.Interfaces.IQuoteItem entity, string? imagesUrl = null)
     {
         return new()
         {
             Id = entity.Id,
 
             ProductId = entity.ProductId,
-            Product = QuoteItemProduct.FromEntity(entity.Product, imagesUrlPath),
+            Product = QuoteItemProduct.FromEntity(entity.Product, imagesUrl),
 
             Quantity = entity.Quantity,
 
@@ -34,7 +34,7 @@ public class QuoteItem
 
     public static List<QuoteItem> FromListOfEntities(
         IList<Domain.Interfaces.IQuoteItem> entities,
-        string? imagesUrlPath = null
+        string? imagesUrl = null
     ) =>
-        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
+        entities.Select(e => FromEntity(e, imagesUrl)).ToList();
 }

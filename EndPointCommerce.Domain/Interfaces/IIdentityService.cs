@@ -16,4 +16,5 @@ public interface IIdentityService
     Task<bool> IsPasswordValid(User user, string password);
     Task<IList<IdentityRole<int>>> FetchAllRolesAsync();
     Task<IdentityRole<int>> GetRoleAsync(User user);
+    Task<string> GenerateEmailConfirmationCodeAsync(User user);
 }

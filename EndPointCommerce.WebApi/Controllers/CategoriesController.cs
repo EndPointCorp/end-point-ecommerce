@@ -8,12 +8,12 @@ namespace EndPointCommerce.WebApi.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _repository;
-        private readonly string _imagesUrlPath;
+        private readonly string _imagesUrl;
 
         public CategoriesController(ICategoryRepository repository, IConfiguration config)
         {
             _repository = repository;
-            _imagesUrlPath = config["CategoryImagesUrlPath"]!;
+            _imagesUrl = config["CategoryImagesUrl"]!;
         }
 
         // GET: api/Categories
@@ -22,7 +22,7 @@ namespace EndPointCommerce.WebApi.Controllers
         {
             return ResourceModels.Category.FromListOfEntities(
                 await _repository.FetchAllAsync(enabledOnly: true),
-                _imagesUrlPath
+                _imagesUrl
             );
         }
     }

@@ -1,0 +1,37 @@
+@using EndPointCommerce.WebStore.Api
+
+<div class="row mb-3">
+    <div class="input-group">
+        <InputSelect
+            @bind-Value="AddressId"
+            class="form-select form-select-address"
+            aria-label="Choose from your address book"
+        >
+            <option value="0" selected>Choose from your address book...</option>
+            @foreach (var address in Addresses)
+            {
+                <option value="@address.Id">
+                    @address.FullName, @address.Street, @address.City
+                </option>
+            }
+        </InputSelect>
+
+        <button
+            @onclick="@(_e => OnAddressSelected.InvokeAsync(AddressId))"
+            class="btn btn-outline-dark"
+            type="button"
+        >
+            Use this address
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<Address> Addresses { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<int> OnAddressSelected { get; set; }
+
+    private int AddressId { get; set; } = 0;
+}

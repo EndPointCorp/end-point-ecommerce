@@ -1,0 +1,52 @@
+@page "/auth/confirm-email"
+
+@using EndPointCommerce.WebStore.Api
+
+@inject NavigationManager Navigation
+@inject IApiClient ApiClient
+
+<PageTitle>Confirm Email - End Point Commerce</PageTitle>
+
+<section>
+    <div class="container px-4 px-lg-5 my-5">
+        @if (IsLoading)
+        {
+            <p>Confirming your account...</p>
+        }
+        else
+        {
+            <p>
+                Thanks for confirming your account. <a href="/auth/login">You can now sign in.</a>
+            </p>
+        }
+    </div>
+</section>
+
+@code {
+    [SupplyParameterFromQuery]
+    public string UserId { get; set; } = string.Empty;
+
+    [SupplyParameterFromQuery]
+    public string Code { get; set; } = string.Empty;
+
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(Code))
+        {
+            Navigation.NavigateTo("/auth/login");
+            return;
+        }
+
+        try
+        {
+            await ApiClient.GetUserConfirmEmail(UserId, Code);
+            IsLoading = false;
+        }
+        catch
+        {
+            Navigation.NavigateTo("/auth/login");
+        }
+    }
+}

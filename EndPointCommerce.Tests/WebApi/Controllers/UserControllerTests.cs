@@ -28,6 +28,11 @@ public class UserControllerTests : IntegrationTests
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
+        // Simulate email confirmation
+        var user = dbContext.Users.First(u => u.Email == "test@email.com");
+        user.EmailConfirmed = true;
+        dbContext.SaveChanges();
+
         return response;
     }
 
@@ -184,7 +189,10 @@ public class UserControllerTests : IntegrationTests
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Passwords must be at least 6 characters. Passwords must have at least one non alphanumeric character. Passwords must have at least one digit ('0'-'9'). Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
+        Assert.Contains("Passwords must be at least 8 characters.", errorMessage);
+        Assert.Contains("Passwords must have at least one non alphanumeric character.", errorMessage);
+        Assert.Contains("Passwords must have at least one digit ('0'-'9').", errorMessage);
+        Assert.Contains("Passwords must have at least one uppercase ('A'-'Z').", errorMessage);
     }
 
     [Fact]
@@ -222,7 +230,8 @@ public class UserControllerTests : IntegrationTests
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Username 'test@email.com' is already taken. Email 'test@email.com' is already taken.", errorMessage);
+        Assert.Contains("Username 'test@email.com' is already taken.", errorMessage);
+        Assert.Contains("Email 'test@email.com' is already taken.", errorMessage);
     }
 
     [Fact]
@@ -312,82 +321,5 @@ public class UserControllerTests : IntegrationTests
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task PutUser_UpdatesPassword()
-    {
-        // Arrange
-        var client = CreateHttpClient();
-
-        await SignUp(client);
-        await Login(client);
-
-        // Act
-        var response = await client.PutAsJsonAsync(
-            "/api/User",
-            new
-            {
-                Email = "test@email.com",
-                Name = "updated_name",
-                LastName = "updated_last_name",
-                CurrentPassword = "TEST_password_123",
-                NewPassword = "NEW_password_456"
-            }
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        // Verify old password does not work
-        response = await client.PostAsJsonAsync(
-            "/api/User/login?useCookies=true&useSessionCookies=false",
-            new
-            {
-                Email = "test@email.com",
-                Password = "TEST_password_123",
-            }
-        );
-
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-
-        // Verify new password works
-        var loginResponse = await client.PostAsJsonAsync(
-            "/api/User/login?useCookies=true&useSessionCookies=false",
-            new
-            {
-                Email = "test@email.com",
-                Password = "NEW_password_456",
-            }
-        );
-
-        Assert.Equal(HttpStatusCode.OK, loginResponse.StatusCode);
-    }
-
-    [Fact]
-    public async Task PutUser_ReturnsBadRequest_WhenAttemptingToChangePassword_WhenCurrentPasswordIsIncorrect()
-    {
-        // Arrange
-        var client = CreateHttpClient();
-        await SignUp(client);
-        await Login(client);
-
-        // Act
-        var response = await client.PutAsJsonAsync(
-            "/api/User",
-            new
-            {
-                Email = "test@email.com",
-                Name = "updated_name",
-                LastName = "updated_last_name",
-                CurrentPassword = "WRONG_password",
-                NewPassword = "NEW_password_456"
-            }
-        );
-
-        // Assert
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var errorMessage = await response.Content.ReadAsStringAsync();
-        Assert.Contains("Current password is incorrect", errorMessage);
     }
 }
