@@ -9,14 +9,14 @@ services:
     ports:
       - 127.0.0.1:${ADMIN_PORTAL_PORT}:8080
     volumes:
-      - ./data-protection-keys:/data-protection-keys
-      - ./images:/images
+      - admin-portal-data-protection-keys:/home/app/data-protection-keys
+      - images:/home/app/images
     environment:
       - DOTNET_GCHighMemPercent=0x48 # 72%
-      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
-      - AdminPortalDataProtectionKeysPath=/data-protection-keys/admin-portal
-      - CategoryImagesPath=/images/category-images
-      - ProductImagesPath=/images/product-images
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - AdminPortalDataProtectionKeysPath=/home/app/data-protection-keys/admin-portal
+      - CategoryImagesPath=/home/app/images/category-images
+      - ProductImagesPath=/home/app/images/product-images
       - TaxJarApiKey=${TAX_JAR_API_KEY}
       - TaxJarFromCountry=${TAX_JAR_FROM_COUNTRY}
       - TaxJarFromStreet=${TAX_JAR_FROM_STREET}
@@ -44,17 +44,20 @@ services:
     ports:
       - 127.0.0.1:${WEB_API_PORT}:8080
     volumes:
-      - ./data-protection-keys:/data-protection-keys
-      - ./images:/images
+      - web-api-data-protection-keys:/home/app/data-protection-keys
+      - images:/home/app/images
     environment:
       - DOTNET_GCHighMemPercent=0x48 # 72%
-      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
-      - WebApiDataProtectionKeysPath=/data-protection-keys/web-api
-      - CategoryImagesPath=/images/category-images
-      - ProductImagesPath=/images/product-images
-      - CategoryImagesUrlPath=${CATEGORY_IMAGES_URL_PATH}
-      - ProductImagesUrlPath=${PRODUCT_IMAGES_URL_PATH}
-      - WebStorePasswordResetUrl=${WEB_STORE_PASSWORD_RESET_URL}
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - WebApiDataProtectionKeysPath=/home/app/data-protection-keys/web-api
+      - CategoryImagesPath=/home/app/images/category-images
+      - ProductImagesPath=/home/app/images/product-images
+      - AllowedOrigins=${WEB_API_ALLOWED_ORIGINS}
+      - CategoryImagesUrl=${CATEGORY_IMAGES_URL}
+      - ProductImagesUrl=${PRODUCT_IMAGES_URL}
+      - ConfirmEmailUrl=${WEB_STORE_CONFIRM_EMAIL_URL}
+      - PasswordResetUrl=${WEB_STORE_PASSWORD_RESET_URL}
+      - OrderDetailsUrl=${WEB_STORE_ORDER_DETAILS_URL}
       - MailSettings__Server=${MAIL_SETTINGS_SERVER}
       - MailSettings__Port=${MAIL_SETTINGS_PORT}
       - MailSettings__SenderName=${MAIL_SETTINGS_SENDER_NAME}
@@ -72,7 +75,6 @@ services:
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
-      - SwaggerForceEnable=${SWAGGER_FORCE_ENABLE}
     secrets:
       - end-point-commerce-db-connection-string
     entrypoint: [
@@ -93,17 +95,11 @@ services:
     restart: always
     ports:
       - 127.0.0.1:${WEB_STORE_PORT}:8080
-    volumes:
-      - ./data-protection-keys:/data-protection-keys
     environment:
-      - DOTNET_GCHighMemPercent=0x48 # 72%
-      - ASPNETCORE_ENVIRONMENT=${BUILD_ENV}
-      - WebStoreDataProtectionKeysPath=/data-protection-keys/web-store
-      - EndPointCommerceApiUrl=http://web-api:8080
+      - EndPointCommerceApiUrl=${WEB_API_URL}
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
-    entrypoint: [ "sh", "-c", "dotnet EndPointCommerce.WebStore.dll" ]
     depends_on:
       web-api:
         condition: service_healthy
@@ -136,13 +132,16 @@ services:
     image: $IMAGE_MAINTENANCE_COMMIT
     init: true
     volumes:
-      - ./images:/images
+      - images:/home/app/images
     secrets:
       - end-point-commerce-db-connection-string
     command: sleep infinity
 
 volumes:
   db-postgres-data:
+  admin-portal-data-protection-keys:
+  web-api-data-protection-keys:
+  images:
 
 secrets:
   postgres-db-password:
