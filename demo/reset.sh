@@ -19,7 +19,8 @@ docker compose exec db rm /demo-data.sql
 docker compose exec maintenance run-job.sh create_admin_user -u admin -e ecommerce-demo-admin@endpointdev.com -p Sh0pd3m0!
 
 # Populate the images volume with our initial set of images to match the demo store SQL data just inserted
-docker compose cp ./reference-images/* maintenance:/home/app/images/
+docker compose cp ./reference-images/. maintenance:/home/app/images/
+docker compose exec -u 0 maintenance chown -R app:app /home/app/images/
 
 # Now we can bring up all the containers
 docker compose up -d
