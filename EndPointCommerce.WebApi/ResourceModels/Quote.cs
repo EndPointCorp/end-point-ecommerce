@@ -11,12 +11,13 @@ public class Quote
     public decimal Tax { get; set; }
     public decimal Total { get; set; }
 
+    public string? Email { get; set; }
     public QuoteAddress? ShippingAddress { get; set; }
     public QuoteAddress? BillingAddress { get; set; }
 
     public ICollection<QuoteItem> Items { get; set; } = [];
 
-    public static Quote FromEntity(Domain.Entities.Quote entity, string? imagesUrlPath = null)
+    public static Quote FromEntity(Domain.Entities.Quote entity, string? imagesUrl = null)
     {
         return new() {
             Id = entity.Id,
@@ -29,10 +30,11 @@ public class Quote
             CouponId = entity.CouponId,
             Coupon = entity.Coupon is null ? null : Coupon.FromEntity(entity.Coupon),
 
+            Email = entity.Email,
             ShippingAddress = entity.ShippingAddress is null ? null : QuoteAddress.FromEntity(entity.ShippingAddress),
             BillingAddress = entity.BillingAddress is null ? null : QuoteAddress.FromEntity(entity.BillingAddress),
 
-            Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrlPath)
+            Items = QuoteItem.FromListOfEntities([.. entity.Items], imagesUrl)
         };
     }
 }

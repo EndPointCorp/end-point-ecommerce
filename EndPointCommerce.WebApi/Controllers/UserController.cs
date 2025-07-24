@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using EndPointCommerce.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using EndPointCommerce.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using EndPointCommerce.Domain.Entities;
+using EndPointCommerce.Domain.Interfaces;
+using EndPointCommerce.WebApi.Services;
 
 namespace EndPointCommerce.WebApi.Controllers
 {
@@ -14,7 +14,7 @@ namespace EndPointCommerce.WebApi.Controllers
         private readonly IIdentityService _identityService;
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender<User> _identityEmailSender;
-        private readonly string _confirmEmailURL;
+        private readonly string _confirmEmailUrl;
 
         public UserController(
             IIdentityService identityService,
@@ -25,7 +25,7 @@ namespace EndPointCommerce.WebApi.Controllers
             _identityService = identityService;
             _userManager = userManager;
             _identityEmailSender = identityEmailSender;
-            _confirmEmailURL = config["WebsiteConfirmEmailURL"]!;
+            _confirmEmailUrl = config["ConfirmEmailUrl"]!;
         }
 
         // GET: api/User
@@ -34,10 +34,7 @@ namespace EndPointCommerce.WebApi.Controllers
         public async Task<ActionResult<ResourceModels.User>> GetUser()
         {
             var user = await _identityService.FindByUserNameAsync(User.Identity!.Name!);
-            if (user == null || !user.IsCustomer)
-            {
-                return NotFound();
-            }
+            if (user == null || !user.IsCustomer) return NotFound();
 
             return ResourceModels.User.FromEntity(user);
         }
@@ -49,15 +46,10 @@ namespace EndPointCommerce.WebApi.Controllers
             var userEntity = user.ToEntity();
 
             var result = await _identityService.AddAsync(userEntity, user.Password, Domain.Entities.User.CUSTOMER_ROLE);
-            if (!result.Succeeded)
-            {
-                return BadRequest(string.Join(" ", result.Errors.ToList().Select(x => x.Description).ToArray()));
-            }
+            if (!result.Succeeded) return BadRequest(result.ToHttpValidationProblemDetails());
 
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(userEntity);
-
-            var emailLink = $"{_confirmEmailURL}?code={code}";
-
+            var code = await _identityService.GenerateEmailConfirmationCodeAsync(userEntity);
+            var emailLink = $"{_confirmEmailUrl}?userId={userEntity.Id}&code={code}";
             await _identityEmailSender.SendConfirmationLinkAsync(userEntity, user.Email, emailLink);
 
             return ResourceModels.User.FromEntity(userEntity);
@@ -78,28 +70,12 @@ namespace EndPointCommerce.WebApi.Controllers
         public async Task<ActionResult<ResourceModels.User>> PutUser([FromBody] ResourceModels.UserPut user)
         {
             var userEntity = await _identityService.FindByUserNameAsync(User.Identity!.Name!);
-            if (userEntity == null || !userEntity.IsCustomer)
-            {
-                return NotFound();
-            }
+            if (userEntity == null || !userEntity.IsCustomer) return NotFound();
 
             userEntity = user.UpdateEntity(userEntity);
-            
-            // Set the new password if requested
-            var newPassword = string.Empty;
-            if ((!string.IsNullOrEmpty(user.CurrentPassword)) && (!string.IsNullOrEmpty(user.NewPassword)))
-            {
-                if (!await _identityService.IsPasswordValid(userEntity, user.CurrentPassword))
-                    return BadRequest("Current password is incorrect.");
-                newPassword = user.NewPassword;
-            }
 
-            // Update the user
-            var result = await _identityService.UpdateAsync(userEntity, newPassword, Domain.Entities.User.CUSTOMER_ROLE);
-            if (!result.Succeeded)
-            {
-                return BadRequest(string.Join(" ", result.Errors.ToList().Select(x => x.Description).ToArray()));
-            }
+            var result = await _identityService.UpdateAsync(userEntity, null, Domain.Entities.User.CUSTOMER_ROLE);
+            if (!result.Succeeded) return BadRequest(result.ToHttpValidationProblemDetails());
 
             return ResourceModels.User.FromEntity(userEntity);
         }

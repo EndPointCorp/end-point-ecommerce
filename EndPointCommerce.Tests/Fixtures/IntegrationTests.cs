@@ -63,6 +63,9 @@ public abstract class IntegrationTests : TransactionalTests, IClassFixture<WebAp
                 services.AddTransient(_ => mockTaxCalculator.Object);
             });
         })
-        .CreateClient();
+        .CreateClient(new WebApplicationFactoryClientOptions
+        {
+            BaseAddress = new Uri("https://localhost")
+        });
     }
 }

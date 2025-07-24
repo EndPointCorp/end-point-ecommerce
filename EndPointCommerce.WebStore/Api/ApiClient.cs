@@ -1,46 +1,55 @@
-using System.Net;
+using System.Net.Http.Json;
 
 namespace EndPointCommerce.WebStore.Api;
 
 public interface IApiClient
 {
+    Task<List<Country>> GetCountries();
     Task<List<State>> GetStates();
     Task<List<Category>> GetCategories();
     Task<List<Product>> GetProducts();
     Task<Product> GetProduct(int id);
     Task<List<Product>> GetProductsByCategoryId(int id);
-    Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie);
-    Task<ResponseWithCookie<NoContent>> PutQuote(string email, Address shippingAddress, Address billingAddress, string? quoteCookie);
-    Task<ResponseWithCookie<Quote>> PostQuoteValidate(string? quoteCookie);
-    Task<ResponseWithCookie<QuoteItem>> PostQuoteItem(int productId, int quantity, string? quoteCookie);
-    Task<ResponseWithCookie<QuoteItem>> PutQuoteItem(int id, int quantity, string? quoteCookie);
-    Task<ResponseWithCookie<NoContent>> DeleteQuoteItem(int id, string? quoteCookie);
-    Task<ResponseWithCookie<Order>> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor, string? quoteCookie);
+    Task<Quote> GetQuote();
+    Task<NoContent> PutQuote(string email, Address shippingAddress, Address billingAddress);
+    Task<QuoteItem> PostQuoteItem(int productId, int quantity);
+    Task<QuoteItem> PutQuoteItem(int id, int quantity);
+    Task<NoContent> DeleteQuoteItem(int id);
+    Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor);
+    Task<List<Order>> GetOrders();
+    Task<Order> GetOrder(string guid);
+    Task<List<Address>> GetAddresses();
+    Task<Address> GetAddress(int id);
+    Task<Address> PostAddress(Address address);
+    Task<Address> PutAddress(Address address);
+    Task<NoContent> DeleteAddress(int id);
+    Task<User> GetUser();
+    Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName);
+    Task<HttpResponseMessage> PutUser(string email, string phoneNumber, string name, string lastName);
+    Task<HttpResponseMessage> PostUserLogin(string email, string password);
+    Task<HttpResponseMessage> PostUserLogout();
+    Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code);
+    Task<HttpResponseMessage> PostUserForgotPassword(string email);
+    Task<HttpResponseMessage> PostUserResetPassword(string email, string resetCode, string newPassword);
+    Task<HttpResponseMessage> PostUserManageInfo(string oldPassword, string newPassword);
 }
 
-public class ResponseWithCookie<T>
+public class ApiClient : IApiClient
 {
-    public T Body { get; set; } = default!;
-    public string? Cookie { get; set; }
-}
-
-public class ApiClient : IApiClient, IDisposable
-{
-    private const string QUOTE_COOKIE_NAME = "EndPointCommerce_QuoteId";
-
     private readonly HttpClient _httpClient;
-    private readonly Uri _baseApiUri;
 
-    public ApiClient(HttpClient httpClient, IConfiguration config)
+    public ApiClient(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClient;
-        _baseApiUri = new Uri(
-            config["EndPointCommerceApiUrl"] ??
-                throw new InvalidOperationException("Config setting 'EndPointCommerceApiUrl' not found.")
-        );
+        _httpClient = httpClientFactory.CreateClient("EndPointCommerce.WebApi");
     }
 
-    public void Dispose() => _httpClient?.Dispose();
+    public async Task<List<Country>> GetCountries()
+    {
+        using var response = await _httpClient.GetAsync("api/Countries");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Country>>())!;
+    }
 
     public async Task<List<State>> GetStates()
     {
@@ -82,119 +91,213 @@ public class ApiClient : IApiClient, IDisposable
         return (await response.Content.ReadFromJsonAsync<List<Product>>())!;
     }
 
-    public async Task<ResponseWithCookie<Quote>> GetQuote(string? quoteCookie)
+    public async Task<Quote> GetQuote()
     {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.GetAsync("api/Quote");
-            response.EnsureSuccessStatusCode();
+        using var response = await _httpClient.GetAsync("api/Quote");
+        response.EnsureSuccessStatusCode();
 
-            return (await response.Content.ReadFromJsonAsync<Quote>())!;
-        });
+        return (await response.Content.ReadFromJsonAsync<Quote>())!;
     }
 
-    public async Task<ResponseWithCookie<NoContent>> PutQuote(
-        string email, Address shippingAddress, Address billingAddress, string? quoteCookie
-    ) {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.PutAsJsonAsync(
-                "api/Quote",
-                new
-                {
-                    Email = email,
-                    ShippingAddress = shippingAddress,
-                    BillingAddress = billingAddress
-                }
-            );
-            response.EnsureSuccessStatusCode();
-
-            return new NoContent();
-        });
-    }
-
-    public async Task<ResponseWithCookie<Quote>> PostQuoteValidate(string? quoteCookie)
+    public async Task<NoContent> PutQuote(string email, Address shippingAddress, Address billingAddress)
     {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.PostAsJsonAsync("api/Quote/Validate", new { });
-            response.EnsureSuccessStatusCode();
+        using var response = await _httpClient.PutAsJsonAsync(
+            "api/Quote",
+            new { Email = email, ShippingAddress = shippingAddress, BillingAddress = billingAddress }
+        );
+        response.EnsureSuccessStatusCode();
 
-            return (await response.Content.ReadFromJsonAsync<Quote>())!;
-        });
+        return new NoContent();
     }
 
-    public async Task<ResponseWithCookie<QuoteItem>> PostQuoteItem(
-        int productId, int quantity, string? quoteCookie
-    ) {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.PostAsJsonAsync(
-                "api/Quote/Items",
-                new { ProductId = productId, Quantity = quantity }
-            );
-            response.EnsureSuccessStatusCode();
+    public async Task<QuoteItem> PostQuoteItem(int productId, int quantity)
+    {
+        using var response = await _httpClient.PostAsJsonAsync(
+            "api/Quote/Items",
+            new { ProductId = productId, Quantity = quantity }
+        );
+        response.EnsureSuccessStatusCode();
 
-            return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
-        });
+        return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
     }
 
-    public async Task<ResponseWithCookie<QuoteItem>> PutQuoteItem(
-        int id, int quantity, string? quoteCookie
-    ) {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.PutAsJsonAsync(
-                $"api/Quote/Items/{id}",
-                new { Quantity = quantity }
-            );
-            response.EnsureSuccessStatusCode();
+    public async Task<QuoteItem> PutQuoteItem(int id, int quantity)
+    {
+        using var response = await _httpClient.PutAsJsonAsync(
+            $"api/Quote/Items/{id}",
+            new { Quantity = quantity }
+        );
+        response.EnsureSuccessStatusCode();
 
-            return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
-        });
+        return (await response.Content.ReadFromJsonAsync<QuoteItem>())!;
     }
 
-    public async Task<ResponseWithCookie<NoContent>> DeleteQuoteItem(
-        int id, string? quoteCookie
-    ) {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.DeleteAsync($"api/Quote/Items/{id}");
-            response.EnsureSuccessStatusCode();
+    public async Task<NoContent> DeleteQuoteItem(int id)
+    {
+        using var response = await _httpClient.DeleteAsync($"api/Quote/Items/{id}");
+        response.EnsureSuccessStatusCode();
 
-            return new NoContent();
-        });
+        return new NoContent();
     }
 
-    public async Task<ResponseWithCookie<Order>> PostOrder(
-        string paymentMethodNonceValue, string paymentMethodNonceDescriptor, string? quoteCookie
-    ) {
-        return await WithCookie(quoteCookie, async httpClient => {
-            using var response = await httpClient.PostAsJsonAsync(
-                "api/Orders",
-                new
-                {
-                    PaymentMethodNonceValue = paymentMethodNonceValue,
-                    PaymentMethodNonceDescriptor = paymentMethodNonceDescriptor
-                }
-            );
-            response.EnsureSuccessStatusCode();
+    public async Task<Order> PostOrder(string paymentMethodNonceValue, string paymentMethodNonceDescriptor)
+    {
+        using var response = await _httpClient.PostAsJsonAsync(
+            "api/Orders",
+            new
+            {
+                PaymentMethodNonceValue = paymentMethodNonceValue,
+                PaymentMethodNonceDescriptor = paymentMethodNonceDescriptor
+            }
+        );
+        response.EnsureSuccessStatusCode();
 
-            return (await response.Content.ReadFromJsonAsync<Order>())!;
-        });
+        return (await response.Content.ReadFromJsonAsync<Order>())!;
     }
 
-    private async Task<ResponseWithCookie<T>> WithCookie<T>(
-        string? quoteCookie,
-        Func<HttpClient, Task<T>> func
-    ) {
-        var cookies = new CookieContainer();
+    public async Task<List<Order>> GetOrders()
+    {
+        using var response = await _httpClient.GetAsync("api/Orders");
+        response.EnsureSuccessStatusCode();
 
-        if (quoteCookie != null)
-            cookies.SetCookies(_baseApiUri, quoteCookie);
+        return (await response.Content.ReadFromJsonAsync<List<Order>>())!;
+    }
 
-        var httpClient = new HttpClient(new HttpClientHandler { CookieContainer = cookies });
-        httpClient.BaseAddress = _baseApiUri;
+    public async Task<Order> GetOrder(string guid)
+    {
+        using var response = await _httpClient.GetAsync($"api/Orders/{guid}");
+        response.EnsureSuccessStatusCode();
 
-        var responseBody = await func(httpClient);
-        var response = new ResponseWithCookie<T> { Body = responseBody };
+        return (await response.Content.ReadFromJsonAsync<Order>())!;
+    }
 
-        if (cookies.GetAllCookies().Any(c => c.Name == QUOTE_COOKIE_NAME))
-            response.Cookie = cookies.GetCookieHeader(_baseApiUri);
+    public async Task<List<Address>> GetAddresses()
+    {
+        using var response = await _httpClient.GetAsync("api/Addresses");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<List<Address>>())!;
+    }
+
+    public async Task<Address> GetAddress(int id)
+    {
+        using var response = await _httpClient.GetAsync($"api/Addresses/{id}");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<Address> PostAddress(Address address)
+    {
+        using var response = await _httpClient.PostAsJsonAsync("api/Addresses", address);
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<Address> PutAddress(Address address)
+    {
+        using var response = await _httpClient.PutAsJsonAsync($"api/Addresses/{address.Id}", address);
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<Address>())!;
+    }
+
+    public async Task<NoContent> DeleteAddress(int id)
+    {
+        using var response = await _httpClient.DeleteAsync($"api/Addresses/{id}");
+        response.EnsureSuccessStatusCode();
+
+        return new NoContent();
+    }
+
+    public async Task<User> GetUser()
+    {
+        using var response = await _httpClient.GetAsync("api/User");
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<User>())!;
+    }
+
+    public async Task<HttpResponseMessage> PostUser(string email, string password, string name, string lastName)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User",
+            new { email, password, name, lastName }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PutUser(string email, string phoneNumber, string name, string lastName)
+    {
+        var response = await _httpClient.PutAsJsonAsync(
+            "api/User",
+            new { email, phoneNumber, name, lastName }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserLogin(string email, string password)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/login?useCookies=true",
+            new { email, password }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserLogout()
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "/api/User/Logout",
+            new { }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> GetUserConfirmEmail(string userId, string code)
+    {
+        var response = await _httpClient.GetAsync(
+            $"/api/User/confirmEmail?userId={userId}&code={code}"
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserForgotPassword(string email)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/forgotPassword",
+            new { email }
+        );
+        response.EnsureSuccessStatusCode();
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserResetPassword(string email, string resetCode, string newPassword)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/resetPassword",
+            new { email, resetCode, newPassword }
+        );
+
+        return response;
+    }
+
+    public async Task<HttpResponseMessage> PostUserManageInfo(string oldPassword, string newPassword)
+    {
+        var response = await _httpClient.PostAsJsonAsync(
+            "api/User/manage/info",
+            new { oldPassword, newPassword }
+        );
 
         return response;
     }

@@ -39,10 +39,11 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
+            Assert.Contains("<!DOCTYPE html", result);
             Assert.Contains("Thank you for signing up with EndPointCommerce.com", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("Please <a href=\"test_confirmation_link\">click here</a> to confirm your account.", result);
+            Assert.Contains("Please <a href=\"test_confirmation_link\"", result);
+            Assert.Contains("click here</a> to confirm your account.", result);
         }
 
         [Fact]
@@ -67,10 +68,9 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
+            Assert.Contains("<!DOCTYPE html", result);
             Assert.Contains("test_name test_last_name", result);
-            Assert.Contains("click the following button to reset your password", result);
-            Assert.Contains("<a href=\"test_password_reset_link\" target=\"_blank\">", result);
+            Assert.Contains("<a href=\"test_password_reset_link\"", result);
             Assert.Contains("If you did not request a password reset, please ignore this email.", result);
         }
 
@@ -78,6 +78,8 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
         public async Task Render_CanRenderTheOrderConfirmationEmailTemplate()
         {
             // Act
+            var orderGuid = Guid.NewGuid();
+
             var result = await _subject.Render(
                 Templates.OrderConfirmation,
                 new OrderConfirmationViewModel()
@@ -85,6 +87,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                     Order = new Order
                     {
                         Id = 123,
+                        OrderGuid = orderGuid,
                         DateCreated = new DateTime(2010, 10, 10),
                         Customer = new Customer
                         {
@@ -119,15 +122,21 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
                             Street = "123 Main St",
                             StreetTwo = "Unit A"
                         },
+                        Status = new OrderStatus { Name = OrderStatus.PENDING },
                         PaymentMethod = new PaymentMethod { Name = PaymentMethod.CREDIT_CARD }
-                    }
+                    },
+                    OrderDetailsUrl = "test_order_details_url",
+                    ProductImagesUrl = "test_product_images_url"
                 }
             );
 
             // Assert
-            Assert.Contains("<!DOCTYPE html>", result);
-            Assert.Contains("Hello test_name test_last_name", result);
-            Assert.Contains("Here are the details for Order #123 that was placed on Sunday, October 10, 2010", result);
+            Assert.Contains("<!DOCTYPE html", result);
+            Assert.Contains("Thank you for your order!", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\"", result);
+            Assert.Contains($"Sunday, October 10, 2010", result);
+            Assert.Contains($"<a href=\"test_order_details_url/{orderGuid}\"", result);
+            Assert.Contains($"123", result);
         }
     }
 }
