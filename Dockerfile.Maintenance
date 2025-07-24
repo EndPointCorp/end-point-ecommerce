@@ -14,6 +14,9 @@ RUN npm install -g pnpm@10
 USER app
 WORKDIR /home/app
 
+RUN mkdir -p /home/app/bin \
+             /home/app/images
+
 # install tools
 RUN dotnet tool install dotnet-ef --global
 ENV PATH="$PATH:/home/app/.dotnet/tools:/home/app/bin"
@@ -41,6 +44,6 @@ COPY --chown=app EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
 COPY --chown=app EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 
 # helper scripts
-COPY deploy-utils/maintenance/check-migrations.sh ./bin/
-COPY deploy-utils/maintenance/run-migrations.sh ./bin/
-COPY deploy-utils/maintenance/run-job.sh ./bin/
+COPY --chown=app deploy-utils/maintenance/check-migrations.sh ./bin/
+COPY --chown=app deploy-utils/maintenance/run-migrations.sh ./bin/
+COPY --chown=app deploy-utils/maintenance/run-job.sh ./bin/
