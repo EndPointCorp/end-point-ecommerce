@@ -95,7 +95,7 @@ services:
     image: $IMAGE_WEBSTORE_COMMIT
     restart: always
     ports:
-      - 127.0.0.1:${WEB_STORE_PORT}:8080
+      - 127.0.0.1:${WEB_STORE_PORT}:80
     environment:
       - EndPointCommerceApiUrl=${WEB_API_URL}
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
