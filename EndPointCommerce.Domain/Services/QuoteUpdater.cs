@@ -98,7 +98,7 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
     private async Task<Address> ResolveAddressOrThrow(Address? address, int? addressId, Quote quote)
     {
         var resolvedAddress = address ??
-            (await _addressRepository.FindByIdWithStateAsync(addressId!.Value))?.Clone() ??
+            (await _addressRepository.FindByIdAsync(addressId!.Value))?.Clone() ??
                 throw new EntityNotFoundException();
 
         resolvedAddress.Country ??= await _countryRepository.FindByIdAsync(resolvedAddress.CountryId) ??

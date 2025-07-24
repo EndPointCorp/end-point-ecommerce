@@ -20,7 +20,7 @@ namespace EndPointCommerce.WebApi.Controllers
         private readonly IQuoteResolver _quoteResolver;
         private readonly ISessionHelper _session;
 
-        private readonly string _imagesUrlPath;
+        private readonly string _imagesUrl;
 
         public QuoteController(
             IQuoteUpdater quoteUpdater,
@@ -43,7 +43,7 @@ namespace EndPointCommerce.WebApi.Controllers
             _quoteResolver = quoteResolver;
             _session = session;
 
-            _imagesUrlPath = config["ProductImagesUrlPath"]!;
+            _imagesUrl = config["ProductImagesUrl"]!;
         }
 
         // GET: api/Quote
@@ -55,7 +55,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
             _quoteCookieManager.SetQuoteIdCookie(Response, quote.Id);
 
-            return Quote.FromEntity(quote, _imagesUrlPath);
+            return Quote.FromEntity(quote, _imagesUrl);
         }
 
         // PUT: api/Quote
@@ -81,7 +81,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
                 _quoteCookieManager.SetQuoteIdCookie(Response, result.Id);
 
-                return Quote.FromEntity(result, _imagesUrlPath);
+                return Quote.FromEntity(result, _imagesUrl);
             }
             catch (EntityNotFoundException)
             {
@@ -108,7 +108,7 @@ namespace EndPointCommerce.WebApi.Controllers
 
                 _quoteCookieManager.SetQuoteIdCookie(Response, result.QuoteId);
 
-                return QuoteItem.FromEntity(result, _imagesUrlPath);
+                return QuoteItem.FromEntity(result, _imagesUrl);
             }
             catch (EntityNotFoundException)
             {
@@ -128,7 +128,7 @@ namespace EndPointCommerce.WebApi.Controllers
                     QuoteId = quoteId,
                     Quantity = quoteItem.Quantity
                 }),
-                result => QuoteItem.FromEntity(result, _imagesUrlPath)
+                result => QuoteItem.FromEntity(result, _imagesUrl)
             );
         }
 
@@ -159,7 +159,7 @@ namespace EndPointCommerce.WebApi.Controllers
             {
                 var result = await _quoteValidator.Run(quote.Id);
 
-                return Quote.FromEntity(result, _imagesUrlPath);
+                return Quote.FromEntity(result, _imagesUrl);
             }
             catch (EntityNotFoundException)
             {

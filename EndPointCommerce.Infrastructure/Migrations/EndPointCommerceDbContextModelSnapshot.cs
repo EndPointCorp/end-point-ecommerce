@@ -2111,6 +2111,11 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("modified_by");
 
+                    b.Property<Guid>("OrderGuid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_guid");
+
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("integer")
                         .HasColumnName("payment_method_id");

@@ -39,7 +39,7 @@ public class ProductTests
             UrlKey = "test_category_url_key",
         };
 
-        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromEntity(entity, "test_image_url_path");
+        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromEntity(entity, "test_image_url");
 
         // Act & Assert
         Assert.Equal(10, result.Id);
@@ -70,7 +70,7 @@ public class ProductTests
         entity.CategoryId = null;
         entity.Category = null;
 
-        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromEntity(entity, "test_image_url_path");
+        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromEntity(entity, "test_image_url");
 
         // Act & Assert
         Assert.Null(result.CategoryId);
@@ -99,7 +99,7 @@ public class ProductTests
             }
         };
 
-        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromListOfEntities(entities, "test_image_url_path");
+        var result = EndPointCommerce.WebApi.ResourceModels.Product.FromListOfEntities(entities, "test_image_url");
 
         // Act & Assert
         Assert.Equal(entities.Count, result.Count);

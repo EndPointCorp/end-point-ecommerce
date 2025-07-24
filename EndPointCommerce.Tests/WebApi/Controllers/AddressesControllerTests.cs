@@ -51,6 +51,11 @@ public class AddressesControllerTests : IntegrationTests
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
+        // Simulate email confirmation
+        var user = dbContext.Users.First(u => u.Email == "test@email.com");
+        user.EmailConfirmed = true;
+        dbContext.SaveChanges();
+
         return response;
     }
 
@@ -354,7 +359,7 @@ public class AddressesControllerTests : IntegrationTests
         var response = await client.DeleteAsync($"/api/Addresses/{address.Id}");
 
         // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
         var deletedAddress = dbContext.Addresses.Find(address.Id);
         Assert.True(deletedAddress!.Deleted);

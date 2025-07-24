@@ -1,0 +1,25 @@
+@using EndPointCommerce.WebStore.State
+
+@implements IDisposable
+
+@inject AlertStateContainer AlertState
+
+@if (!string.IsNullOrEmpty(AlertState.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show fixed-bottom text-center m-2" role="alert">
+        @AlertState.SuccessMessage
+        <button @onclick="() => AlertState.ClearMessage()" class="btn-close" aria-label="Close"></button>
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        AlertState.MessageChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AlertState.MessageChanged -= StateHasChanged;
+    }
+}

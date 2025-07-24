@@ -13,6 +13,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
     {
         private readonly Mock<IMailer> _mockMailer;
         private readonly Mock<IRazorViewRenderer> _mockRazorViewRenderer;
+        private readonly Mock<IConfiguration> _mockConfig;
         private readonly OrderConfirmationMailer _subject;
 
         public OrderConfirmationMailerTests()
@@ -24,7 +25,12 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
                 .Setup(m => m.Render(It.IsAny<string>(), It.IsAny<OrderConfirmationViewModel>()))
                 .ReturnsAsync("test_rendered_body");
 
-            _subject = new OrderConfirmationMailer(_mockMailer.Object, _mockRazorViewRenderer.Object);
+            _mockConfig = new Mock<IConfiguration>();
+            _mockConfig
+                .Setup(m => m["ProductImagesUrl"])
+                .Returns("test_product_images_url");
+
+            _subject = new OrderConfirmationMailer(_mockMailer.Object, _mockRazorViewRenderer.Object, _mockConfig.Object);
         }
 
         private static Order CreateOrder()

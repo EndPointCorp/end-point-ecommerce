@@ -18,6 +18,7 @@ public class QuoteAddress
     [Required]
     public int CountryId { get; set; }
     public int? StateId { get; set; }
+    public State? State { get; set; }
     [Required]
     public string ZipCode { get; set; } = string.Empty;
     public string? PhoneNumber { get; set; }
@@ -51,6 +52,7 @@ public class QuoteAddress
             City = entity.City,
             CountryId = entity.CountryId,
             StateId = entity.StateId,
+            State = entity.State != null ? State.FromEntity(entity.State) : null,
             ZipCode = entity.ZipCode,
             PhoneNumber = entity.PhoneNumber
         };
