@@ -1,3 +1,10 @@
 namespace EndPointCommerce.WebStore.Api;
 
-public record QuoteItem(int Id, int ProductId, int Quantity, decimal Total, Product Product);
+public class QuoteItem
+{
+    public int Id { get; set; }
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
+    public decimal Total { get; set; }
+    public Product Product { get; set; } = default!;
+}

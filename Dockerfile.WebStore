@@ -33,14 +33,18 @@ COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
 
 # build app
 WORKDIR /source/EndPointCommerce.WebStore
-RUN dotnet publish -c release -o /app --no-restore
+RUN dotnet publish -c release -o /home/app --no-restore
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM nginx:1.29-bookworm
 
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends curl \
-    && rm -rf /var/lib/apt/lists/*
-WORKDIR /app
-COPY --from=build /app ./
-ENTRYPOINT ["dotnet", "EndPointCommerce.WebStore.dll"]
+COPY deploy-utils/web-store/create-appsettings.sh /
+COPY deploy-utils/web-store/entrypoint.sh /
+COPY deploy-utils/web-store/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build /home/app/wwwroot /usr/share/nginx/html
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+# original CMD that the Nginx image's Dockerfile specifies
+CMD ["nginx", "-g", "daemon off;"]

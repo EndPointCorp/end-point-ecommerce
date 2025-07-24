@@ -1,4 +1,4 @@
-using EndPointCommerce.WebApi.Services;
+using EndPointCommerce.Domain.Services;
 
 namespace EndPointCommerce.WebApi.ResourceModels;
 
@@ -12,7 +12,7 @@ public class Category
 
     public string? MainImageUrl { get; set; }
 
-    public static Category FromEntity(Domain.Entities.Category entity, string? imagesUrlPath = null)
+    public static Category FromEntity(Domain.Entities.Category entity, string? imagesUrl = null)
     {
         return new() {
             Id = entity.Id,
@@ -20,10 +20,10 @@ public class Category
             UrlKey = entity.UrlKey,
             Metadata = Metadata.FromEntity(entity),
 
-            MainImageUrl = ImageUrlBuilder.GetImageUrl(entity.MainImage, imagesUrlPath),
+            MainImageUrl = ImageUrlBuilder.GetImageUrl(entity.MainImage, imagesUrl),
         };
     }
 
-    public static List<Category> FromListOfEntities(IList<Domain.Entities.Category> entities, string? imagesUrlPath = null) =>
-        entities.Select(e => FromEntity(e, imagesUrlPath)).ToList();
+    public static List<Category> FromListOfEntities(IList<Domain.Entities.Category> entities, string? imagesUrl = null) =>
+        entities.Select(e => FromEntity(e, imagesUrl)).ToList();
 }

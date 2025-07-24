@@ -1,81 +1,54 @@
-using EndPointCommerce.Infrastructure.Startup;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using EndPointCommerce.WebStore;
+using EndPointCommerce.WebStore.Identity;
 using EndPointCommerce.WebStore.Api;
-using Microsoft.AspNetCore.DataProtection;
-using Serilog;
+using EndPointCommerce.WebStore.State;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-// Optional config for local environment overrides, mainly useful during local development
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-
-builder.Services
-    .AddDataProtection()
-    .SetApplicationName("end-point-commerce-web-store")
-    .PersistKeysToFileSystem(
-        new DirectoryInfo(
-            builder.Configuration["WebStoreDataProtectionKeysPath"] ??
-                throw new InvalidOperationException("Config setting 'WebStoreDataProtectionKeysPath' not found.")
-        )
-    );
-
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddSession(options =>
+// HACK: Slightly hacky way of loading appsettings.Local.json files like is done with the other
+//       projects. WebAssemblyHostBuilder.InitializeEnvironment() is internally doing some
+//       filesystem-based detection of what appsettings files it loads by default, but using the
+//       same methods here doesn't work at all!? I'm not sure what magic is going on there.
+//       So, we'll do this as a last resort ... We only load it in Development builds because
+//       in a real-world production environment, you probably don't want to see random requests
+//       to "/appsettings.Local.json" failing with a 404.
+if (builder.HostEnvironment.IsDevelopment())
 {
-    options.Cookie.Name = ".EndPointCommerce.WebStore.Session";
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromMinutes(5);
-});
-
-builder.Services.AddHttpClient<IApiClient, ApiClient>(client => {
-    client.BaseAddress = new Uri(
-        builder.Configuration["EndPointCommerceApiUrl"] ??
-            throw new InvalidOperationException("Config setting 'EndPointCommerceApiUrl' not found.")
-    );
-});
-
-builder.Services.AddHealthChecks();
-
-builder.Host.UseSerilog((context, loggerConfig) =>
-    loggerConfig.ReadFrom.Configuration(context.Configuration)
-);
-
-var app = builder.Build();
-
-app.UseRequestLocalization("en-US");
-
-app.UseSerilogRequestLogging(opts =>
-{
-    opts.GetLevel = LogHelper.ExcludeHealthChecks;
-});
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    using var httpClient = new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) };
+    var response = await httpClient.GetAsync("appsettings.Local.json");
+    if (response.IsSuccessStatusCode)
+    {
+        var json = await response.Content.ReadAsStringAsync();
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(json)))
+            .Build();
+        builder.Configuration.AddConfiguration(config);
+    }
 }
 
-app.UseHttpsRedirection();
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
 
-app.UseRouting();
+builder.Services.AddAuthorizationCore();
 
-app.UseAuthorization();
+builder.Services.AddTransient<IncludeCredentialsHandler>();
 
-app.UseSession();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-// app.MapStaticAssets();
-// app.MapRazorPages()
-//    .WithStaticAssets();
+builder.Services.AddHttpClient(
+    "EndPointCommerce.WebApi",
+    opt => opt.BaseAddress = new Uri(
+        builder.Configuration["EndPointCommerceApiUrl"] ??
+            throw new InvalidOperationException("Config setting 'EndPointCommerceApiUrl' not found.")
+    )
+).AddHttpMessageHandler<IncludeCredentialsHandler>();
 
-app.UseStaticFiles();
-app.MapRazorPages();
+builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+builder.Services.AddScoped<IApiClient, ApiClient>();
+builder.Services.AddSingleton<QuoteStateContainer>();
+builder.Services.AddSingleton<AlertStateContainer>();
 
-app.MapHealthChecks("/healthz");
-
-app.Run();
+await builder.Build().RunAsync();

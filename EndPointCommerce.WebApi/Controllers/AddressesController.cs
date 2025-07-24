@@ -33,6 +33,22 @@ namespace EndPointCommerce.WebApi.Controllers
             );
         }
 
+        // GET: api/Addresses/{id}
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ResourceModels.Address>> GetAddress(int id)
+        {
+            var customerId = await _sessionHelper.GetCustomerId(User);
+            if (customerId == null) return NotFound();
+
+            var address = await _repository.FindByIdAsync(id);
+            if (address == null) return NotFound();
+
+            if (address.CustomerId != customerId) return NotFound();
+
+            return ResourceModels.Address.FromEntity(address!);
+        }
+
         // POST: api/Addresses
         [HttpPost]
         public async Task<ActionResult<ResourceModels.Address>> PostAddress([FromBody] ResourceModels.Address payload)
@@ -45,12 +61,12 @@ namespace EndPointCommerce.WebApi.Controllers
 
             // Create the address
             await _repository.AddAsync(address);
-            address = await _repository.FindByIdWithStateAsync(address.Id);
+            address = await _repository.FindByIdAsync(address.Id);
 
             return ResourceModels.Address.FromEntity(address!);
         }
 
-        // PUT: api/Addresses
+        // PUT: api/Addresses/{id}
         [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<ResourceModels.Address>> PutAddress(
@@ -69,7 +85,7 @@ namespace EndPointCommerce.WebApi.Controllers
             address = payload.UpdateEntity(address);
 
             await _repository.UpdateAsync(address);
-            address = await _repository.FindByIdWithStateAsync(address.Id);
+            address = await _repository.FindByIdAsync(address.Id);
 
             return ResourceModels.Address.FromEntity(address!);
         }
@@ -90,7 +106,7 @@ namespace EndPointCommerce.WebApi.Controllers
             // Delete the address
             await _repository.DeleteAsync(address);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

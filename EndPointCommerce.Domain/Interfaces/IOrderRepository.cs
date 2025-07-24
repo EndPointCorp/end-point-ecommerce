@@ -15,6 +15,7 @@ public interface IOrderRepository : IBaseRepository<Order>
 
     public Task<IList<Order>> FetchAllByCustomerIdAsync(int customerId);
     public Task<Order?> FindByIdWithItemsAsync(int id);
+    public Task<Order?> FindByGuidWithItemsAsync(Guid guid);
     public Task<List<CountPerGroup>> FetchOrderCountsFromLastSevenDaysAsync();
     public Task<List<CountPerGroup>> FetchOrderAmountsFromLastSevenDaysAsync();
     public Task<decimal> GetTodaysSales();

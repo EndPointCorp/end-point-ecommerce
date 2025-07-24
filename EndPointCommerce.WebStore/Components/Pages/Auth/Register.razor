@@ -1,0 +1,182 @@
+@page "/auth/register"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Net
+@using System.Text.Json
+@using EndPointCommerce.WebStore.Api
+@using EndPointCommerce.WebStore.Identity
+@using EndPointCommerce.WebStore.State
+
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationState
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>Register - End Point Commerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="card mb-2 p-3 mx-5">
+            <h3>Register a new account</h3>
+            <EditForm Model="RegisterInput" method="post" OnValidSubmit="RegisterUser">
+                <DataAnnotationsValidator />
+
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="RegisterInput.Email"
+                        id="RegisterInput.Email"
+                        class="form-control"
+                        autocomplete="username"
+                        aria-required="true"
+                        placeholder="name@example.com"
+                    />
+                    <label for="RegisterInput.Email" class="form-label">
+                        Email
+                    </label>
+                    <ValidationMessage For="() => RegisterInput.Email" class="text-danger" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="RegisterInput.Password"
+                                type="password"
+                                id="RegisterInput.Password"
+                                class="form-control"
+                                autocomplete="new-password"
+                                aria-required="true"
+                                placeholder="password"
+                            />
+                            <label for="RegisterInput.Password" class="form-label">
+                                Password
+                            </label>
+                            <ValidationMessage For="() => RegisterInput.Password" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="RegisterInput.ConfirmPassword"
+                                type="password"
+                                id="RegisterInput.ConfirmPassword"
+                                class="form-control"
+                                autocomplete="new-password"
+                                aria-required="true"
+                                placeholder="confirm password"
+                            />
+                            <label for="RegisterInput.ConfirmPassword" class="form-label">
+                                Confirm password
+                            </label>
+                            <ValidationMessage For="() => RegisterInput.ConfirmPassword" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="RegisterInput.FirstName"
+                                id="RegisterInput.FirstName"
+                                class="form-control"
+                                autocomplete="given-name"
+                                aria-required="true"
+                                placeholder="John"
+                            />
+                            <label for="RegisterInput.FirstName" class="form-label">
+                                First name
+                            </label>
+                            <ValidationMessage For="() => RegisterInput.FirstName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="RegisterInput.LastName"
+                                id="RegisterInput.LastName"
+                                class="form-control"
+                                autocomplete="family-name"
+                                aria-required="true"
+                                placeholder="Doe"
+                            />
+                            <label for="RegisterInput.LastName" class="form-label">
+                                Last name
+                            </label>
+                            <ValidationMessage For="() => RegisterInput.LastName" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                @if (ErrorMessages.Count > 0)
+                {
+                    <ul class="validation-errors">
+                        @foreach (var error in ErrorMessages)
+                        {
+                            <li class="validation-message">@error</li>
+                        }
+                    </ul>
+                }
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-dark" disabled="@(!SubmitButtonEnabled)">
+                        Register
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</section>
+
+@code {
+    private class RegisterInputModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+
+        [Required]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+    }
+
+    private RegisterInputModel RegisterInput { get; set; } = new();
+
+    private bool SubmitButtonEnabled { get; set; } = true;
+
+    private List<string> ErrorMessages { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await AuthenticationState.IsUserAuthenticated())
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    public async Task RegisterUser()
+    {
+        ErrorMessages.Clear();
+        SubmitButtonEnabled = false;
+
+        var response = await ApiClient.PostUser(
+            RegisterInput.Email, RegisterInput.Password,
+            RegisterInput.FirstName, RegisterInput.LastName
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            _ = AlertState.SetMessage("Registration successful. You can now sign in.");
+            Navigation.NavigateTo("/auth/login");
+        }
+        else
+        {
+            ErrorMessages = await response.GetErrorMessages();
+            SubmitButtonEnabled = true;
+        }
+    }
+}
