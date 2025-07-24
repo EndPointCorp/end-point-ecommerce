@@ -16,7 +16,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Account
         public async Task<IActionResult> OnGetAsync(string? returnUrl)
         {
             await _identityService.LogoutAsync();
-            return LocalRedirect(returnUrl ?? "/admin/");
+            return LocalRedirect(returnUrl ?? "/");
         }
     }
 }

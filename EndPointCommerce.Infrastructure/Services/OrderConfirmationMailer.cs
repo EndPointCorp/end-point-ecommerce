@@ -11,11 +11,15 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
 {
     private readonly IMailer _mailer;
     private readonly IRazorViewRenderer _razorViewRenderer;
+    private readonly string _orderDetailsUrl;
+    private readonly string _productImagesUrl;
 
-    public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer)
+    public OrderConfirmationMailer(IMailer mailer, IRazorViewRenderer razorViewRenderer, IConfiguration config)
     {
         _mailer = mailer;
         _razorViewRenderer = razorViewRenderer;
+        _orderDetailsUrl = config["OrderDetailsUrl"]!;
+        _productImagesUrl = config["ProductImagesUrl"]!;
     }
 
     public async Task SendAsync(Order order)
@@ -24,11 +28,14 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
             Templates.OrderConfirmation,
             new OrderConfirmationViewModel()
             {
-                Order = order
+                Order = order,
+                OrderDetailsUrl = _orderDetailsUrl,
+                ProductImagesUrl = _productImagesUrl
             }
         );
 
-        await _mailer.SendMailAsync(new() {
+        await _mailer.SendMailAsync(new()
+        {
             To = order.Customer.Email,
             ToName = order.Customer.FullName,
             Subject = $"End Point Commerce: New Order # {order.Id}",

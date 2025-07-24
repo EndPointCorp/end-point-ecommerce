@@ -166,6 +166,11 @@ public class OrdersControllerTests : IntegrationTests
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
+        // Simulate email confirmation
+        var user = dbContext.Users.First(u => u.Email == "test@email.com");
+        user.EmailConfirmed = true;
+        dbContext.SaveChanges();
+
         return response;
     }
 

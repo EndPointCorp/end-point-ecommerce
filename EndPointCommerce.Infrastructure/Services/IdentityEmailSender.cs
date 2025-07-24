@@ -12,13 +12,13 @@ public class IdentityEmailSender : IEmailSender<User>
 {
     private readonly IMailer _mailer;
     private readonly IRazorViewRenderer _razorViewRenderer;
-    private readonly string _webStorePasswordResetUrl;
+    private readonly string _passwordResetUrl;
 
     public IdentityEmailSender(IMailer mailer, IRazorViewRenderer razorViewRenderer, IConfiguration config)
     {
         _mailer = mailer;
         _razorViewRenderer = razorViewRenderer;
-        _webStorePasswordResetUrl = config["WebStorePasswordResetUrl"]!;
+        _passwordResetUrl = config["PasswordResetUrl"]!;
     }
 
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
@@ -28,7 +28,7 @@ public class IdentityEmailSender : IEmailSender<User>
             new IdentityEmailViewModel()
             {
                 User = user,
-                Link = confirmationLink
+                Link = WebUtility.HtmlDecode(confirmationLink)
             }
         );
 
@@ -47,7 +47,7 @@ public class IdentityEmailSender : IEmailSender<User>
             new IdentityEmailViewModel()
             {
                 User = user,
-                Link = $"{_webStorePasswordResetUrl}?email={WebUtility.UrlEncode(email)}&resetCode={resetCode}"
+                Link = $"{_passwordResetUrl}?email={WebUtility.UrlEncode(email)}&resetCode={resetCode}"
             }
         );
 

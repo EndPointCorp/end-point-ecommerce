@@ -40,8 +40,8 @@ public class Program
 
         builder.Services.AddIdentityCore<User>(opt =>
         {
-            opt.Password.RequiredLength = 8;
             opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 8;
             opt.Password.RequireNonAlphanumeric = false;
             opt.SignIn.RequireConfirmedEmail = false;
         }).AddRoles<IdentityRole<int>>()
@@ -51,9 +51,9 @@ public class Program
 
         builder.Services.ConfigureApplicationCookie(options =>
         {
-            options.AccessDeniedPath = new PathString("/admin/Account/AccessDenied");
-            options.LoginPath = new PathString("/admin/Account/Login");
-            options.LogoutPath = new PathString("/admin/Account/Logout");
+            options.AccessDeniedPath = new PathString("/Account/AccessDenied");
+            options.LoginPath = new PathString("/Account/Login");
+            options.LogoutPath = new PathString("/Account/Logout");
         });
 
         // Bug: https://stackoverflow.com/questions/77970596/how-to-register-system-timeprovider-implementation
@@ -100,9 +100,7 @@ public class Program
             // app.UseHsts();
         }
 
-        app.UsePathBase("/admin");
-
-        // app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
         app.UseStaticFiles();
 
