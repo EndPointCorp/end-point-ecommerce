@@ -543,11 +543,17 @@ So, for any configuration change that is done to the database in an ad-hoc manne
 
 ### Catalog images
 
-This repo contains the directories `images/category-images` and `images/product-images` which are meant to store category and product image files in non-Docker deployments. The Admin Portal and Web API will expect these directories to exist. In deployments using the included Docker Compose configuration, these files are stored in Docker volumes.
+When run via Docker using the included `compose.yaml`, the AdminPortal, WebApi and Maintenance containers all mount the same `images` Docker volume which stores both category and product images.
+
+During local development, this repo contains the directories `images/category-images` and `images/product-images` which are meant to store category and product image files. The Admin Portal and Web API will expect these directories to exist.
 
 ### Keys for .NET's Data Protection API
 
-Our system uses cookies which are protected using [.NET's Data Protection API](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-8.0). To make sure it works well across deployments, part of its configuration involves storing the keys in a non-volatile location. The `data-protection-keys` directory serves that purpose for non-Docker deployments. The Admin Portal, Web API use it to store their respective keys. In deployments using the included Docker Compose configuration, these files are stored in Docker volumes.
+Our system uses cookies which are protected using [.NET's Data Protection API](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-8.0). To make sure it works well across deployments, part of its configuration involves storing the keys in a non-volatile location.
+
+When run via Docker using the included `compose.yaml`, these keys are stored in individual volumes that are unique to each container (`admin-portal-data-protection-keys`, `web-api-data-protection-keys`).
+
+Otherwise, during local development the `data-protection-keys` directory included in this repo serves that purpose. The Admin Portal, Web API and Web Store containers use it to store their respective keys.
 
 More info here:
 - [The key was not found in the key ring. Unable to validate token](https://stackoverflow.com/a/63319132)
