@@ -4,6 +4,12 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
+
+                <a href="https://demo.ecommerce.endpointdev.com/" class="nav-link">
+                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-bag"></i></div>
+                    Demo only: Go to Store
+                </a>
+
                 @if (User.IsInRole("Admin"))
                 {
                     <a asp-page="/Index" class="nav-link">
