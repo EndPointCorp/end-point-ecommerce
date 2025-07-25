@@ -2112,7 +2112,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("modified_by");
 
                     b.Property<Guid>("OrderGuid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("order_guid");
 
