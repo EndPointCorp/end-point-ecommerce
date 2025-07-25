@@ -3,6 +3,7 @@ using System;
 using EndPointCommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using NpgsqlTypes;
 namespace EndPointCommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EndPointCommerceDbContext))]
-    partial class EndPointCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250725185457_AddDefaultAdminAccount")]
+    partial class AddDefaultAdminAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2112,7 +2115,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasColumnName("modified_by");
 
                     b.Property<Guid>("OrderGuid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("order_guid");
 
