@@ -56,7 +56,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IQuoteValidator, QuoteValidator>();
         services.AddScoped<IOrderCreator, OrderCreator>();
 
-        services.AddMvcCore().AddRazorViewEngine();
         services.AddTransient<ISmtpClient, SmtpClient>();
         services.AddTransient<IRazorViewRenderer, RazorViewRenderer>();
         services.AddTransient<IMailer, Mailer>();
