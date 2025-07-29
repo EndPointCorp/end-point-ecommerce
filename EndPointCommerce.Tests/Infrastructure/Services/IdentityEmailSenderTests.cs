@@ -1,10 +1,11 @@
 using System.Net;
 using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.Infrastructure.Services;
-using EndPointCommerce.RazorTemplates;
+using EndPointCommerce.RazorTemplates.Views;
 using EndPointCommerce.RazorTemplates.Services;
 using EndPointCommerce.RazorTemplates.ViewModels;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Components;
 using Moq;
 
 namespace EndPointCommerce.Tests.Infrastructure.Services
@@ -22,7 +23,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
 
             _mockRazorViewRenderer = new Mock<IRazorViewRenderer>();
             _mockRazorViewRenderer
-                .Setup(m => m.Render(It.IsAny<string>(), It.IsAny<IdentityEmailViewModel>()))
+                .Setup(m => m.Render<IComponent, IdentityEmailViewModel>(It.IsAny<IdentityEmailViewModel>()))
                 .ReturnsAsync("test_rendered_body");
 
             _mockConfig = new Mock<IConfiguration>();
@@ -59,10 +60,16 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
             await _subject.SendConfirmationLinkAsync(user, email, confirmationLink);
 
             // Assert
-            _mockRazorViewRenderer.Verify(m => m.Render(Templates.AccountConfirmation, It.Is<IdentityEmailViewModel>(vm =>
-                vm.User == user &&
-                vm.Link == confirmationLink
-            )), Times.Once);
+            _mockRazorViewRenderer.Verify(
+                m => m.Render<AccountConfirmation, IdentityEmailViewModel>(
+                    It.Is<IdentityEmailViewModel>(
+                        vm =>
+                            vm.User == user &&
+                            vm.Link == confirmationLink
+                    )
+                ),
+                Times.Once
+            );
 
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>
                 msg.To == email &&
@@ -86,10 +93,16 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
             await _subject.SendPasswordResetCodeAsync(user, email, resetCode);
 
             // Assert
-            _mockRazorViewRenderer.Verify(m => m.Render(Templates.PasswordReset, It.Is<IdentityEmailViewModel>(vm =>
-                vm.User == user &&
-                vm.Link == $"test_password_reset_url?email={WebUtility.UrlEncode(email)}&resetCode=test_reset_code"
-            )), Times.Once);
+            _mockRazorViewRenderer.Verify(
+                m => m.Render<PasswordReset, IdentityEmailViewModel>(
+                    It.Is<IdentityEmailViewModel>(
+                        vm =>
+                            vm.User == user &&
+                            vm.Link == $"test_password_reset_url?email={WebUtility.UrlEncode(email)}&resetCode=test_reset_code"
+                    )
+                ),
+                Times.Once
+            );
 
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>
                 msg.To == email &&
