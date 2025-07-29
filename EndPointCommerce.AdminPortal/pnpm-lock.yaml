@@ -24,8 +24,8 @@ importers:
         specifier: 3.7.1
         version: 3.7.1
       quill:
-        specifier: 2.0.3
-        version: 2.0.3
+        specifier: 2.0.2
+        version: 2.0.2
       simple-datatables:
         specifier: 10.0.0
         version: 10.0.0
@@ -360,8 +360,8 @@ packages:
     resolution: {integrity: sha512-X74oCeRI4/p0ucjb5Ma8adTXd9Scumz367kkMK5V/IatcX6A0vlgLgKbzXWy5nZmCGeNJm2oQX0d2Eqj+ZIlCA==}
     engines: {node: '>= 12.0.0'}
 
-  quill@2.0.3:
-    resolution: {integrity: sha512-xEYQBqfYx/sfb33VJiKnSJp8ehloavImQ2A6564GAbqG55PGw1dAWUn1MUbQB62t0azawUS2CZZhWCjO8gRvTw==}
+  quill@2.0.2:
+    resolution: {integrity: sha512-QfazNrhMakEdRG57IoYFwffUIr04LWJxbS/ZkidRFXYCQt63c1gK6Z7IHUXMx/Vh25WgPBU42oBaNzQ0K1R/xw==}
     engines: {npm: '>=8.2.3'}
 
   readdirp@3.6.0:
@@ -794,7 +794,7 @@ snapshots:
       lodash.clonedeep: 4.5.0
       lodash.isequal: 4.5.0
 
-  quill@2.0.3:
+  quill@2.0.2:
     dependencies:
       eventemitter3: 5.0.1
       lodash-es: 4.17.21
