@@ -11,7 +11,7 @@ public interface IIdentityService
     Task<IdentityResult> AddAsync(User user, string password, string roleName);
     Task<IdentityResult> UpdateAsync(User newUserData, string? newPassword, string? newRoleName);
     Task<IdentityResult> DeleteAsync(User user);
-    Task<SignInResult> LoginAsync(string email, string password);
+    Task<SignInResult> LoginAsync(string username, string password);
     Task LogoutAsync();
     Task<bool> IsPasswordValid(User user, string password);
     Task<IList<IdentityRole<int>>> FetchAllRolesAsync();

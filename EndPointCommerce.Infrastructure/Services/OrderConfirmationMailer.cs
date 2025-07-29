@@ -1,8 +1,8 @@
 using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.Domain.Interfaces;
-using EndPointCommerce.RazorTemplates;
 using EndPointCommerce.RazorTemplates.Services;
 using EndPointCommerce.RazorTemplates.ViewModels;
+using EndPointCommerce.RazorTemplates.Views;
 using Microsoft.Extensions.Configuration;
 
 namespace EndPointCommerce.Infrastructure.Services;
@@ -24,8 +24,7 @@ public class OrderConfirmationMailer : IOrderConfirmationMailer
 
     public async Task SendAsync(Order order)
     {
-        string body = await _razorViewRenderer.Render(
-            Templates.OrderConfirmation,
+        string body = await _razorViewRenderer.Render<OrderConfirmation, OrderConfirmationViewModel>(
             new OrderConfirmationViewModel()
             {
                 Order = order,
