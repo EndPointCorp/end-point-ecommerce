@@ -49,9 +49,9 @@
                             <span>$@Product.BasePrice</span>
                         }
                     </div>
-                    <p class="lead">
+                    <div class="lead">
                         @((MarkupString)Product.Description)
-                    </p>
+                    </div>
 
                     <EditForm Model="AddToCartInput" method="post" OnValidSubmit="AddToCart">
                         <DataAnnotationsValidator />

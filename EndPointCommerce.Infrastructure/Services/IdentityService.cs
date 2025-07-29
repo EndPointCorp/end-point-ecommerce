@@ -99,9 +99,9 @@ public class IdentityService : IIdentityService
     public async Task<IdentityResult> DeleteAsync(User user) =>
         await _userManager.DeleteAsync(user);
 
-    public async Task<SignInResult> LoginAsync(string email, string password) =>
+    public async Task<SignInResult> LoginAsync(string username, string password) =>
         await _signInManager.PasswordSignInAsync(
-            email,
+            username,
             password,
             true,
             lockoutOnFailure: false
