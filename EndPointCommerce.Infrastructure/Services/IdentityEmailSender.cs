@@ -2,7 +2,7 @@ using EndPointCommerce.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using EndPointCommerce.RazorTemplates.Services;
 using EndPointCommerce.RazorTemplates.ViewModels;
-using EndPointCommerce.RazorTemplates;
+using EndPointCommerce.RazorTemplates.Views;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 
@@ -23,8 +23,7 @@ public class IdentityEmailSender : IEmailSender<User>
 
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
     {
-        string body = await _razorViewRenderer.Render(
-            Templates.AccountConfirmation,
+        string body = await _razorViewRenderer.Render<AccountConfirmation, IdentityEmailViewModel>(
             new IdentityEmailViewModel()
             {
                 User = user,
@@ -42,8 +41,7 @@ public class IdentityEmailSender : IEmailSender<User>
 
     public async Task SendPasswordResetCodeAsync(User user, string email, string resetCode)
     {
-        string body = await _razorViewRenderer.Render(
-            Templates.PasswordReset,
+        string body = await _razorViewRenderer.Render<PasswordReset, IdentityEmailViewModel>(
             new IdentityEmailViewModel()
             {
                 User = user,

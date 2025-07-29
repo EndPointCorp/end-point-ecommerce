@@ -2,6 +2,7 @@ using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.RazorTemplates;
 using EndPointCommerce.RazorTemplates.Services;
 using EndPointCommerce.RazorTemplates.ViewModels;
+using EndPointCommerce.RazorTemplates.Views;
 using EndPointCommerce.WebApi;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +22,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
         public async Task Render_CanRenderTheAccountConfirmationEmailTemplate()
         {
             // Act
-            var result = await _subject.Render(
-                Templates.AccountConfirmation,
+            var result = await _subject.Render<AccountConfirmation, IdentityEmailViewModel>(
                 new IdentityEmailViewModel()
                 {
                     User = new User {
@@ -50,8 +50,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
         public async Task Render_CanRenderThePasswordResetEmailTemplate()
         {
             // Act
-            var result = await _subject.Render(
-                Templates.PasswordReset,
+            var result = await _subject.Render<PasswordReset, IdentityEmailViewModel>(
                 new IdentityEmailViewModel()
                 {
                     User = new User {
@@ -80,8 +79,7 @@ namespace EndPointCommerce.Tests.RazorTemplates.Services
             // Act
             var orderGuid = Guid.NewGuid();
 
-            var result = await _subject.Render(
-                Templates.OrderConfirmation,
+            var result = await _subject.Render<OrderConfirmation, OrderConfirmationViewModel>(
                 new OrderConfirmationViewModel()
                 {
                     Order = new Order

@@ -1,10 +1,10 @@
-using System.Net;
 using EndPointCommerce.Domain.Entities;
 using EndPointCommerce.Infrastructure.Services;
-using EndPointCommerce.RazorTemplates;
+using EndPointCommerce.RazorTemplates.Views;
 using EndPointCommerce.RazorTemplates.Services;
 using EndPointCommerce.RazorTemplates.ViewModels;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Components;
 using Moq;
 
 namespace EndPointCommerce.Tests.Infrastructure.Services
@@ -22,7 +22,7 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
 
             _mockRazorViewRenderer = new Mock<IRazorViewRenderer>();
             _mockRazorViewRenderer
-                .Setup(m => m.Render(It.IsAny<string>(), It.IsAny<OrderConfirmationViewModel>()))
+                .Setup(m => m.Render<IComponent, OrderConfirmationViewModel>(It.IsAny<OrderConfirmationViewModel>()))
                 .ReturnsAsync("test_rendered_body");
 
             _mockConfig = new Mock<IConfiguration>();
@@ -57,9 +57,12 @@ namespace EndPointCommerce.Tests.Infrastructure.Services
             await _subject.SendAsync(order);
 
             // Assert
-            _mockRazorViewRenderer.Verify(m => m.Render(Templates.OrderConfirmation, It.Is<OrderConfirmationViewModel>(vm =>
-                vm.Order == order
-            )), Times.Once);
+            _mockRazorViewRenderer.Verify(
+                m => m.Render<OrderConfirmation, OrderConfirmationViewModel>(
+                    It.Is<OrderConfirmationViewModel>(vm => vm.Order == order)
+                ),
+                Times.Once
+            );
 
             _mockMailer.Verify(m => m.SendMailAsync(It.Is<MailData>(msg =>
                 msg.To == order.Customer.Email &&
