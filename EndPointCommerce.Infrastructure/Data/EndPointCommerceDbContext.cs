@@ -83,28 +83,6 @@ public class EndPointCommerceDbContext : DbContext
             }
         );
 
-        modelBuilder.Entity<User>().HasData(
-            new User {
-                Id = 999,
-                UserName = "demoadmin@endpointcommerce.com",
-                NormalizedUserName = "DEMOADMIN@ENDPOINTCOMMERCE.COM",
-                Email = "demoadmin@endpointcommerce.com",
-                NormalizedEmail = "DEMOADMIN@ENDPOINTCOMMERCE.COM",
-                EmailConfirmed = true,
-                ConcurrencyStamp = "11c224f7-0ae4-4a0e-a84f-4c347879cdcb",
-                SecurityStamp = "UTX2NGNJHCDEVFHGTHIRYFSP6VJUFNMJ",
-                PhoneNumberConfirmed = false,
-                TwoFactorEnabled = false,
-                LockoutEnabled = false,
-                AccessFailedCount = 0,
-                PasswordHash = "AQAAAAIAAYagAAAAECXf2a5iPTohU44T1WF2wHcSCnV30fIxmIgE6cNWwavkO9Hsojvn1lofUFJeekRPZg=="
-            }
-        );
-
-        modelBuilder.Entity<IdentityUserRole<int>>().HasData(
-            new IdentityUserRole<int> { UserId = 999, RoleId = 1 }
-        );
-
         modelBuilder.Entity<Country>().HasData(
             new Country { Id = 1, Code = "AF", Name = "Afghanistan" },
             new Country { Id = 2, Code = "AL", Name = "Albania" },
