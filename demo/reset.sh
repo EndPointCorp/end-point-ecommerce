@@ -16,7 +16,7 @@ docker compose exec db psql -U $END_POINT_COMMERCE_DB_USERNAME -f /demo-data.sql
 docker compose exec db rm /demo-data.sql
 
 # Add demo store admin user
-docker compose exec maintenance run-job.sh create_admin_user -u admin -e ecommerce-demo-admin@endpointdev.com -p Sh0pd3m0!
+docker compose exec maintenance run-job.sh create_admin_user -u admin -e ecommerce-demo-admin@endpointdev.com -p Password123!
 
 # Populate the images volume with our initial set of images to match the demo store SQL data just inserted
 docker compose cp ./reference-images/. maintenance:/home/app/images/

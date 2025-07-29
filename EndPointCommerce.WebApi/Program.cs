@@ -62,7 +62,7 @@ public class Program
             opt.User.RequireUniqueEmail = true;
             opt.Password.RequiredLength = 8;
             opt.Password.RequireNonAlphanumeric = true;
-            opt.SignIn.RequireConfirmedEmail = true;
+            opt.SignIn.RequireConfirmedEmail = false;
         }).AddRoles<IdentityRole<int>>()
         .AddEntityFrameworkStores<EndPointCommerceDbContext>();
 
