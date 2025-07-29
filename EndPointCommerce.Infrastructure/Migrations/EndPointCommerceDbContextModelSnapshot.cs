@@ -3030,24 +3030,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasDatabaseName("ix_users_customer_id");
 
                     b.ToTable("users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 999,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "11c224f7-0ae4-4a0e-a84f-4c347879cdcb",
-                            Email = "demoadmin@endpointcommerce.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "DEMOADMIN@ENDPOINTCOMMERCE.COM",
-                            NormalizedUserName = "DEMOADMIN@ENDPOINTCOMMERCE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECXf2a5iPTohU44T1WF2wHcSCnV30fIxmIgE6cNWwavkO9Hsojvn1lofUFJeekRPZg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "UTX2NGNJHCDEVFHGTHIRYFSP6VJUFNMJ",
-                            TwoFactorEnabled = false,
-                            UserName = "demoadmin@endpointcommerce.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -3161,13 +3143,6 @@ namespace EndPointCommerce.Infrastructure.Migrations
                         .HasName("pk_user_roles");
 
                     b.ToTable("user_roles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 999,
-                            RoleId = 1
-                        });
                 });
 
             modelBuilder.Entity("EndPointCommerce.Domain.Entities.CategoryImage", b =>
