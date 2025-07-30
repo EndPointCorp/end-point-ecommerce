@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using EndPointCommerce.WebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;
@@ -49,6 +50,29 @@ public class QuoteCookieManagerTests
 
         var mockRequest = new Mock<HttpRequest>();
         mockRequest.Setup(x => x.Cookies).Returns(mockCookies.Object);
+
+        // Act
+        var result = _subject.GetQuoteIdFromCookie(mockRequest.Object);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void GetQuoteIdFromCookie_ReturnsNull_WhenTheCallToTheDataProtectorThrowsAnError()
+    {
+        // Arrange
+        var mockCookies = new Mock<IRequestCookieCollection>();
+        mockCookies
+            .Setup(m => m["EndPointCommerce_QuoteId"])
+            .Returns("test_protected_quote_id");
+
+        var mockRequest = new Mock<HttpRequest>();
+        mockRequest.Setup(x => x.Cookies).Returns(mockCookies.Object);
+
+        _mockDataProtector
+            .Setup(x => x.Unprotect("test_protected_quote_id"))
+            .Throws(new CryptographicException("test_exception"));
 
         // Act
         var result = _subject.GetQuoteIdFromCookie(mockRequest.Object);
