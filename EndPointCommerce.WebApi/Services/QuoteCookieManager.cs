@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+
 namespace EndPointCommerce.WebApi.Services;
 
 public interface IQuoteCookieManager
@@ -24,7 +26,14 @@ public class QuoteCookieManager : IQuoteCookieManager
         var quoteCookie = request.Cookies[COOKIE_NAME];
         if (quoteCookie == null) return null;
 
-        return int.Parse(_protector.Unprotect(quoteCookie));
+        try
+        {
+            return int.Parse(_protector.Unprotect(quoteCookie));
+        }
+        catch (CryptographicException)
+        {
+            return null;
+        }
     }
 
     public void SetQuoteIdCookie(HttpResponse response, int quoteId)
