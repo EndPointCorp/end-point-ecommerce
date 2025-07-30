@@ -1,6 +1,6 @@
 # End Point Commerce
 
-Minimalist E-Commerce backend that's quick to set up and easy to understand. Meant for developers to adapt, customize and extend.
+Minimalist E-Commerce system that's quick to set up and easy to understand. Meant for developers to adapt, customize and extend.
 
 [![pipeline status](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/badges/main/pipeline.svg)](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/-/commits/main)
 
@@ -63,7 +63,7 @@ Minimalist E-Commerce backend that's quick to set up and easy to understand. Mea
 
 1. An Admin Portal for managing the store.
 2. A REST API for building user-facing frontends.
-3. A sample web store frontend that demonstrates core API interactions and Auth.NET integration.
+3. A simple web store frontend.
 4. Shopping cart handling for guests and logged in users.
 5. Checkout as a guest and as a logged in user.
 6. Product catalog and categories management.
@@ -106,7 +106,7 @@ In order to run the system with this approach, you'll need to have installed:
 
 This is the approach that we recommend for production deployments.
 
-Here's a step by step guide on how to get the system running using this strategy for development.
+Here's a step by step guide on how to get the system running using this deployment strategy.
 
 #### Deploying for the first time
 
@@ -117,7 +117,7 @@ Let's first go over what you'd have to do to create a new deployment from scratc
 The easiest way to get started is just to clone this repository to wherever you intend to run it from:
 
 ```sh
-git clone git@bits.endpointdev.com:end-point-open-source/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-commerce.git
 ```
 
 There are several settings that need to be configured via Docker secret files and environment variables. The secrets are stored found under `/secrets` and need to be modified like the following:
@@ -126,12 +126,16 @@ There are several settings that need to be configured via Docker secret files an
 2. Set `end-point-commerce-db-password.txt` to a secure password for the user that will be used by the EndPointCommerce services to connect to the Postgres database.
 3. Update the connection string found in `end-point-commerce-db-connection-string.txt` to ensure it is correct for your environment. In the majority of cases, all you will need to do is simply copy the password from the previous `end-point-commerce-db-password.txt` file, at put it at the end of the connection string here.
 
-The environment variables are expected to be configured via the `/.env` file. Copy `/env.template` to a new `/.env` file and modify it as appropriate for your deployment. Here's a description of the available variables:
+The environment variables are expected to be configured via the `/.env` file. Copy `/env.template` to a new `/.env` file and modify it as appropriate for your deployment. `/env.template` includes some default values, and these should work out of the box. There are also some empty ones that you will have to provide. Here's a description of the available variables:
 
-- `ADMIN_PORTAL_PORT`, `WEB_API_PORT` and `DB_PORT` determine the ports in which the various services will be run.
+- `ADMIN_PORTAL_PORT`, `WEB_API_PORT`, `WEB_STORE_PORT` and `DB_PORT` determine the ports in which the various services will be run.
 - `END_POINT_COMMERCE_DB`, `END_POINT_COMMERCE_DB_USERNAME` configure the system's database name and the user it will use to connect to it.
 - `ASPNETCORE_ENVIRONMENT` determines the .NET runtime environment.
-- `CATEGORY_IMAGES_URL`, `PRODUCT_IMAGES_URL` determines the URLs of product and category images. Used by the Web API to link to them. This could be the URL where the Web API itself will be running. It could also be any other URL that you have configured in your web server to expose the files from the `images/category-images` and `images/product-images` directories.
+- `WEB_API_URL` is the URL of the Web API. Used by the Web Store to interact with the Web API.
+- `WEB_API_ALLOWED_ORIGINS` determines which locations are allowed to call the Web API via CORS. Set this to the URL where the Web Store is running. You can add a comma separated list of any other API clients that you may have.
+- `CATEGORY_IMAGES_URL`, `PRODUCT_IMAGES_URL` determines the URLs of product and category images. Used by the Web API to link to them. This will most likely be the URL where the Web API itself will be running. But it could also be any other URL that you have configured in your web server to expose the files.
+- `WEB_STORE_CONFIRM_EMAIL_URL`, `WEB_STORE_PASSWORD_RESET_URL`. These are the pages in the Web Store that support basic account management features like email confirmation and password reset.
+- `WEB_STORE_ORDER_DETAILS_URL` links to the order confirmation page. This is included in the order confirmation emails sent by the Web API.
 - The `MAIL_SETTINGS_*` ones determine the SMTP server to connect to for email delivery.
 - `MAIL_CC_ADDRESSES` and `MAIL_BCC_ADDRESSES` determine which addresses will be sent CCs and BCCs of the emails generated by the system.
 - The `TAX_JAR_*` ones determine the TaxJar credentials to use for sales tax calculations.
@@ -155,7 +159,7 @@ docker compose logs -f
 
 ##### 3. Initialize the database
 
-Upon first deployment, a PostgreSQL database will be up and running in its own container. However, this database is empty and needs to be initialized. In order to do that, the EF Core database migration need to run. The Docker Compose file provides a `maintenance` container as a convenience which can be used to do various maintenance tasks, including applying database migrations.
+Upon first deployment, a PostgreSQL database will be up and running in its own container. However, this database is empty and needs to be initialized. In order to do that, the [EF Core](https://learn.microsoft.com/en-us/ef/core/) database migrations need to run. The Docker Compose file provides a `maintenance` container as a convenience which can be used to do various tasks, including applying database migrations.
 
 To run the migrations simply run:
 
@@ -182,7 +186,7 @@ Assuming you made no changes to the `.env` variables regarding ports, you should
 
 - **AdminPortal**: http://localhost:8001
 - **WebApi**: http://localhost:8002/swagger
-- **WebStore**: http://localhost:8003. Remember that this is meant as a demo and may not be suitable for your production deployments.
+- **WebStore**: http://localhost:8003
 
 And the database will be running on port 5432. Which you can connect to using:
 
@@ -196,11 +200,10 @@ If you want to expose the applications to the internet via an NGINX reverse prox
 
 ##### 5. Log into the Admin Portal
 
-<!-- TODO: LOAD THE CONNECTION STRING ENV VAR -->
-
-In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done from the `maintenance` container with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
 
 - Connect to the maintenance container with `docker compose exec maintenance bash`.
+- Load the database connection string in the env var where the `Jobs` project expects it: `export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)`.
 - Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
 - Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
@@ -259,10 +262,10 @@ Here's a list of steps to get this running:
 
 #### 1. Clone this repository
 
-Once you have all that installed, clone this repo:
+Once you have all the above installed, clone this repo:
 
 ```sh
-git clone git@bits.endpointdev.com:end-point-open-source/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-commerce.git
 ```
 
 #### 2. Configure some of the Development app settings
@@ -270,12 +273,12 @@ git clone git@bits.endpointdev.com:end-point-open-source/end-point-commerce.git
 You will then also have to configure some of the system settings via the `appsettings.Development.json` files. Most of them, not all, are already preset to values that make sense for a development environment using Development Containers. Here are the ones that are missing:
 
 - In `EndPointCommerce.WebApi/appsettings.Development.json`, set:
-  - The settings under `MailSettings` to that of your SMTP server.
-  - The `TaxJar*` settings to that of your TaxJar account.
-  - The `AuthNet*` settings to that of your Authorize.NET account.
+  - The settings under `MailSettings` to those of your SMTP server.
+  - The `TaxJar*` settings to those of your TaxJar account.
+  - The `AuthNet*` settings to those of your Authorize.NET account.
 
 - In `EndPointCommerce.WebStore/appsettings.Development.json`, set:
-  - The `AuthNet*` settings to that of your Authorize.NET account.
+  - The `AuthNet*` settings to those of your Authorize.NET account.
 
 You should configure these to have all the features working.
 
@@ -285,19 +288,19 @@ Finally, open the project directory in VS Code and run the "Dev Containers: Reop
 
 That will download and build the necessary images and containers: one for the PostgreSQL database and one with .NET for running and debugging the apps themselves. Once done, VS Code will connect to the app container and you'll be able to develop in the container as if it was your host machine. `Node.js`, along with `pnpm`, as well as the `dotnet-aspnet-codegenerator` and `dotnet-ef` tools will also be installed without needing any extra steps.
 
-On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update`. This will work if run from within the `EndPointCommerce.WebApi` or `EndPointCommerce.AdminPortal` directories.
+On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update --project EndPointCommerce.Infrastructure --startup-project EndPointCommerce.AdminPortal`. This will work if run from within the root directory of this repository.
 
 #### 4. Run the apps
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
 
-You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
+You can start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
-- The Web API at http://localhost:5240/swagger/
-- The Admin Portal at http://localhost:5047/
-- The Web Store at https://localhost:7166/
+- The Admin Portal at https://localhost:7025
+- The Web API at https://localhost:7043/swagger
+- The Web Store at https://localhost:7106
 
-Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the Web Store with HTTPs, like it is set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
+Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the apps using HTTPS, like they are set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
 
 #### 5. Log into the Admin Portal
 
@@ -308,18 +311,18 @@ In order to log into the Admin Portal, you will need to create an admin user acc
 
 ### With .NET and Node.js installed locally
 
-Like any other application, this system can run in any machine with the necessary system software installed. In order to run the system with this method, you'll need:
+Like any .NET application, this system can run in any machine with the necessary software installed. In order to run the system with this method, you'll need:
 
 - [.NET](https://dotnet.microsoft.com)
 - [PostgreSQL](https://www.postgresql.org)
 - [Node.js](https://nodejs.org)
 - [pnpm](https://pnpm.io)
 
-Here's a step by step guide on how to get the system running using this strategy for development.
+Here's a step by step guide on how to get the system running using this deployment strategy.
 
 #### 1. Install .NET framework and tools, and Node.js
 
-Installing this software will vary greatly depending on your environment. But here's what that could look like in Ubuntu 24.04 and similar Linux distros.
+The process of installing this software will vary depending on your environment. But here's what that could look like in Ubuntu 24.04 and similar Linux distros.
 
 To install .NET:
 
@@ -353,7 +356,7 @@ docker run -d \
   postgres:17.2-bookworm
 ```
 
-It would also help to install the psql CLI client to be able to connect to this database. That can be done with:
+It would also help to install the [psql](https://www.postgresql.org/docs/current/app-psql.html) CLI client to be able to connect to this database. That can be done with:
 
 ```sh
 sudo apt-get update && sudo apt-get install postgresql-client
@@ -372,54 +375,52 @@ When psql asks for a password, just type in `password`. That's what the `POSTGRE
 Now that all the necessary system software is in place, you can run the applications. First clone this repository, anywhere you like:
 
 ```sh
-git clone git@bits.endpointdev.com:end-point-open-source/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-commerce.git
 ```
 
-Now you need to update several settings in the various `appsettings.json` files to have a fully working system.
+Now you need to update several settings in the various `appsettings.*.json` files to have a fully working system. Some of them are already preset to values that should work out of the box. But there are also some that you will have to configure yourself, as they will depend on you particular environment.
 
-For an added convenience during local development, all the EndPointCommerce projects will include any `appsettings.Local.json` files that might exist. But they are completely optional. If present, these will be evaluated at the highest-level precedence during settings files evaluation. This means that any settings you put in a `appsettings.Local.json` file will override equivalent settings found in any of the other files. This is useful to let you easily override any per-environment settings like file paths, database connection settings, URLs, etc. that are unique to your system. Additionally, the `appsettings.Local.json` files are listed in `.gitignore`, so you aren't forced to modify `appsettings.json` and then have to occasionally deal with Git conflicts when pulling other changes that might have modified these same files.
+> A note on `appsettings` files: In this code base, you can configure settings using the default mechanisms supported by the .NET framework. That means you can use either of the included `appsettings.json` and `appsettings.Development.json` files. In addition to that, for an added convenience during local development, `appsettings.Local.json` files are also supported.
+>
+> They are completely optional. If present, these will be evaluated at the highest-level precedence during settings files evaluation. This means that any settings you put in a `appsettings.Local.json` file will override equivalent settings found in any of the other files. This is useful to let you easily override any per-environment settings like file paths, database connection settings, URLs, etc. that are unique to your system.
+>
+> Additionally, the `appsettings.Local.json` files are listed in `.gitignore`, so you aren't forced to modify `appsettings.json` and then have to occasionally deal with Git conflicts when pulling other changes that might have modified these same files.
+>
+> So, in the following section, we explain how to set certain settings. You can choose whichever `appsettings.*.json` you like.
 
-The most important `appsettings.json` (or `appsettings.Local.json`) changes, which are required to start up the apps, are these:
+The most important `appsettings.*.json` changes, which are required to start up the apps, are these:
 
-- In `EndPointCommerce.AdminPortal/appsettings.json` (or `EndPointCommerce.AdminPortal/appsettings.Local.json`), set:
+- In `EndPointCommerce.AdminPortal/appsettings.*.json`, set:
   - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
   - `CategoryImagesPath` to `REPO_ROOT/images/category-images`.
   - `ProductImagesPath` to `REPO_ROOT/images/product-images`.
   - `AdminPortalDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/admin-portal`.
 
-- In `EndPointCommerce.WebApi/appsettings.json` (or `EndPointCommerce.WebApi/appsettings.Local.json`), set:
-  - `AllowedOrigins` to the URL where your frontend is running. For a local development environment, where you want to use the WebStore project, this should be `https://localhost:7166`. This is the default URL that the WebStore starts up at with `dotnet run`.
+- In `EndPointCommerce.WebApi/appsettings.*.json`, set:
   - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
   - `CategoryImagesPath` to `REPO_ROOT/images/category-images`.
   - `ProductImagesPath` to `REPO_ROOT/images/product-images`.
   - `WebApiDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/web-api`.
 
-- In `EndPointCommerce.WebStore/appsettings.json` (or `EndPointCommerce.WebStore/appsettings.Local.json`), set:
-  - `WebStoreDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/web-store`.
-  - `EndPointCommerceApiUrl` to the URL where the Web API is running. For a local development environment, this should be `http://localhost:5240`. This is the default URL that the Web Store starts up at with `dotnet run`.
-
-- In `EndPointCommerce.Jobs/appsettings.json` (or `EndPointCommerce.Jobs/appsettings.Local.json`), set:
+- In `EndPointCommerce.Jobs/appsettings.*.json`, set:
   - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
 
-- In `EndPointCommerce.Tests/appsettings.json` (or `EndPointCommerce.Tests/appsettings.Local.json`), set:
+- In `EndPointCommerce.Tests/appsettings.*.json` set:
   - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password`. Notice that `Database` is set to `end_point_commerce_test` in this connection string. This is the database used for integration testing.
 
-And here's the rest of them, which enable other secondary functionality like emails, serving catalog images, interactions with TaxJar and Authorize.NET, etc:
+And here's the rest of them, which enable other secondary functionality like emails and interactions with TaxJar and Authorize.NET:
 
-- In `EndPointCommerce.WebApi/appsettings.json` (or `EndPointCommerce.WebApi/appsettings.Local.json`), set:
-  - The settings under `MailSettings` to that of your SMTP server.
-  - The `TaxJar*` settings to that of your TaxJar account.
-  - The `AuthNet*` settings to that of your Authorize.NET account.
-  - `CategoryImagesUrl` to `WEB_API_URL/category-images`.
-  - `ProductImagesUrl` to `WEB_API_URL/product-images`.
-  - `PasswordResetUrl` to `WEB_STORE_URL/auth/reset-password`. This is the page in your frotnend where you offer password reset functionality to your users.
+- In `EndPointCommerce.WebApi/appsettings.*.json`, set:
+  - The settings under `MailSettings` to those of your SMTP server.
+  - The `TaxJar*` settings to those of your TaxJar account.
+  - The `AuthNet*` settings to those of your Authorize.NET account.
   - `MailCcAddresses` to any emails you want to receive CC of emails generated by the system.
   - `MailBccAddresses` to any emails you want to receive BCC of emails generated by the system.
 
-- In `EndPointCommerce.WebStore/appsettings.json` (or `EndPointCommerce.WebStore/appsettings.Local.json`), set:
-  - The `AuthNet*` settings to that of your Authorize.NET account.
+- In `EndPointCommerce.WebStore/wwwroot/appsettings.*.json`, set:
+  - The `AuthNet*` settings to those of your Authorize.NET account.
 
-Considering `REPO_ROOT` as the root directory of this repository (which should be an *absolute* path); `ADMIN_PORTAL_URL` as the URL where the Admin Portal application is running; `WEB_API_URL` as the URL where the Web API is running; `WEB_STORE_URL` as the URL where your frontend is running.
+> Considering `REPO_ROOT` as the root directory of this repository. This should be an *absolute* path.
 
 #### 4. Initialize the database
 
@@ -435,11 +436,11 @@ You can now run the apps and the tests. You can run tests with `dotnet test` and
 
 You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
 
-- The Web API at http://localhost:5240/swagger/
-- The Admin Portal at http://localhost:5047/
-- The Web Store at https://localhost:7166/
+- The Admin Portal at https://localhost:7025
+- The Web API at https://localhost:7043/swagger
+- The Web Store at https://localhost:7106
 
-Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the Web Store with HTTPs, like it is set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
+Note also that you may need to trust the ASP.NET Core developer certificate in order to be able to run the apps using HTTPS, like they are set up to do by default. Check more details on that here: https://aka.ms/aspnet/https-trust-dev-cert.
 
 #### 6. Log into the Admin Portal
 
@@ -452,7 +453,7 @@ In order to log into the Admin Portal, you will need to create an admin user acc
 
 ### Deployment quick summary
 
-This is a quick guide on how to deploy changes to an already running system:
+This is a quick guide on how to deploy changes to an already running system that was deployed using the include Docker Compose configuration:
 
 1. Checkout the desired commit or otherwise apply desired code changes.
 2. If needed, review and/or update the `.env` file and the files inside the `secrets` directory.
@@ -460,8 +461,8 @@ This is a quick guide on how to deploy changes to an already running system:
 4. If you want to monitor the system while deploying, tail the logs with `docker compose logs -f`.
 5. Rebuild and restart the system with `docker compose up -d --build`.
 6. If needed, check the pending migrations with `docker compose exec maintenance check-migrations.sh`.
-7. If needed, check the pending migrations with `docker compose exec maintenance run-migrations.sh`.
-8. If needed, create a new Admin Portal user account with `docker compose exec maintenance bash`, `cd EndPointCommerce.Jobs` and `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`.
+7. If needed, run the pending migrations with `docker compose exec maintenance run-migrations.sh`.
+8. If needed, create a new Admin Portal user account with `docker compose exec maintenance bash`, `export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)`, `cd EndPointCommerce.Jobs` and `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`.
 9. From time to time, cleanup old dangling images with `docker image prune`.
 
 ### Useful Docker commands
@@ -538,19 +539,19 @@ This directory is backed by a Docker Volume. Which means that any changes made h
 
 As a final note, always keep in mind that this is a containerized deployment which is managed by Docker configuration files. This means that, to the best of our abilities, the full system configuration needs to be reflected by these files. And documented explicitly in this README if for whatever reason this is not possible.
 
-So, for any configuration change that is done to the database in an ad-hoc manner using the approach described in this section, we need to make sure to update the corresponding config files in this repo. For the database, the changes would likely be made on one or more of these files: `Dockerfile.DB`, `compose.yaml`, and `db/initialize.sh`.
+So, for any configuration change that is done to the database in an ad-hoc manner using the approach described in this section, we need to make sure to update the corresponding config files in this repo. For the database, the changes would likely be made on one or more of these files: `Dockerfile.DB`, `compose.yaml`, and `deploy-utils/db/initialize.sh`.
 
 ### Catalog images
 
 When run via Docker using the included `compose.yaml`, the AdminPortal, WebApi and Maintenance containers all mount the same `images` Docker volume which stores both category and product images.
 
-During local development, this repo contains the directories `images/category-images` and `images/product-images` which are meant to store category and product image files. The Admin Portal container will expect these directories to exist. The Web API will expect URLs that serve their contents.
+During local development, this repo contains the directories `images/category-images` and `images/product-images` which are meant to store category and product image files. The Admin Portal and Web API will expect these directories to exist.
 
 ### Keys for .NET's Data Protection API
 
 Our system uses cookies which are protected using [.NET's Data Protection API](https://learn.microsoft.com/en-us/aspnet/core/security/data-protection/introduction?view=aspnetcore-8.0). To make sure it works well across deployments, part of its configuration involves storing the keys in a non-volatile location.
 
-When run via Docker using the included `compose.yaml`, these keys are stored in individual volumes that are unique to each container (`admin-portal-data-protection-keys`, `web-api-data-protection-keys`, and `web-store-data-protection-keys`).
+When run via Docker using the included `compose.yaml`, these keys are stored in individual volumes that are unique to each container (`admin-portal-data-protection-keys`, `web-api-data-protection-keys`).
 
 Otherwise, during local development the `data-protection-keys` directory included in this repo serves that purpose. The Admin Portal, Web API and Web Store containers use it to store their respective keys.
 
@@ -575,7 +576,7 @@ The unused builder cache can also be cleaned with `docker builder prune`.
 
 ### Useful development commands
 
-- `dotnet build` builds the projects. Can be run within the directory of any of the projects to build that particular project.
+- `dotnet build` builds all the projects in the solution. Can be run within the directory of any of the projects to build that particular project.
 - `dotnet test` runs the automated tests. `dotnet test --logger "console;verbosity=normal"` produces a more verbose output.
 - `dotnet run` runs a particular app. Needs to be run from one of these directories: `./EndPointCommerce.AdminPortal`, `./EndPointCommerce.WebApi`, `./EndPointCommerce.WebStore`.
 - `pnpm install` downloads JavaScript frotnend packages. Needs to be run from one of these directories: `./EndPointCommerce.AdminPortal`, `./EndPointCommerce.WebStore`.
@@ -595,7 +596,7 @@ The automated tests can be found in the `EndPointCommerce.Tests` project. There 
 
 ### Managing frontend assets
 
-This solution includes two ASP.NET Core applications with frontends: `EndPointCommerce.AdminPortal` and `EndPointCommerce.WebStore`. These applications use SCSS and JavaScript for frontend styling and functionality. The JavaScript files are stored in the project's `JavaScript` directory, while the SCSS files are stored in the project's `Stylesheets` directory.
+This solution includes two ASP.NET Core applications with frontends: `EndPointCommerce.AdminPortal` and `EndPointCommerce.WebStore`. These applications use SCSS and JavaScript for frontend styling and functionality. The JavaScript files are stored in each project's `JavaScript` directory, while the SCSS files are stored in each project's `Stylesheets` directory.
 
 These files depend on third party libraries and need to be bundled in order to be usable in the browser. So, for managing and bundling frontend assets, we use the [PNPM](https://pnpm.io/) package manager and the [esbuild](https://esbuild.github.io/) bundler. This is apparent by the presence of `package.json`, `pnpm-lock.yaml` and `esbuild.config.mjs` files in those two projects' root directories.
 
@@ -630,7 +631,7 @@ The projects are:
 
 1. **EndPointCommerce.WebApi**: An ASP.NET Web API project that contains a REST API meant to be consumed by a frontend, user-facing store application. Exposes the core functionality needed for an E-Commerce site.
 2. **EndPointCommerce.AdminPortal**: An ASP.NET Razor Pages Web app project meant for site administrators to manage various aspects of the store.
-3. **EndPointCommerce.WebStore**: An ASP.NET Razor Pages Web app project which contains a sample implementation of what a frontend web store might look like. Demonstrates some of the functionality that's available in the Web API and how to implement payment processing with Auth.NET.
+3. **EndPointCommerce.WebStore**: A Blazor WebAssembly Standalone app project which contains a simple web store frontend. Demonstrates the functionality that's available in the Web API and how to implement payment processing with Authorize.NET.
 4. **EndPointCommerce.Jobs**: A .NET Console Application project which contains backend jobs that can be run on demand. The included `create_admin_user` command creates user accounts that can log into the Admin Portal.
 5. **EndPointCommerce.Domain**: A class library project that contains the business logic.
 6. **EndPointCommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
@@ -643,15 +644,15 @@ Here's a diagram that highlights the main architectural components of the system
 
 ![Conceptual architecture](doc/epc_conceptual_architecture.webp)
 
-In the top most layer we have the executable applications: The Web API and the Admin Portal.
+In the top most layer we have the executable applications: The Web API, the Admin Portal and the Web Store.
 
 The Web API and the Admin Portal are regular ASP.NET Core web applications. The Web API uses MVC while the Admin Portal uses Razor Pages. In the Web API, there are a number of Controllers which define all the endpoints that are available. There is also a series of Resource Models that represent the data structures for the request and response payloads of those endpoints.
 
 The Admin Portal, being a Razor Pages project, defines Pages which implement all the screens in the application, both the view templates and the code behind them. It also defines a series of View Models that allow passing data to and from the Razor view templates for rendering purposes and capturing user actions.
 
-As a special case, it's also worth mentioning the sample Web Store. This is an ASP.NET Core Razor Pages project which demonstrate how to interact with the Web API to build a possible Web Store frotnend. As such, the only way in which it integrates with the rest of the system is by interacting with the Web API via HTTP.
-
 Both the Web API and Admin Portal depend on the Domain and Infrastructure layers in order to expose their functionality to clients and users.
+
+The Web Store is an Blazor WebAssembly Standalone app which offers a user facing frontend. The only way in which it integrates with the rest of the system is by interacting with the Web API via HTTP.
 
 Next we have the Domain layer, implemented as a .NET class library project. This is the core of the system. It contains the logic that fulfills the business requirements. This is done through: 1. Entities that represent the main concepts of the domain (and closely resemble the tables in the database); and 2. domain Services that implement the use cases. Under `EndPointCommerce.Domain/Services`, you'll find a number of service objects, each one of which implements one system operation or use case. Tasks like "add an item to a cart" or "place and order" are implemented here, each in their own separate class.
 
@@ -669,7 +670,7 @@ Following is an overview of the data model, including the most notable tables an
 
 1. **`quotes` and `quote_items`**: These tables store shopping carts and the items within them. The `quotes.is_open` flag indicates whether a cart is open or closed. A cart is closed when an order for it is placed.
 
-2. **`orders` and `order_items`**: These tables store orders and their items. Orders contain a copy of all the information from the quote that produced them. They also contain the pricing of all items at the time of purchase. That is, the amount that the customer got charged. The `orders.payment_*` store Auth.NET transaction identifiers and tokens.
+2. **`orders` and `order_items`**: These tables store orders and their items. Orders contain a copy of all the information from the quote that produced them. They also contain the pricing of all items at the time of purchase. That is, the amount that the customer got charged. The `orders.payment_*` store Authorize.NET transaction identifiers and tokens.
 
 3. **`products` and `categories`**: These tables contain the catalog of available products and the categories that they belong to. Both tables include a series of `meta_` fields that are meant to populate `<meta>` tags in product pages in web frontends. These help with SEO purposes. `url_key` is a unique field that can be used to build product page URLs. There is also an API endpoint available that allows fetching products using this field. `products.search_vector` is an auto-calculated field that enables PostgreSQL's full text search functionality on products. They also support associated images, which are stored in the various `*_image_id` fields.
 
@@ -677,4 +678,4 @@ Following is an overview of the data model, including the most notable tables an
 
 5. **`coupons`**: This table stores available coupon codes. Coupons apply discounts to quotes and orders. The discount can be a fixed amount or based on a percentage of the total value of the shopping cart.
 
-6. **`addresses`**: This table stores billing and shipping addresses associated with quotes and orders.
+6. **`addresses`**: This table stores billing and shipping addresses associated with quotes, orders and customers.
