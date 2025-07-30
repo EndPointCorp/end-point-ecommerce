@@ -10,17 +10,6 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-if (builder.Environment.IsDevelopment())
-{
-    // HACK: Workaround for dependency injection validation during DOTNET_ENVIRONMENT=Development
-    //       failing currently. Should investigate a better solution to this.
-    builder.ConfigureContainer(new DefaultServiceProviderFactory(new ServiceProviderOptions
-    {
-        ValidateOnBuild = false,
-        ValidateScopes = false,
-    }));
-}
-
 // Optional config for local environment overrides, mainly useful during local development
 builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
 

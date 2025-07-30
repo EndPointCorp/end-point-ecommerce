@@ -30,7 +30,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Account
         {
             if (!ModelState.IsValid) return Page();
 
-            var user = await _identityService.FindByUserNameAsync(Login.Email);
+            var user = await _identityService.FindByUserNameAsync(Login.Username);
 
             if (user == null)
             {
@@ -54,7 +54,7 @@ namespace EndPointCommerce.AdminPortal.Pages.Account
                 return Page();
             }
 
-            var result = await _identityService.LoginAsync(Login.Email!, Login.Password);
+            var result = await _identityService.LoginAsync(Login.Username!, Login.Password);
 
             if (result.Succeeded)
             {

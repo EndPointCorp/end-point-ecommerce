@@ -1,95 +1,40 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 
 namespace EndPointCommerce.RazorTemplates.Services;
 
 public interface IRazorViewRenderer
 {
-    Task<string> Render<TModel>(string viewName, TModel model);
+    Task<string> Render<TView, TViewModel>(TViewModel model) where TView : IComponent;
 }
 
-// Code from:
-// - https://scottsauber.com/2018/07/07/walkthrough-creating-an-html-email-template-with-razor-and-razor-class-libraries-and-rendering-it-from-a-net-standard-class-library/
-// - https://github.com/aspnet/Entropy/blob/master/samples/Mvc.RenderViewToString/RazorViewToStringRenderer.cs
-// - https://stackoverflow.com/questions/63802400/return-view-as-string-in-net-core-3-0/64337478#64337478
 public class RazorViewRenderer : IRazorViewRenderer
 {
-    private readonly IRazorViewEngine _viewEngine;
-    private readonly ITempDataProvider _tempDataProvider;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILoggerFactory _loggerFactory;
 
-    public RazorViewRenderer(
-        IRazorViewEngine viewEngine,
-        ITempDataProvider tempDataProvider,
-        IServiceScopeFactory serviceScopeFactory,
-        IConfiguration config
-    ) {
-        _viewEngine = viewEngine;
-        _tempDataProvider = tempDataProvider;
-        _serviceScopeFactory = serviceScopeFactory;
+    public RazorViewRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+    {
+        _serviceProvider = serviceProvider;
+        _loggerFactory = loggerFactory;
     }
 
-    public async Task<string> Render<TModel>(string viewName, TModel model)
+    public async Task<string> Render<TView, TViewModel>(TViewModel model) where TView : IComponent
     {
-        using var scope = _serviceScopeFactory.CreateScope();
+        await using var htmlRenderer = new HtmlRenderer(_serviceProvider, _loggerFactory);
 
-        var httpContext = new DefaultHttpContext() { RequestServices = scope.ServiceProvider };
-        var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-
-        var view = FindView(actionContext, viewName);
-
-        var viewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+        var html = await htmlRenderer.Dispatcher.InvokeAsync(async () =>
         {
-            Model = model
-        };
+            var output = await htmlRenderer.RenderComponentAsync<TView>(
+                ParameterView.FromDictionary(
+                    new Dictionary<string, object?> { { "Model", model } }
+                )
+            );
 
-        var tempData = new TempDataDictionary(httpContext, _tempDataProvider);
+            return output.ToHtmlString();
+        });
 
-        using var output = new StringWriter();
-
-        var viewContext = new ViewContext(
-            actionContext,
-            view,
-            viewData,
-            tempData,
-            output,
-            new HtmlHelperOptions()
-        );
-
-        await view.RenderAsync(viewContext);
-
-        return output.ToString();
-    }
-
-    private IView FindView(ActionContext actionContext, string viewName)
-    {
-        var getViewResult = _viewEngine.GetView(executingFilePath: null, viewPath: viewName, isMainPage: true);
-        if (getViewResult.Success)
-        {
-            return getViewResult.View;
-        }
-
-        var findViewResult = _viewEngine.FindView(actionContext, viewName, isMainPage: true);
-        if (findViewResult.Success)
-        {
-            return findViewResult.View;
-        }
-
-        var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
-        var errorMessage = string.Join(
-            Environment.NewLine,
-            new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations)
-        );
-
-        throw new InvalidOperationException(errorMessage);
+        return html;
     }
 }
