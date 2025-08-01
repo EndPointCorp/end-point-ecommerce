@@ -1,6 +1,9 @@
+# This workflow is temporarily set up to be run only on the "demo" branch, at 
+# least for as long as we have this branch split off from "main" specifically
+# to include demo store customizations.
+
 name: Deploy Webstore Demo
 
-# just for a little bit now, require this to be run manually
 on: workflow_dispatch
 
 env:
@@ -10,6 +13,7 @@ env:
 
 jobs:
   prepare-artifacts:
+    if: github.ref_name == 'demo'
     runs-on: ubuntu-latest
 
     steps:
@@ -42,6 +46,7 @@ jobs:
           key: prepared-artifacts-${{ github.sha }}
 
   deploy:
+    if: github.ref_name == 'demo'
     needs: [prepare-artifacts]
     runs-on: ubuntu-latest
     environment: demo
