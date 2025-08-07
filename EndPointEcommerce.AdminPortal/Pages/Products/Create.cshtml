@@ -1,0 +1,72 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Products.CreateModel
+
+@{
+    ViewData["Title"] = "Add a new product";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/js/products.form.css" />
+}
+
+<div class="container-fluid px-4">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Add a new product</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+                <button type="submit" asp-page-handler="SaveAndContinue" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <partial name="_Form.cshtml" for="Product" />
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-image"></i>
+                Images
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label asp-for="Product.MainImageFile" class="form-label"></label>
+                            <input asp-for="Product.MainImageFile" accept="image/*" class="form-control" />
+                            <span asp-validation-for="Product.MainImageFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label asp-for="Product.ThumbnailImageFile" class="form-label"></label>
+                            <input asp-for="Product.ThumbnailImageFile" accept="image/*" class="form-control" />
+                            <span asp-validation-for="Product.ThumbnailImageFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label asp-for="Product.AdditionalImageFiles" class="form-label"></label>
+                    <span asp-validation-for="Product.AdditionalImageFiles" class="text-danger"></span>
+
+                    <partial name="_NewAdditionalImages.cshtml" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/products.form.js" asp-append-version="true"></script>
+    <script src="~/js/products.additional-images.js" asp-append-version="true"></script>
+}

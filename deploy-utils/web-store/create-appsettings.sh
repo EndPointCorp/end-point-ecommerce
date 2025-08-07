@@ -2,7 +2,7 @@
 
 cat <<EOF >/usr/share/nginx/html/appsettings.json
 {
-  "EndPointCommerceApiUrl": "$EndPointCommerceApiUrl",
+  "EndPointEcommerceApiUrl": "$EndPointEcommerceApiUrl",
   "AuthNetEnvironment": "$AuthNetEnvironment",
   "AuthNetLoginId": "$AuthNetLoginId",
   "AuthNetClientKey": "$AuthNetClientKey"

@@ -1,0 +1,53 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Quotes.IndexModel
+
+@{
+    ViewData["Title"] = "Quotes";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/js/quotes.index.css">
+}
+
+<div class="container-fluid px-4">
+    <div class="row py-4">
+        <div class="col">
+            <h2><i class="fas fa-store"></i> Quotes</h2>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="table-quotes" class="datatable-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].DateCreated)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].IsOpen)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].ShippingAddress!.State)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quotes[0].Total)
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/quotes.index.js" asp-append-version="true"></script>
+}

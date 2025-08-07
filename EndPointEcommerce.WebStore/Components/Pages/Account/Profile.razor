@@ -1,0 +1,270 @@
+@page "/account/profile"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
+@using EndPointEcommerce.WebStore.Api
+@using EndPointEcommerce.WebStore.Identity
+@using EndPointEcommerce.WebStore.State
+
+@attribute [Authorize]
+
+@inject AuthenticationStateProvider AuthenticationState
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>Your profile - End Point Ecommerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="card mb-2 p-3 mx-5">
+            <h3>Your profile</h3>
+            <EditForm Model="ProfileInput" method="post" OnValidSubmit="UpdateProfile">
+                <DataAnnotationsValidator />
+
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="ProfileInput.Email"
+                                id="ProfileInput.Email"
+                                class="form-control"
+                                autocomplete="username"
+                                aria-required="true"
+                                placeholder="name@example.com"
+                            />
+                            <label for="ProfileInput.Email" class="form-label">
+                                Email
+                            </label>
+                            <ValidationMessage For="() => ProfileInput.Email" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="ProfileInput.PhoneNumber"
+                                id="ProfileInput.PhoneNumber"
+                                class="form-control"
+                                autocomplete="phone"
+                                aria-required="true"
+                                placeholder="1234567890"
+                            />
+                            <label for="ProfileInput.PhoneNumber" class="form-label">
+                                Phone Number
+                            </label>
+                            <ValidationMessage For="() => ProfileInput.PhoneNumber" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="ProfileInput.FirstName"
+                                id="ProfileInput.FirstName"
+                                class="form-control"
+                                autocomplete="given-name"
+                                aria-required="true"
+                                placeholder="John"
+                            />
+                            <label for="ProfileInput.FirstName" class="form-label">
+                                First name
+                            </label>
+                            <ValidationMessage For="() => ProfileInput.FirstName" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <InputText @bind-Value="ProfileInput.LastName"
+                                id="ProfileInput.LastName"
+                                class="form-control"
+                                autocomplete="family-name"
+                                aria-required="true"
+                                placeholder="Doe"
+                            />
+                            <label for="ProfileInput.LastName" class="form-label">
+                                Last name
+                            </label>
+                            <ValidationMessage For="() => ProfileInput.LastName" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                @if (ProfileErrorMessages.Count > 0)
+                {
+                    <ul class="validation-errors">
+                        @foreach (var error in ProfileErrorMessages)
+                        {
+                            <li class="validation-message">@error</li>
+                        }
+                    </ul>
+                }
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-dark">
+                        Update profile
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+
+        <div class="card mb-2 p-3 mx-5">
+            <h3>Change your password</h3>
+            <EditForm Model="UpdatePasswordInput" method="post" OnValidSubmit="UpdatePassword">
+                <DataAnnotationsValidator />
+
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="UpdatePasswordInput.OldPassword"
+                        type="password"
+                        id="UpdatePasswordInput.OldPassword"
+                        class="form-control"
+                        autocomplete="new-password"
+                        aria-required="true"
+                        placeholder="password"
+                    />
+                    <label for="UpdatePasswordInput.OldPassword" class="form-label">
+                        Old password
+                    </label>
+                    <ValidationMessage For="() => UpdatePasswordInput.OldPassword" class="text-danger" />
+                </div>
+
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="UpdatePasswordInput.NewPassword"
+                        type="password"
+                        id="UpdatePasswordInput.NewPassword"
+                        class="form-control"
+                        autocomplete="new-password"
+                        aria-required="true"
+                        placeholder="confirm password"
+                    />
+                    <label for="UpdatePasswordInput.NewPassword" class="form-label">
+                        New password
+                    </label>
+                    <ValidationMessage For="() => UpdatePasswordInput.NewPassword" class="text-danger" />
+                </div>
+
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="UpdatePasswordInput.ConfirmNewPassword"
+                        type="password"
+                        id="UpdatePasswordInput.ConfirmNewPassword"
+                        class="form-control"
+                        autocomplete="new-password"
+                        aria-required="true"
+                        placeholder="confirm password"
+                    />
+                    <label for="UpdatePasswordInput.ConfirmNewPassword" class="form-label">
+                        Confirm new password
+                    </label>
+                    <ValidationMessage For="() => UpdatePasswordInput.ConfirmNewPassword" class="text-danger" />
+                </div>
+
+                @if (UpdatePasswordErrorMessages.Count > 0)
+                {
+                    <ul class="validation-errors">
+                        @foreach (var error in UpdatePasswordErrorMessages)
+                        {
+                            <li class="validation-message">@error</li>
+                        }
+                    </ul>
+                }
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-dark">
+                        Update password
+                    </button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</section>
+
+@code {
+    private class ProfileInputModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Phone]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+
+        public ProfileInputModel() { }
+
+        public ProfileInputModel(User user)
+        {
+            Email = user.Email;
+            PhoneNumber = user.PhoneNumber;
+            FirstName = user.Customer.Name;
+            LastName = user.Customer.LastName;
+        }
+    }
+
+    private class UpdatePasswordInputModel
+    {
+        [Required]
+        public string OldPassword { get; set; } = string.Empty;
+
+        [Required]
+        public string NewPassword { get; set; } = string.Empty;
+
+        [Required]
+        [Compare("NewPassword")]
+        public string ConfirmNewPassword { get; set; } = string.Empty;
+    }
+
+    private ProfileInputModel ProfileInput { get; set; } = new();
+
+    private UpdatePasswordInputModel UpdatePasswordInput { get; set; } = new();
+
+    private List<string> ProfileErrorMessages { get; set; } = new();
+
+    private List<string> UpdatePasswordErrorMessages { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await ApiClient.GetUser();
+
+        ProfileInput = new ProfileInputModel(user);
+    }
+
+    public async Task UpdateProfile()
+    {
+        ProfileErrorMessages.Clear();
+
+        var response = await ApiClient.PutUser(
+            ProfileInput.Email, ProfileInput.PhoneNumber,
+            ProfileInput.FirstName, ProfileInput.LastName
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            _ = AlertState.SetMessage("Your profile was updated successfully.");
+        }
+        else
+        {
+            ProfileErrorMessages = await response.GetErrorMessages();
+        }
+    }
+
+    public async Task UpdatePassword()
+    {
+        UpdatePasswordErrorMessages.Clear();
+
+        var response = await ApiClient.PostUserManageInfo(
+            UpdatePasswordInput.OldPassword, UpdatePasswordInput.NewPassword
+        );
+
+        if (response.IsSuccessStatusCode)
+        {
+            UpdatePasswordInput = new UpdatePasswordInputModel();
+            _ = AlertState.SetMessage("Password updated successfully.");
+        }
+        else
+        {
+            UpdatePasswordErrorMessages = await response.GetErrorMessages();
+        }
+    }
+}

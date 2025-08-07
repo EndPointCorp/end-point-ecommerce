@@ -1,0 +1,48 @@
+@model EndPointEcommerce.AdminPortal.ViewModels.QuoteViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fa-solid fa-circle-info"></i>
+        Info
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col">
+                <div class="form-check form-switch">
+                    <input asp-for="IsOpen" class="form-check-input" disabled>
+                    <label asp-for="IsOpen" class="form-check-label"></label>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="Email" class="form-label"></label>
+                <span class="form-control">@(Model.Email ?? "Not set")</span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="Customer" class="form-label"></label>
+                <span class="form-control">@(Model.Customer?.FullName ?? "Not set")</span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <label asp-for="ShippingAddress" class="form-label"></label>
+                <span class="form-control">@(Model.ShippingAddress?.FullAddress ?? "Not set")</span>
+            </div>
+            <div class="col-6">
+                <label asp-for="BillingAddress" class="form-label"></label>
+                <span class="form-control">@(Model.BillingAddress?.FullAddress ?? "Not set")</span>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label asp-for="Coupon" class="form-label"></label>
+                <span class="form-control">@(Model.Coupon?.Code ?? "Not set")</span>
+            </div>
+        </div>
+    </div>
+</div>
