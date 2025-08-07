@@ -55,11 +55,11 @@ Minimalist E-Commerce system that's quick to set up and easy to understand. Mean
 
 ## Features
 
-![Admin portal dashboard](doc/epc_admin_portal.png)
+![Admin Portal dashboard](doc/epec_admin_portal.png)
 
-![Web API Swagger UI](doc/epc_swagger.png)
+![Web API Swagger UI](doc/epec_swagger.png)
 
-![Sample Web Store](doc/epc_web_store.png)
+![Web Store](doc/epec_web_store.png)
 
 1. An Admin Portal for managing the store.
 2. A REST API for building user-facing frontends.
@@ -642,7 +642,7 @@ The projects are:
 
 Here's a diagram that highlights the main architectural components of the system and their basic interactions.
 
-![Conceptual architecture](doc/epc_conceptual_architecture.webp)
+![Conceptual architecture](doc/epec_conceptual_architecture.webp)
 
 In the top most layer we have the executable applications: The Web API, the Admin Portal and the Web Store.
 
@@ -666,7 +666,7 @@ As a special case, there is the Razor Templates component which is used by the I
 
 Following is an overview of the data model, including the most notable tables and fields. This also maps generally pretty cleanly to the main domain entities implemented in this system.
 
-![Data model overview](doc/epc_db_diagram.png)
+![Data model overview](doc/epec_db_diagram.png)
 
 1. **`quotes` and `quote_items`**: These tables store shopping carts and the items within them. The `quotes.is_open` flag indicates whether a cart is open or closed. A cart is closed when an order for it is placed.
 
