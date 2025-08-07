@@ -2,7 +2,7 @@
 
 Minimalist E-Commerce system that's quick to set up and easy to understand. Meant for developers to adapt, customize and extend.
 
-[![pipeline status](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/badges/main/pipeline.svg)](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/-/commits/main)
+[![Pipeline Status](https://github.com/EndPointCorp/end-point-ecommerce/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/EndPointCorp/end-point-ecommerce/actions/workflows/build-and-test.yml)
 
 ## Table of contents
 
