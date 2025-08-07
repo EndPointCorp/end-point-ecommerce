@@ -117,7 +117,7 @@ Let's first go over what you'd have to do to create a new deployment from scratc
 The easiest way to get started is just to clone this repository to wherever you intend to run it from:
 
 ```sh
-git clone git@github.com:EndPointCorp/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-ecommerce.git
 ```
 
 There are several settings that need to be configured via Docker secret files and environment variables. The secrets are stored found under `/secrets` and need to be modified like the following:
