@@ -1,0 +1,60 @@
+@page "/account/addresses/new"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Net
+@using System.Text.Json
+@using Microsoft.AspNetCore.Authorization
+@using EndPointEcommerce.WebStore.Api
+@using EndPointEcommerce.WebStore.Identity
+@using EndPointEcommerce.WebStore.State
+
+@attribute [Authorize]
+
+@inject NavigationManager Navigation
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>Add a new address - End Point Ecommerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1 class="mb-3">Add a new address</h1>
+
+        <div class="my-3 d-flex justify-content-start">
+            <a href="/account/addresses">Back to address list</a>
+        </div>
+
+        <EditForm Model="Address" method="post" OnValidSubmit="CreateAddress">
+            <DataAnnotationsValidator />
+
+            <div class="card mb-4 p-3">
+                <AddressForm Address="Address" States="States" />
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-dark">
+                    Add address
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</section>
+
+@code {
+    private List<State> States { get; set; } = new();
+
+    private Address Address { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        States = await ApiClient.GetStates();
+    }
+
+    public async Task CreateAddress()
+    {
+        var response = await ApiClient.PostAddress(Address);
+
+        _ = AlertState.SetMessage("Address created successfully.");
+        Navigation.NavigateTo("/account/addresses");
+    }
+}

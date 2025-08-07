@@ -11,8 +11,8 @@ stages:
 
 variables:
   POSTGRES_PASSWORD: password
-  POSTGRES_USER: end_point_commerce
-  POSTGRES_DB: end_point_commerce
+  POSTGRES_USER: end_point_ecommerce
+  POSTGRES_DB: end_point_ecommerce
 
 dotnet test:
   stage: test
@@ -23,7 +23,7 @@ dotnet test:
     - apt-get -y install --no-install-recommends nodejs
     - npm install -g pnpm@10
     #
-    - mkdir -p /workspaces/end-point-commerce/images/category-images /workspaces/end-point-commerce/images/product-images
+    - mkdir -p /workspaces/end-point-ecommerce/images/category-images /workspaces/end-point-ecommerce/images/product-images
     - export LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
     - dotnet test
   services:

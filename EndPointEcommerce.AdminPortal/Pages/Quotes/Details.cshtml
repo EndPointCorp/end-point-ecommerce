@@ -1,0 +1,30 @@
+@page "{id:int}"
+@model EndPointEcommerce.AdminPortal.Pages.Quotes.DetailsModel
+
+@{
+    ViewData["Title"] = $"Quote Details";
+}
+
+<div class="container-fluid px-4">
+    <form method="post">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Quote Details</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+            </div>
+        </div>
+
+        <partial name="_FormHeader.cshtml" for="Quote" />
+        <partial name="_FormItems.cshtml" for="Quote" />
+        <partial name="_FormTotals.cshtml" for="Quote" />
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/quotes.form.js" asp-append-version="true"></script>
+}

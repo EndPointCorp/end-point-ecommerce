@@ -19,26 +19,26 @@ RUN dotnet tool install dotnet-ef --global
 ENV PATH="$PATH:/home/app/.dotnet/tools:/home/app/bin"
 
 # copy sln and csproj files and restore
-COPY --chown=app end-point-commerce.sln .
-COPY --chown=app EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPointCommerce.AdminPortal/
-COPY --chown=app EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
-COPY --chown=app EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
-COPY --chown=app EndPointCommerce.Jobs/EndPointCommerce.Jobs.csproj ./EndPointCommerce.Jobs/
-COPY --chown=app EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
-COPY --chown=app EndPointCommerce.Tests/EndPointCommerce.Tests.csproj ./EndPointCommerce.Tests/
-COPY --chown=app EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
-COPY --chown=app EndPointCommerce.WebStore/EndPointCommerce.WebStore.csproj ./EndPointCommerce.WebStore/
+COPY --chown=app end-point-ecommerce.sln .
+COPY --chown=app EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj ./EndPointEcommerce.AdminPortal/
+COPY --chown=app EndPointEcommerce.Domain/EndPointEcommerce.Domain.csproj ./EndPointEcommerce.Domain/
+COPY --chown=app EndPointEcommerce.Infrastructure/EndPointEcommerce.Infrastructure.csproj ./EndPointEcommerce.Infrastructure/
+COPY --chown=app EndPointEcommerce.Jobs/EndPointEcommerce.Jobs.csproj ./EndPointEcommerce.Jobs/
+COPY --chown=app EndPointEcommerce.RazorTemplates/EndPointEcommerce.RazorTemplates.csproj ./EndPointEcommerce.RazorTemplates/
+COPY --chown=app EndPointEcommerce.Tests/EndPointEcommerce.Tests.csproj ./EndPointEcommerce.Tests/
+COPY --chown=app EndPointEcommerce.WebApi/EndPointEcommerce.WebApi.csproj ./EndPointEcommerce.WebApi/
+COPY --chown=app EndPointEcommerce.WebStore/EndPointEcommerce.WebStore.csproj ./EndPointEcommerce.WebStore/
 RUN dotnet restore
 
 # copy everything else
-COPY --chown=app EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
-COPY --chown=app EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
-COPY --chown=app EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
-COPY --chown=app EndPointCommerce.Jobs/. ./EndPointCommerce.Jobs/
-COPY --chown=app EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
-COPY --chown=app EndPointCommerce.Tests/. ./EndPointCommerce.Tests/
-COPY --chown=app EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
-COPY --chown=app EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
+COPY --chown=app EndPointEcommerce.AdminPortal/. ./EndPointEcommerce.AdminPortal/
+COPY --chown=app EndPointEcommerce.Domain/. ./EndPointEcommerce.Domain/
+COPY --chown=app EndPointEcommerce.Infrastructure/. ./EndPointEcommerce.Infrastructure/
+COPY --chown=app EndPointEcommerce.Jobs/. ./EndPointEcommerce.Jobs/
+COPY --chown=app EndPointEcommerce.RazorTemplates/. ./EndPointEcommerce.RazorTemplates/
+COPY --chown=app EndPointEcommerce.Tests/. ./EndPointEcommerce.Tests/
+COPY --chown=app EndPointEcommerce.WebApi/. ./EndPointEcommerce.WebApi/
+COPY --chown=app EndPointEcommerce.WebStore/. ./EndPointEcommerce.WebStore/
 
 # helper scripts
 COPY deploy-utils/maintenance/check-migrations.sh ./bin/

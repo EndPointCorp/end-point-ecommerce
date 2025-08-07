@@ -1,0 +1,59 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/js/orders.index.css">
+}
+
+<div class="container-fluid px-4">
+    <div class="row py-4">
+        <div class="col">
+            <h2><i class="fas fa-store"></i> Orders</h2>
+        </div>
+        <div class="col">
+            <a asp-page="Create" class="btn btn-primary float-end" role="button">
+                <i class="fa-solid fa-folder-plus"></i>
+                Add a new order
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="table-orders" class="datatable-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].DateCreated)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].Customer)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].Status)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].BillingAddress.State)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Orders[0].Total)
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/orders.index.js" asp-append-version="true"></script>
+}
