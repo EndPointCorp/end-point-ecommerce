@@ -8,7 +8,7 @@ Gitlab CI/CD variables are used to store sensitive info like API keys, they shou
 
 ### Container Registry
 
-CI pushes the following docker images to the gitlab container registry at `bits.endpointdev.com:5050/end-point-open-source/end-point-commerce/`:
+CI pushes the following docker images to the gitlab container registry at `bits.endpointdev.com:5050/end-point-open-source/end-point-ecommerce/`:
 - `webapi` - The WebApi project running on port 8080
 - `adminportal` - The AdminPortal running on port 8080
 - `maintenance` - For dev related tasks

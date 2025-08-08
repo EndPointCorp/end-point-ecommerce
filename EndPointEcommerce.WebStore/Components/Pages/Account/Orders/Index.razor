@@ -1,0 +1,81 @@
+@page "/account/orders"
+
+@using Microsoft.AspNetCore.Authorization
+@using EndPointEcommerce.WebStore.Api
+@using EndPointEcommerce.WebStore.Formatters
+@using EndPointEcommerce.WebStore.State
+
+@attribute [Authorize]
+
+@inject IApiClient ApiClient
+@inject AlertStateContainer AlertState
+
+<PageTitle>Your orders - End Point Ecommerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1 class="mb-4">Your orders</h1>
+        @foreach (var order in Orders)
+        {
+            <div class="card mb-2">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md">
+                            <div>Order placed on: @order.DateCreated.AsLongDate()</div>
+                            <div>Status: @order.Status</div>
+                        </div>
+                        <div class="col-md">
+                            <div>Order #: @order.Id</div>
+                            <div>Tracking #: @(order.TrackingNumber ?? "N/A")</div>
+                        </div>
+                        <div class="col-md">
+                            <div>Total: @order.Total.AsCurrency()</div>
+                            <div><a href="/account/orders/@order.Guid">View details</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in order.Items)
+                    {
+                        <div class="card mb-2 p-3">
+                            <div class="row g-0">
+                                <div class="col-md-4 text-center">
+                                    @if (!string.IsNullOrEmpty(item.Product.ThumbnailImageUrl))
+                                    {
+                                        <img
+                                            class="img-fluid rounded small-thumbnail"
+                                            src="@item.Product.ThumbnailImageUrl"
+                                            alt="@item.Product.Name"
+                                        />
+                                    }
+                                    else
+                                    {
+                                        <img
+                                            class="img-fluid rounded small-thumbnail"
+                                            src="https://dummyimage.com/300x300/dee2e6/6c757d.jpg"
+                                            alt="@item.Product.Name"
+                                        />
+                                    }
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="fs-4">@item.Quantity x @item.Product.Name</p>
+                                    <p>SKU: @item.Product.Sku</p>
+                                    <p>@item.Total.AsCurrency()</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private List<Order> Orders = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await ApiClient.GetOrders();
+    }
+}

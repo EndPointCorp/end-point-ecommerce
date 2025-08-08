@@ -26,8 +26,8 @@ services:
       - postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRES_USER: end_point_commerce
-      POSTGRES_DB: end_point_commerce
+      POSTGRES_USER: end_point_ecommerce
+      POSTGRES_DB: end_point_ecommerce
     ports:
       - 5432:5432
 
