@@ -10,29 +10,29 @@ RUN npm install -g pnpm@10
 WORKDIR /source
 
 # copy sln and csproj files and restore
-COPY end-point-commerce.sln .
-COPY EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj ./EndPointCommerce.AdminPortal/
-COPY EndPointCommerce.Domain/EndPointCommerce.Domain.csproj ./EndPointCommerce.Domain/
-COPY EndPointCommerce.Infrastructure/EndPointCommerce.Infrastructure.csproj ./EndPointCommerce.Infrastructure/
-COPY EndPointCommerce.Jobs/EndPointCommerce.Jobs.csproj ./EndPointCommerce.Jobs/
-COPY EndPointCommerce.RazorTemplates/EndPointCommerce.RazorTemplates.csproj ./EndPointCommerce.RazorTemplates/
-COPY EndPointCommerce.Tests/EndPointCommerce.Tests.csproj ./EndPointCommerce.Tests/
-COPY EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj ./EndPointCommerce.WebApi/
-COPY EndPointCommerce.WebStore/EndPointCommerce.WebStore.csproj ./EndPointCommerce.WebStore/
+COPY end-point-ecommerce.sln .
+COPY EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj ./EndPointEcommerce.AdminPortal/
+COPY EndPointEcommerce.Domain/EndPointEcommerce.Domain.csproj ./EndPointEcommerce.Domain/
+COPY EndPointEcommerce.Infrastructure/EndPointEcommerce.Infrastructure.csproj ./EndPointEcommerce.Infrastructure/
+COPY EndPointEcommerce.Jobs/EndPointEcommerce.Jobs.csproj ./EndPointEcommerce.Jobs/
+COPY EndPointEcommerce.RazorTemplates/EndPointEcommerce.RazorTemplates.csproj ./EndPointEcommerce.RazorTemplates/
+COPY EndPointEcommerce.Tests/EndPointEcommerce.Tests.csproj ./EndPointEcommerce.Tests/
+COPY EndPointEcommerce.WebApi/EndPointEcommerce.WebApi.csproj ./EndPointEcommerce.WebApi/
+COPY EndPointEcommerce.WebStore/EndPointEcommerce.WebStore.csproj ./EndPointEcommerce.WebStore/
 RUN dotnet restore
 
 # copy everything else
-COPY EndPointCommerce.AdminPortal/. ./EndPointCommerce.AdminPortal/
-COPY EndPointCommerce.Domain/. ./EndPointCommerce.Domain/
-COPY EndPointCommerce.Infrastructure/. ./EndPointCommerce.Infrastructure/
-COPY EndPointCommerce.Jobs/. ./EndPointCommerce.Jobs/
-COPY EndPointCommerce.RazorTemplates/. ./EndPointCommerce.RazorTemplates/
-COPY EndPointCommerce.Tests/. ./EndPointCommerce.Tests/
-COPY EndPointCommerce.WebApi/. ./EndPointCommerce.WebApi/
-COPY EndPointCommerce.WebStore/. ./EndPointCommerce.WebStore/
+COPY EndPointEcommerce.AdminPortal/. ./EndPointEcommerce.AdminPortal/
+COPY EndPointEcommerce.Domain/. ./EndPointEcommerce.Domain/
+COPY EndPointEcommerce.Infrastructure/. ./EndPointEcommerce.Infrastructure/
+COPY EndPointEcommerce.Jobs/. ./EndPointEcommerce.Jobs/
+COPY EndPointEcommerce.RazorTemplates/. ./EndPointEcommerce.RazorTemplates/
+COPY EndPointEcommerce.Tests/. ./EndPointEcommerce.Tests/
+COPY EndPointEcommerce.WebApi/. ./EndPointEcommerce.WebApi/
+COPY EndPointEcommerce.WebStore/. ./EndPointEcommerce.WebStore/
 
 # build app
-WORKDIR /source/EndPointCommerce.WebStore
+WORKDIR /source/EndPointEcommerce.WebStore
 RUN dotnet publish -c release -o /home/app --no-restore
 
 # final stage/image

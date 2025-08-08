@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ ! -d "./EndPointCommerce.Infrastructure" ]; then
-  echo "Run this from the same directory as end-point-commerce.sln."
+if [ ! -d "./EndPointEcommerce.Infrastructure" ]; then
+  echo "Run this from the same directory as end-point-ecommerce.sln."
   exit 1
 fi
 
-export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)
+export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string)
 dotnet ef database update \
-  --startup-project ./EndPointCommerce.AdminPortal \
-  --project ./EndPointCommerce.Infrastructure
+  --startup-project ./EndPointEcommerce.AdminPortal \
+  --project ./EndPointEcommerce.Infrastructure

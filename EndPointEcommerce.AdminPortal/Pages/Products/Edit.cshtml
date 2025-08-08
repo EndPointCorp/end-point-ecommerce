@@ -1,0 +1,148 @@
+@page "{id:int}"
+@model EndPointEcommerce.AdminPortal.Pages.Products.EditModel
+
+@{
+    ViewData["Title"] = $"Edit product";
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/js/products.form.css" />
+}
+
+<div class="container-fluid px-4">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Edit product</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+                <button type="submit" asp-page-handler="SaveAndContinue" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <input type="hidden" asp-for="Product.Id" />
+
+        <partial name="_Form.cshtml" for="Product" />
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fa-solid fa-image"></i>
+                Images
+            </div>
+            <div class="card-body ">
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-3 d-flex">
+                            <label asp-for="Product.MainImageFile" class="form-label"></label>
+
+                            <div class="col-6 flex-fill">
+                                <input asp-for="Product.MainImageFile" accept="image/*" class="form-control" />
+                                <span asp-validation-for="Product.MainImageFile" class="text-danger"></span>
+                            </div>
+                            <div class="col-auto">
+                                <button
+                                    type="submit"
+                                    asp-page-handler="DeleteMainImage"
+                                    disabled="@(!Model.Product.HasMainImage ? "disabled" : null)"
+                                    class="btn btn-outline-danger"
+                                >
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+
+                        @if (Model.Product.HasMainImage)
+                        {
+                            <img
+                                src="@Model.Product.MainImageUrl"
+                                asp-append-version="true"
+                                alt="Main product image"
+                                class="mx-auto d-block w-25"
+                            />
+                        }
+                    </div>
+                    <div class="col">
+                        <div class="row mb-3 d-flex">
+                            <label asp-for="Product.ThumbnailImageFile" class="form-label"></label>
+
+                            <div class="col-6 flex-fill">
+                                <input asp-for="Product.ThumbnailImageFile" accept="image/*" class="form-control" />
+                                <span asp-validation-for="Product.ThumbnailImageFile" class="text-danger"></span>
+                            </div>
+                            <div class="col-auto">
+                                <button
+                                    type="submit"
+                                    asp-page-handler="DeleteThumbnailImage"
+                                    disabled="@(!Model.Product.HasThumbnailImage ? "disabled" : null)"
+                                    class="btn btn-outline-danger"
+                                >
+                                    <i class="fa-solid fa-trash-can"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+
+                        @if (Model.Product.HasThumbnailImage)
+                        {
+                            <img
+                                src="@Model.Product.ThumbnailImageUrl"
+                                asp-append-version="true"
+                                alt="Thumbnail product image"
+                                class="mx-auto d-block w-25"
+                            />
+                        }
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <label asp-for="Product.AdditionalImageFiles" class="form-label">Existing Additionals</label>
+
+                    @foreach (var image in Model.Product.AdditionalImages)
+                    {
+                        <div class="col-3">
+                            <img
+                                data-id="@image.Id"
+                                src="@Model.Product.GetAdditionaImageUrl(image)"
+                                asp-append-version="true"
+                                alt="Additional product image"
+                                class="mx-auto d-block w-75"
+                            />
+
+                            <button
+                                type="submit"
+                                asp-page-handler="DeleteAdditionalImage"
+                                asp-route-imageId="@image.Id"
+                                class="btn btn-outline-danger mx-auto d-block"
+                            >
+                                <i class="fa-solid fa-trash-can"></i>
+                                Delete
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <label asp-for="Product.AdditionalImageFiles" class="form-label">New Additionals</label>
+                    <span asp-validation-for="Product.AdditionalImageFiles" class="text-danger"></span>
+
+                    <partial name="_NewAdditionalImages.cshtml" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/products.form.js" asp-append-version="true"></script>
+    <script src="~/js/products.additional-images.js" asp-append-version="true"></script>
+}

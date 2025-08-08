@@ -5,25 +5,25 @@
             "name": "Debug WebStore",
             "type": "blazorwasm",
             "request": "launch",
-            "cwd": "${workspaceFolder}/EndPointCommerce.WebStore"
+            "cwd": "${workspaceFolder}/EndPointEcommerce.WebStore"
         },
         {
             "name": "Debug AdminPortal",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/EndPointCommerce.AdminPortal/EndPointCommerce.AdminPortal.csproj"
+            "projectPath": "${workspaceFolder}/EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj"
         },
         {
             "name": "Debug WebApi",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/EndPointCommerce.WebApi/EndPointCommerce.WebApi.csproj"
+            "projectPath": "${workspaceFolder}/EndPointEcommerce.WebApi/EndPointEcommerce.WebApi.csproj"
         },
         {
             "name": "Debug WebStore",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/EndPointCommerce.WebStore/EndPointCommerce.WebStore.csproj"
+            "projectPath": "${workspaceFolder}/EndPointEcommerce.WebStore/EndPointEcommerce.WebStore.csproj"
         }
     ]
 }
