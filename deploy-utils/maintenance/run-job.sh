@@ -1,3 +1,3 @@
 #!/bin/bash
-export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)
-dotnet run --project ./EndPointCommerce.Jobs -- $@
+export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string)
+dotnet run --project ./EndPointEcommerce.Jobs -- $@
