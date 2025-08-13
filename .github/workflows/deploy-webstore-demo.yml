@@ -80,7 +80,6 @@ jobs:
       - name: Restart the deployment on the target server
         run: |
           ssh ${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_SERVER }} "cd ${{ secrets.DEPLOY_TARGET_DIR }} &&
-            docker compose pull &&
-            docker compose down &&
-            ./reset.sh"
-
+             docker compose pull &&
+             docker compose down &&
+             ./reset.sh"
