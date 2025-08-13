@@ -81,6 +81,7 @@ services:
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
+      - SwaggerForceEnable=${SWAGGER_FORCE_ENABLE:-false}
     secrets:
       - end-point-ecommerce-db-connection-string
     entrypoint: [
@@ -108,6 +109,9 @@ services:
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
+    depends_on:
+      web-api:
+        condition: service_healthy
     logging: *default-logging
 
   db:
@@ -150,7 +154,6 @@ volumes:
   db-postgres-data:
   admin-portal-data-protection-keys:
   web-api-data-protection-keys:
-  web-store-data-protection-keys:
   images:
 
 secrets:
