@@ -12,7 +12,7 @@ docker compose exec maintenance run-migrations.sh
 
 # Add demo store data customizations
 docker compose cp demo-data.sql db:/
-docker compose exec db psql -U $END_POINT_COMMERCE_DB_USERNAME -f /demo-data.sql
+docker compose exec db psql -U $END_POINT_ECOMMERCE_DB_USERNAME -f /demo-data.sql
 docker compose exec db rm /demo-data.sql
 
 # Add demo store admin user
