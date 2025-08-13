@@ -1,0 +1,120 @@
+@page "/cart"
+
+@using System.Net
+@using EndPointEcommerce.WebStore.Api
+@using EndPointEcommerce.WebStore.State
+
+@inject IApiClient ApiClient
+@inject QuoteStateContainer QuoteState
+@inject AlertStateContainer AlertState
+
+<PageTitle>Shopping Cart - End Point Ecommerce</PageTitle>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        @if (QuoteIsEmpty)
+        {
+            <div class="text-center">
+                <h2 class="display-5 fw-bolder">Your cart is empty</h2>
+                <p class="lead">
+                    Add some <a href="/">products</a> to your cart to get started!
+                </p>
+            </div>
+        }
+        else
+        {
+            <h1 class="mb-4">Shopping Cart</h1>
+
+            @foreach (var item in Quote!.Items)
+            {
+                <div class="card mb-3 p-3">
+                    <div class="row g-0">
+                        <div class="col-md-4 text-center">
+                            @if (!string.IsNullOrEmpty(item.Product.ThumbnailImageUrl))
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="@item.Product.ThumbnailImageUrl"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                            else
+                            {
+                                <img
+                                    class="img-fluid rounded"
+                                    src="https://dummyimage.com/300x300/dee2e6/6c757d.jpg"
+                                    alt="@item.Product.Name"
+                                />
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text fs-4">@item.Product.Name</p>
+                                <p class="card-text">SKU: @item.Product.Sku</p>
+                                <p class="card-text">$@item.Total</p>
+
+                                <div class="d-flex">
+                                    <InputNumber
+                                        @bind-Value="item.Quantity"
+                                        min="1"
+                                        class="form-control text-center me-3"
+                                        style="max-width: 5rem"
+                                    />
+                                    <button
+                                        @onclick="e => UpdateItem(item.Id, item.Quantity)"
+                                        class="btn btn-outline-success flex-shrink-0 me-3"
+                                    >
+                                        <i class="bi bi-cart-check-fill me-1"></i>
+                                        Update
+                                    </button>
+                                    <button
+                                        @onclick="e => RemoveItem(item.Id)"
+                                        class="btn btn-outline-danger flex-shrink-0 me-3"
+                                    >
+                                        <i class="bi bi-trash-fill me-1"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-end">
+                <h2>Subtotal: $@Quote.Subtotal</h2>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a href="/checkout/shipping" class="btn btn-outline-dark">Proceed to Checkout</a>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    private Quote? Quote => QuoteState.Quote;
+
+    private bool QuoteIsEmpty => QuoteState.IsQuoteEmpty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await QuoteState.LoadQuote();
+    }
+
+    private async Task UpdateItem(int itemId, int quantity)
+    {
+        await ApiClient.PutQuoteItem(itemId, quantity);
+        await QuoteState.LoadQuote();
+
+        _ = AlertState.SetMessage("Item updated.");
+    }
+
+    private async Task RemoveItem(int itemId)
+    {
+        await ApiClient.DeleteQuoteItem(itemId);
+        await QuoteState.LoadQuote();
+
+        _ = AlertState.SetMessage("Item removed.");
+    }
+}

@@ -28,11 +28,11 @@ services:
       - TaxJarFromState=${TAX_JAR_FROM_STATE}
       - TaxJarFromZip=${TAX_JAR_FROM_ZIP}
     secrets:
-      - end-point-commerce-db-connection-string
+      - end-point-ecommerce-db-connection-string
     entrypoint: [
       "sh", "-c",
-      "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
-      dotnet EndPointCommerce.AdminPortal.dll"
+      "export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string) &&
+      dotnet EndPointEcommerce.AdminPortal.dll"
     ]
     healthcheck:
       test: 'curl -f -LI http://localhost:8080/healthz'
@@ -83,11 +83,11 @@ services:
       - AuthNetTransactionKey=${AUTH_NET_TRANSACTION_KEY}
       - SwaggerForceEnable=${SWAGGER_FORCE_ENABLE:-false}
     secrets:
-      - end-point-commerce-db-connection-string
+      - end-point-ecommerce-db-connection-string
     entrypoint: [
       "sh", "-c",
-      "export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string) &&
-      dotnet EndPointCommerce.WebApi.dll"
+      "export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string) &&
+      dotnet EndPointEcommerce.WebApi.dll"
     ]
     healthcheck:
       test: 'curl -f -LI http://localhost:8080/healthz'
@@ -105,7 +105,7 @@ services:
     ports:
       - ${WEB_STORE_PORT}:80
     environment:
-      - EndPointCommerceApiUrl=${WEB_API_URL}
+      - EndPointEcommerceApiUrl=${WEB_API_URL}
       - AuthNetEnvironment=${AUTH_NET_ENVIRONMENT}
       - AuthNetLoginId=${AUTH_NET_LOGIN_ID}
       - AuthNetClientKey=${AUTH_NET_CLIENT_KEY}
@@ -126,12 +126,12 @@ services:
     environment:
       - PGUSER=postgres
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-db-password
-      - END_POINT_COMMERCE_DB=${END_POINT_COMMERCE_DB}
-      - END_POINT_COMMERCE_DB_USERNAME=${END_POINT_COMMERCE_DB_USERNAME}
-      - END_POINT_COMMERCE_DB_PASSWORD_FILE=/run/secrets/end-point-commerce-db-password
+      - END_POINT_ECOMMERCE_DB=${END_POINT_ECOMMERCE_DB}
+      - END_POINT_ECOMMERCE_DB_USERNAME=${END_POINT_ECOMMERCE_DB_USERNAME}
+      - END_POINT_ECOMMERCE_DB_PASSWORD_FILE=/run/secrets/end-point-ecommerce-db-password
     secrets:
       - postgres-db-password
-      - end-point-commerce-db-password
+      - end-point-ecommerce-db-password
     healthcheck:
       test: [ "CMD", "pg_isready" ]
       interval: 10s
@@ -147,7 +147,7 @@ services:
     volumes:
       - images:/home/app/images
     secrets:
-      - end-point-commerce-db-connection-string
+      - end-point-ecommerce-db-connection-string
     command: sleep infinity
 
 volumes:
@@ -159,7 +159,7 @@ volumes:
 secrets:
   postgres-db-password:
     file: ./secrets/postgres-db-password.txt
-  end-point-commerce-db-password:
-    file: ./secrets/end-point-commerce-db-password.txt
-  end-point-commerce-db-connection-string:
-    file: ./secrets/end-point-commerce-db-connection-string.txt
+  end-point-ecommerce-db-password:
+    file: ./secrets/end-point-ecommerce-db-password.txt
+  end-point-ecommerce-db-connection-string:
+    file: ./secrets/end-point-ecommerce-db-connection-string.txt

@@ -17,15 +17,15 @@ jobs:
       ProductImagesPath: "/home/runner/test/images/product-images"
       AdminPortalDataProtectionKeysPath: "/home/runner/data-protection-keys/admin-portal"
       WebApiDataProtectionKeysPath: "/home/runner/test/data-protection-keys/web-api"
-      ConnectionStrings__EndPointCommerceDbContext: "Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password;Include Error Detail=True"
+      ConnectionStrings__EndPointEcommerceDbContext: "Host=localhost;Database=end_point_ecommerce_test;Username=end_point_ecommerce;Password=password;Include Error Detail=True"
 
     services:
       db:
         image: postgres:17.2-alpine
         env:
           POSTGRES_PASSWORD: password
-          POSTGRES_USER: end_point_commerce
-          POSTGRES_DB: end_point_commerce_test
+          POSTGRES_USER: end_point_ecommerce
+          POSTGRES_DB: end_point_ecommerce_test
         ports:
           - 5432:5432
         options: >-
@@ -57,7 +57,7 @@ jobs:
       - name: Tests
         run: |
           mkdir -p "$CategoryImagesPath" "$ProductImagesPath" "$AdminPortalDataProtectionKeysPath" "$WebApiDataProtectionKeysPath"
-          dotnet test --no-build --filter 'FullyQualifiedName!=EndPointCommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
+          dotnet test --no-build --filter 'FullyQualifiedName!=EndPointEcommerce.Tests.Infrastructure.Services.TaxJarTaxCalculatorTests.CalculateTest'
 
   docker-build-and-push:
     # if: github.ref_name == 'main' || startsWith(github.ref, 'refs/tags/v')

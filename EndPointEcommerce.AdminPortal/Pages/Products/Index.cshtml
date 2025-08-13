@@ -1,0 +1,90 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container-fluid px-4">
+    <div class="row py-4">
+        <div class="col">
+            <h2><i class="fa-solid fa-gift"></i></i> Products</h2>
+        </div>
+        <div class="col">
+            <a asp-page="Create" class="btn btn-primary float-end" role="button">
+                <i class="fa-solid fa-folder-plus"></i>
+                Add a new product
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="table-products">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].Sku)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].BasePrice)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].IsEnabled)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].IsInStock)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].DateCreated)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Products[0].DateModified)
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Products) {
+                    <tr>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.Sku)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.BasePrice)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.IsEnabled)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.IsInStock)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.DateModified)
+                        </th>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-link p-0" role="button">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/products.index.js" asp-append-version="true"></script>
+}

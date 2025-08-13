@@ -1,0 +1,44 @@
+@page "/account/orders/{OrderGuid}"
+
+@using System.Net
+@using Microsoft.AspNetCore.Authorization
+@using EndPointEcommerce.WebStore.Api
+@using EndPointEcommerce.WebStore.Formatters
+@using EndPointEcommerce.WebStore.Identity
+
+@attribute [Authorize]
+
+@inject NavigationManager Navigation
+@inject IApiClient ApiClient
+
+<PageTitle>Order Details - End Point Ecommerce</PageTitle>
+
+@if (Order != null)
+{
+    <section class="py-1">
+        <div class="container px-4 px-lg-5 my-5">
+            <h1 class="mb-4">Order details</h1>
+
+            <OrderDetails Order="Order" />
+        </div>
+    </section>
+}
+
+@code {
+    [Parameter]
+    public string OrderGuid { get; set; } = string.Empty;
+
+    public Order Order { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Order = await ApiClient.GetOrder(OrderGuid);
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            Navigation.NavigateTo("/notfound");
+        }
+    }
+}

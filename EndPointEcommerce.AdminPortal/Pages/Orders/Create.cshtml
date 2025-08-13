@@ -1,0 +1,37 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Orders.CreateModel
+
+@{
+    ViewData["Title"] = "Add a new order";
+}
+
+<div class="container-fluid px-4">
+    <form method="post">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Add a new order</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+                <button type="submit" asp-page-handler="SaveAndContinue" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <partial name="_FormHeader.cshtml" for="Order" />
+
+    </form>
+</div>
+
+@section scripts {
+    <script src="~/js/orders.form.js" asp-append-version="true"></script>
+}

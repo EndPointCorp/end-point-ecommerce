@@ -1,8 +1,8 @@
-# End Point Commerce
+# End Point Ecommerce
 
 Minimalist E-Commerce system that's quick to set up and easy to understand. Meant for developers to adapt, customize and extend.
 
-[![pipeline status](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/badges/main/pipeline.svg)](https://bits.endpointdev.com/end-point-open-source/end-point-commerce/-/commits/main)
+[![Pipeline Status](https://github.com/EndPointCorp/end-point-ecommerce/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/EndPointCorp/end-point-ecommerce/actions/workflows/build-and-test.yml)
 
 ## Table of contents
 
@@ -55,11 +55,11 @@ Minimalist E-Commerce system that's quick to set up and easy to understand. Mean
 
 ## Features
 
-![Admin portal dashboard](doc/epc_admin_portal.png)
+![Admin Portal dashboard](doc/epec_admin_portal.png)
 
-![Web API Swagger UI](doc/epc_swagger.png)
+![Web API Swagger UI](doc/epec_swagger.png)
 
-![Sample Web Store](doc/epc_web_store.png)
+![Web Store](doc/epec_web_store.png)
 
 1. An Admin Portal for managing the store.
 2. A REST API for building user-facing frontends.
@@ -117,19 +117,19 @@ Let's first go over what you'd have to do to create a new deployment from scratc
 The easiest way to get started is just to clone this repository to wherever you intend to run it from:
 
 ```sh
-git clone git@github.com:EndPointCorp/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-ecommerce.git
 ```
 
 There are several settings that need to be configured via Docker secret files and environment variables. The secrets are stored found under `/secrets` and need to be modified like the following:
 
 1. Set `postgres-db-password.txt` to a secure password that will be used for the Postgres database server's `postgres` user.
-2. Set `end-point-commerce-db-password.txt` to a secure password for the user that will be used by the EndPointCommerce services to connect to the Postgres database.
-3. Update the connection string found in `end-point-commerce-db-connection-string.txt` to ensure it is correct for your environment. In the majority of cases, all you will need to do is simply copy the password from the previous `end-point-commerce-db-password.txt` file, at put it at the end of the connection string here.
+2. Set `end-point-ecommerce-db-password.txt` to a secure password for the user that will be used by the EndPointEcommerce services to connect to the Postgres database.
+3. Update the connection string found in `end-point-ecommerce-db-connection-string.txt` to ensure it is correct for your environment. In the majority of cases, all you will need to do is simply copy the password from the previous `end-point-ecommerce-db-password.txt` file, at put it at the end of the connection string here.
 
 The environment variables are expected to be configured via the `/.env` file. Copy `/env.template` to a new `/.env` file and modify it as appropriate for your deployment. `/env.template` includes some default values, and these should work out of the box. There are also some empty ones that you will have to provide. Here's a description of the available variables:
 
 - `ADMIN_PORTAL_PORT`, `WEB_API_PORT`, `WEB_STORE_PORT` and `DB_PORT` determine the ports in which the various services will be run.
-- `END_POINT_COMMERCE_DB`, `END_POINT_COMMERCE_DB_USERNAME` configure the system's database name and the user it will use to connect to it.
+- `END_POINT_ECOMMERCE_DB`, `END_POINT_ECOMMERCE_DB_USERNAME` configure the system's database name and the user it will use to connect to it.
 - `ASPNETCORE_ENVIRONMENT` determines the .NET runtime environment.
 - `WEB_API_URL` is the URL of the Web API. Used by the Web Store to interact with the Web API.
 - `WEB_API_ALLOWED_ORIGINS` determines which locations are allowed to call the Web API via CORS. Set this to the URL where the Web Store is running. You can add a comma separated list of any other API clients that you may have.
@@ -191,20 +191,20 @@ Assuming you made no changes to the `.env` variables regarding ports, you should
 And the database will be running on port 5432. Which you can connect to using:
 
 ```sh
-psql -h localhost -d end_point_commerce -U end_point_commerce -W
+psql -h localhost -d end_point_ecommerce -U end_point_ecommerce -W
 ```
 
-The password being defined in the `secrets/end-point-commerce-db-password.txt` file.
+The password being defined in the `secrets/end-point-ecommerce-db-password.txt` file.
 
 If you want to expose the applications to the internet via an NGINX reverse proxy, consider the included `nginx.conf` as an example.
 
 ##### 5. Log into the Admin Portal
 
-In order to log into the Admin Portal, you will need to create an admin user account first. This can be done from the `maintenance` container with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done from the `maintenance` container with the `EndPointEcommerce.Jobs` project. You can follow these steps to create the user account:
 
 - Connect to the maintenance container with `docker compose exec maintenance bash`.
-- Load the database connection string in the env var where the `Jobs` project expects it: `export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)`.
-- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Load the database connection string in the env var where the `Jobs` project expects it: `export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string)`.
+- Change into the `EndPointEcommerce.Jobs` directory with `cd EndPointEcommerce.Jobs`.
 - Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
 #### Updating an existing deployment
@@ -265,19 +265,19 @@ Here's a list of steps to get this running:
 Once you have all the above installed, clone this repo:
 
 ```sh
-git clone git@github.com:EndPointCorp/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-ecommerce.git
 ```
 
 #### 2. Configure some of the Development app settings
 
 You will then also have to configure some of the system settings via the `appsettings.Development.json` files. Most of them, not all, are already preset to values that make sense for a development environment using Development Containers. Here are the ones that are missing:
 
-- In `EndPointCommerce.WebApi/appsettings.Development.json`, set:
+- In `EndPointEcommerce.WebApi/appsettings.Development.json`, set:
   - The settings under `MailSettings` to those of your SMTP server.
   - The `TaxJar*` settings to those of your TaxJar account.
   - The `AuthNet*` settings to those of your Authorize.NET account.
 
-- In `EndPointCommerce.WebStore/appsettings.Development.json`, set:
+- In `EndPointEcommerce.WebStore/appsettings.Development.json`, set:
   - The `AuthNet*` settings to those of your Authorize.NET account.
 
 You should configure these to have all the features working.
@@ -288,13 +288,13 @@ Finally, open the project directory in VS Code and run the "Dev Containers: Reop
 
 That will download and build the necessary images and containers: one for the PostgreSQL database and one with .NET for running and debugging the apps themselves. Once done, VS Code will connect to the app container and you'll be able to develop in the container as if it was your host machine. `Node.js`, along with `pnpm`, as well as the `dotnet-aspnet-codegenerator` and `dotnet-ef` tools will also be installed without needing any extra steps.
 
-On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update --project EndPointCommerce.Infrastructure --startup-project EndPointCommerce.AdminPortal`. This will work if run from within the root directory of this repository.
+On first run, it'll be necessary to create the database and apply all migrations with `dotnet ef database update --project EndPointEcommerce.Infrastructure --startup-project EndPointEcommerce.AdminPortal`. This will work if run from within the root directory of this repository.
 
 #### 4. Run the apps
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
 
-You can start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
+You can start any of the apps by running `dotnet run` from within their respective directories: `./EndPointEcommerce.AdminPortal` for the Admin Portal, `./EndPointEcommerce.WebApi` for the Web API, and `./EndPointEcommerce.WebStore` for the Web Store. You can access the running apps at:
 
 - The Admin Portal at https://localhost:7025
 - The Web API at https://localhost:7043/swagger
@@ -304,9 +304,9 @@ Note also that you may need to trust the ASP.NET Core developer certificate in o
 
 #### 5. Log into the Admin Portal
 
-In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointEcommerce.Jobs` project. You can follow these steps to create the user account:
 
-- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Change into the `EndPointEcommerce.Jobs` directory with `cd EndPointEcommerce.Jobs`.
 - Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
 ### With .NET and Node.js installed locally
@@ -348,10 +348,10 @@ Like mentioned before, the system needs a PostgreSQL database. There are many wa
 
 ```sh
 docker run -d \
-  --name end-point-commerce-postgres \
+  --name end-point-ecommerce-postgres \
   -p 5432:5432 \
-  -e POSTGRES_DB=end_point_commerce \
-  -e POSTGRES_USER=end_point_commerce \
+  -e POSTGRES_DB=end_point_ecommerce \
+  -e POSTGRES_USER=end_point_ecommerce \
   -e POSTGRES_PASSWORD=password \
   postgres:17.2-bookworm
 ```
@@ -365,7 +365,7 @@ sudo apt-get update && sudo apt-get install postgresql-client
 Now you can connect to the database using:
 
 ```sh
-psql -h localhost -d end_point_commerce -U end_point_commerce -W
+psql -h localhost -d end_point_ecommerce -U end_point_ecommerce -W
 ```
 
 When psql asks for a password, just type in `password`. That's what the `POSTGRES_PASSWORD` env var was set to, in the `docker run` command.
@@ -375,7 +375,7 @@ When psql asks for a password, just type in `password`. That's what the `POSTGRE
 Now that all the necessary system software is in place, you can run the applications. First clone this repository, anywhere you like:
 
 ```sh
-git clone git@github.com:EndPointCorp/end-point-commerce.git
+git clone git@github.com:EndPointCorp/end-point-ecommerce.git
 ```
 
 Now you need to update several settings in the various `appsettings.*.json` files to have a fully working system. Some of them are already preset to values that should work out of the box. But there are also some that you will have to configure yourself, as they will depend on you particular environment.
@@ -390,34 +390,34 @@ Now you need to update several settings in the various `appsettings.*.json` file
 
 The most important `appsettings.*.json` changes, which are required to start up the apps, are these:
 
-- In `EndPointCommerce.AdminPortal/appsettings.*.json`, set:
-  - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
+- In `EndPointEcommerce.AdminPortal/appsettings.*.json`, set:
+  - `ConnectionStrings.EndPointEcommerceDbContext` to `Host=localhost;Database=end_point_ecommerce;Username=end_point_ecommerce;Password=password`.
   - `CategoryImagesPath` to `REPO_ROOT/images/category-images`.
   - `ProductImagesPath` to `REPO_ROOT/images/product-images`.
   - `AdminPortalDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/admin-portal`.
 
-- In `EndPointCommerce.WebApi/appsettings.*.json`, set:
-  - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
+- In `EndPointEcommerce.WebApi/appsettings.*.json`, set:
+  - `ConnectionStrings.EndPointEcommerceDbContext` to `Host=localhost;Database=end_point_ecommerce;Username=end_point_ecommerce;Password=password`.
   - `CategoryImagesPath` to `REPO_ROOT/images/category-images`.
   - `ProductImagesPath` to `REPO_ROOT/images/product-images`.
   - `WebApiDataProtectionKeysPath` to `REPO_ROOT/data-protection-keys/web-api`.
 
-- In `EndPointCommerce.Jobs/appsettings.*.json`, set:
-  - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce;Username=end_point_commerce;Password=password`.
+- In `EndPointEcommerce.Jobs/appsettings.*.json`, set:
+  - `ConnectionStrings.EndPointEcommerceDbContext` to `Host=localhost;Database=end_point_ecommerce;Username=end_point_ecommerce;Password=password`.
 
-- In `EndPointCommerce.Tests/appsettings.*.json` set:
-  - `ConnectionStrings.EndPointCommerceDbContext` to `Host=localhost;Database=end_point_commerce_test;Username=end_point_commerce;Password=password`. Notice that `Database` is set to `end_point_commerce_test` in this connection string. This is the database used for integration testing.
+- In `EndPointEcommerce.Tests/appsettings.*.json` set:
+  - `ConnectionStrings.EndPointEcommerceDbContext` to `Host=localhost;Database=end_point_ecommerce_test;Username=end_point_ecommerce;Password=password`. Notice that `Database` is set to `end_point_ecommerce_test` in this connection string. This is the database used for integration testing.
 
 And here's the rest of them, which enable other secondary functionality like emails and interactions with TaxJar and Authorize.NET:
 
-- In `EndPointCommerce.WebApi/appsettings.*.json`, set:
+- In `EndPointEcommerce.WebApi/appsettings.*.json`, set:
   - The settings under `MailSettings` to those of your SMTP server.
   - The `TaxJar*` settings to those of your TaxJar account.
   - The `AuthNet*` settings to those of your Authorize.NET account.
   - `MailCcAddresses` to any emails you want to receive CC of emails generated by the system.
   - `MailBccAddresses` to any emails you want to receive BCC of emails generated by the system.
 
-- In `EndPointCommerce.WebStore/wwwroot/appsettings.*.json`, set:
+- In `EndPointEcommerce.WebStore/wwwroot/appsettings.*.json`, set:
   - The `AuthNet*` settings to those of your Authorize.NET account.
 
 > Considering `REPO_ROOT` as the root directory of this repository. This should be an *absolute* path.
@@ -427,14 +427,14 @@ And here's the rest of them, which enable other secondary functionality like ema
 With the app settings configured, we're able to initialize the database by running the migrations. This can be done with:
 
 ```sh
-dotnet ef database update --startup-project ./EndPointCommerce.AdminPortal --project ./EndPointCommerce.Infrastructure
+dotnet ef database update --startup-project ./EndPointEcommerce.AdminPortal --project ./EndPointEcommerce.Infrastructure
 ```
 
 #### 5. Run the apps
 
 You can now run the apps and the tests. You can run tests with `dotnet test` and they should all pass now.
 
-You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointCommerce.AdminPortal` for the Admin Portal, `./EndPointCommerce.WebApi` for the Web API, and `./EndPointCommerce.WebStore` for the Web Store. You can access the running apps at:
+You can now start any of the apps by running `dotnet run` from within their respective directories: `./EndPointEcommerce.AdminPortal` for the Admin Portal, `./EndPointEcommerce.WebApi` for the Web API, and `./EndPointEcommerce.WebStore` for the Web Store. You can access the running apps at:
 
 - The Admin Portal at https://localhost:7025
 - The Web API at https://localhost:7043/swagger
@@ -444,9 +444,9 @@ Note also that you may need to trust the ASP.NET Core developer certificate in o
 
 #### 6. Log into the Admin Portal
 
-In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointCommerce.Jobs` project. You can follow these steps to create the user account:
+In order to log into the Admin Portal, you will need to create an admin user account first. This can be done with the `EndPointEcommerce.Jobs` project. You can follow these steps to create the user account:
 
-- Change into the `EndPointCommerce.Jobs` directory with `cd EndPointCommerce.Jobs`.
+- Change into the `EndPointEcommerce.Jobs` directory with `cd EndPointEcommerce.Jobs`.
 - Run the `create_admin_user` command with: `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`. Choosing your desired `USERNAME`, `EMAIL` and `PASSWORD`.
 
 ## System operation under Docker Compose deployments
@@ -462,7 +462,7 @@ This is a quick guide on how to deploy changes to an already running system that
 5. Rebuild and restart the system with `docker compose up -d --build`.
 6. If needed, check the pending migrations with `docker compose exec maintenance check-migrations.sh`.
 7. If needed, run the pending migrations with `docker compose exec maintenance run-migrations.sh`.
-8. If needed, create a new Admin Portal user account with `docker compose exec maintenance bash`, `export ConnectionStrings__EndPointCommerceDbContext=$(cat /run/secrets/end-point-commerce-db-connection-string)`, `cd EndPointCommerce.Jobs` and `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`.
+8. If needed, create a new Admin Portal user account with `docker compose exec maintenance bash`, `export ConnectionStrings__EndPointEcommerceDbContext=$(cat /run/secrets/end-point-ecommerce-db-connection-string)`, `cd EndPointEcommerce.Jobs` and `dotnet run -- create_admin_user -u USERNAME -e EMAIL -p PASSWORD`.
 9. From time to time, cleanup old dangling images with `docker image prune`.
 
 ### Useful Docker commands
@@ -485,7 +485,7 @@ The database process is running in its own container. The data files will be sto
 You can connect to the database using:
 
 ```sh
-psql -h localhost -d end_point_commerce -U end_point_commerce -W
+psql -h localhost -d end_point_ecommerce -U end_point_ecommerce -W
 ```
 
 For this to work, you will need to have the `psql` CLI client installed.
@@ -499,10 +499,10 @@ docker compose exec maintenance bash
 And then:
 
 ```sh
-psql -h db -d end_point_commerce -U end_point_commerce -W
+psql -h db -d end_point_ecommerce -U end_point_ecommerce -W
 ```
 
-> The password can be found in `secrets/end-point-commerce-db-password.txt`.
+> The password can be found in `secrets/end-point-ecommerce-db-password.txt`.
 
 ### Database administration
 
@@ -524,7 +524,7 @@ Type "help" for help.
 postgres=#
 ```
 
-> As root, you'll be connected to the `postgres` database by default. The application's database is `end_point_commerce`.
+> As root, you'll be connected to the `postgres` database by default. The application's database is `end_point_ecommerce`.
 
 This container is based on [the official `postgres` image from Dockerhub](https://hub.docker.com/_/postgres). That means that the environment inside this container is going to look like any default `postgres` installation. As such, the data directory is found in the default location `/var/lib/postgresql/data`:
 
@@ -578,25 +578,25 @@ The unused builder cache can also be cleaned with `docker builder prune`.
 
 - `dotnet build` builds all the projects in the solution. Can be run within the directory of any of the projects to build that particular project.
 - `dotnet test` runs the automated tests. `dotnet test --logger "console;verbosity=normal"` produces a more verbose output.
-- `dotnet run` runs a particular app. Needs to be run from one of these directories: `./EndPointCommerce.AdminPortal`, `./EndPointCommerce.WebApi`, `./EndPointCommerce.WebStore`.
-- `pnpm install` downloads JavaScript frotnend packages. Needs to be run from one of these directories: `./EndPointCommerce.AdminPortal`, `./EndPointCommerce.WebStore`.
-- `pnpm build` bundles frontend assets. Needs to be run from one of these directories: `./EndPointCommerce.AdminPortal`, `./EndPointCommerce.WebStore`.
-- `dotnet ef migrations has-pending-model-changes -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` checks if there are model changes that would warrant a new database migration.
-- `dotnet ef migrations add [MIGRATION_NAME] -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` creates new database migrations.
-- `dotnet ef migrations list -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` lists existing migrations and distinguishes between applied and pending ones.
-- `dotnet ef migrations remove -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` removes the latest migration.
-- `dotnet ef database update -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` applies pending migrations.
-- `dotnet ef database update [MIGRATION_NAME] -s EndPointCommerce.AdminPortal -p EndPointCommerce.Infrastructure` applies or rolls back migrations to bring the database state to the given migration.
+- `dotnet run` runs a particular app. Needs to be run from one of these directories: `./EndPointEcommerce.AdminPortal`, `./EndPointEcommerce.WebApi`, `./EndPointEcommerce.WebStore`.
+- `pnpm install` downloads JavaScript frotnend packages. Needs to be run from one of these directories: `./EndPointEcommerce.AdminPortal`, `./EndPointEcommerce.WebStore`.
+- `pnpm build` bundles frontend assets. Needs to be run from one of these directories: `./EndPointEcommerce.AdminPortal`, `./EndPointEcommerce.WebStore`.
+- `dotnet ef migrations has-pending-model-changes -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` checks if there are model changes that would warrant a new database migration.
+- `dotnet ef migrations add [MIGRATION_NAME] -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` creates new database migrations.
+- `dotnet ef migrations list -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` lists existing migrations and distinguishes between applied and pending ones.
+- `dotnet ef migrations remove -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` removes the latest migration.
+- `dotnet ef database update -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` applies pending migrations.
+- `dotnet ef database update [MIGRATION_NAME] -s EndPointEcommerce.AdminPortal -p EndPointEcommerce.Infrastructure` applies or rolls back migrations to bring the database state to the given migration.
 
 ### Automated tests
 
 All tests can be run with `dotnet test`, from the root of this repo. For more verbose output, you can use `dotnet test -l "console;verbosity=normal"`.
 
-The automated tests can be found in the `EndPointCommerce.Tests` project. There are both unit and integration tests in there. Unit tests exercise specific classes and methods in isolation or with mocked dependencies. Integration tests have a wider scope and exercise interactions with external components, like the database, and end-to-end tests that simulate HTTP requests.
+The automated tests can be found in the `EndPointEcommerce.Tests` project. There are both unit and integration tests in there. Unit tests exercise specific classes and methods in isolation or with mocked dependencies. Integration tests have a wider scope and exercise interactions with external components, like the database, and end-to-end tests that simulate HTTP requests.
 
 ### Managing frontend assets
 
-This solution includes two ASP.NET Core applications with frontends: `EndPointCommerce.AdminPortal` and `EndPointCommerce.WebStore`. These applications use SCSS and JavaScript for frontend styling and functionality. The JavaScript files are stored in each project's `JavaScript` directory, while the SCSS files are stored in each project's `Stylesheets` directory.
+This solution includes two ASP.NET Core applications with frontends: `EndPointEcommerce.AdminPortal` and `EndPointEcommerce.WebStore`. These applications use SCSS and JavaScript for frontend styling and functionality. The JavaScript files are stored in each project's `JavaScript` directory, while the SCSS files are stored in each project's `Stylesheets` directory.
 
 These files depend on third party libraries and need to be bundled in order to be usable in the browser. So, for managing and bundling frontend assets, we use the [PNPM](https://pnpm.io/) package manager and the [esbuild](https://esbuild.github.io/) bundler. This is apparent by the presence of `package.json`, `pnpm-lock.yaml` and `esbuild.config.mjs` files in those two projects' root directories.
 
@@ -614,9 +614,9 @@ There are no additional steps necessary to bundle the frontend assets. That's be
 Of course, in case you want to manually run these or any other Node.js commands, you can do so from the projects' root directories. That is:
 
 ```sh
-cd EndPointCommerce.AdminPortal
+cd EndPointEcommerce.AdminPortal
 # or
-cd EndPointCommerce.WebStore
+cd EndPointEcommerce.WebStore
 
 # and then...
 pnpm install
@@ -629,20 +629,20 @@ This code base is a .NET solution organized in a simple structure inspired by [C
 
 The projects are:
 
-1. **EndPointCommerce.WebApi**: An ASP.NET Web API project that contains a REST API meant to be consumed by a frontend, user-facing store application. Exposes the core functionality needed for an E-Commerce site.
-2. **EndPointCommerce.AdminPortal**: An ASP.NET Razor Pages Web app project meant for site administrators to manage various aspects of the store.
-3. **EndPointCommerce.WebStore**: A Blazor WebAssembly Standalone app project which contains a simple web store frontend. Demonstrates the functionality that's available in the Web API and how to implement payment processing with Authorize.NET.
-4. **EndPointCommerce.Jobs**: A .NET Console Application project which contains backend jobs that can be run on demand. The included `create_admin_user` command creates user accounts that can log into the Admin Portal.
-5. **EndPointCommerce.Domain**: A class library project that contains the business logic.
-6. **EndPointCommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
-7. **EndPointCommerce.RazorTemplates**: A class library project that contains utilities for rendering text content using the Razor rendering engine. The system uses this to render HTML emails.
-8. **EndPointCommerce.Tests**: An xUnit project that contains tests of varying granularity for all the projects in the solution. Every project has its own directory where their respective tests live.
+1. **EndPointEcommerce.WebApi**: An ASP.NET Web API project that contains a REST API meant to be consumed by a frontend, user-facing store application. Exposes the core functionality needed for an E-Commerce site.
+2. **EndPointEcommerce.AdminPortal**: An ASP.NET Razor Pages Web app project meant for site administrators to manage various aspects of the store.
+3. **EndPointEcommerce.WebStore**: A Blazor WebAssembly Standalone app project which contains a simple web store frontend. Demonstrates the functionality that's available in the Web API and how to implement payment processing with Authorize.NET.
+4. **EndPointEcommerce.Jobs**: A .NET Console Application project which contains backend jobs that can be run on demand. The included `create_admin_user` command creates user accounts that can log into the Admin Portal.
+5. **EndPointEcommerce.Domain**: A class library project that contains the business logic.
+6. **EndPointEcommerce.Infrastructure**: A class library project that contains components for interacting with database and other system software as well as third party software and (web) APIs.
+7. **EndPointEcommerce.RazorTemplates**: A class library project that contains utilities for rendering text content using the Razor rendering engine. The system uses this to render HTML emails.
+8. **EndPointEcommerce.Tests**: An xUnit project that contains tests of varying granularity for all the projects in the solution. Every project has its own directory where their respective tests live.
 
 ### Conceptual architecture
 
 Here's a diagram that highlights the main architectural components of the system and their basic interactions.
 
-![Conceptual architecture](doc/epc_conceptual_architecture.webp)
+![Conceptual architecture](doc/epec_conceptual_architecture.webp)
 
 In the top most layer we have the executable applications: The Web API, the Admin Portal and the Web Store.
 
@@ -654,7 +654,7 @@ Both the Web API and Admin Portal depend on the Domain and Infrastructure layers
 
 The Web Store is an Blazor WebAssembly Standalone app which offers a user facing frontend. The only way in which it integrates with the rest of the system is by interacting with the Web API via HTTP.
 
-Next we have the Domain layer, implemented as a .NET class library project. This is the core of the system. It contains the logic that fulfills the business requirements. This is done through: 1. Entities that represent the main concepts of the domain (and closely resemble the tables in the database); and 2. domain Services that implement the use cases. Under `EndPointCommerce.Domain/Services`, you'll find a number of service objects, each one of which implements one system operation or use case. Tasks like "add an item to a cart" or "place and order" are implemented here, each in their own separate class.
+Next we have the Domain layer, implemented as a .NET class library project. This is the core of the system. It contains the logic that fulfills the business requirements. This is done through: 1. Entities that represent the main concepts of the domain (and closely resemble the tables in the database); and 2. domain Services that implement the use cases. Under `EndPointEcommerce.Domain/Services`, you'll find a number of service objects, each one of which implements one system operation or use case. Tasks like "add an item to a cart" or "place and order" are implemented here, each in their own separate class.
 
 The domain project stands on its own. It does not depend on any other project. Instead, other projects depend on it. It does need objects from the Infrastructure layer, but instead of depending directly on its classes, it just defines the interfaces the they need to implement and references those. Dependency Injection then takes care of creating and providing the concrete instances that meet the interface requirements put forth by the Domain layer.
 
@@ -666,7 +666,7 @@ As a special case, there is the Razor Templates component which is used by the I
 
 Following is an overview of the data model, including the most notable tables and fields. This also maps generally pretty cleanly to the main domain entities implemented in this system.
 
-![Data model overview](doc/epc_db_diagram.png)
+![Data model overview](doc/epec_db_diagram.png)
 
 1. **`quotes` and `quote_items`**: These tables store shopping carts and the items within them. The `quotes.is_open` flag indicates whether a cart is open or closed. A cart is closed when an order for it is placed.
 
