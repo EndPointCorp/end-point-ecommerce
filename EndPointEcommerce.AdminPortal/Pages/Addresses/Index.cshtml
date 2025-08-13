@@ -1,0 +1,95 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Addresses.IndexModel
+
+@{
+    ViewData["Title"] = "Customer Addresses";
+}
+
+<div class="container-fluid px-4">
+    <div class="row py-4">
+        <div class="col">
+            <h2><i class="fas fa-book"></i> Customer Addresses</h2>
+        </div>
+        <div class="col">
+            <a asp-page="/Customers/Edit" asp-route-id="@Model.CustomerId" id="back" class="btn btn-primary float-end me-2" role="button">
+                <i class="fa-solid fa-backward"></i>
+                Back to customer details
+            </a>
+            <a asp-page="Create" asp-route-customerId="@Model.CustomerId" class="btn btn-primary float-end me-2" role="button">
+                <i class="fa-solid fa-folder-plus"></i>
+                Add a new address
+            </a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="table-addresses">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].Street)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].City)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].ZipCode)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].State!.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Addresses[0].Country!.Name)
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Addresses)
+                    {
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.Street)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.ZipCode)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.State!.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(modelItem => item.Country!.Name)
+                            </th>
+                            <td>
+                                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-link p-0" role="button">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/addresses.index.js" asp-append-version="true"></script>
+}

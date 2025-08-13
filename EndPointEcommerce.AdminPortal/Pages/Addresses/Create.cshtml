@@ -1,0 +1,32 @@
+@page
+@model EndPointEcommerce.AdminPortal.Pages.Addresses.CreateModel
+
+@{
+    ViewData["Title"] = "Add a new address";
+}
+
+<div class="container-fluid px-4">
+    <form method="post">
+        <div class="row py-4">
+            <div class="col">
+                <h2>Add a new address</h2>
+            </div>
+            <div class="col">
+                <a asp-page="Index" class="btn btn-outline-danger float-end" role="button">
+                    <i class="fa-solid fa-circle-arrow-left"></i>
+                    Cancel
+                </a>
+                <button type="submit" asp-page-handler="SaveAndContinue" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save and continue to edit
+                </button>
+                <button type="submit" asp-page-handler="Save" class="btn btn-primary float-end me-2">
+                    <i class="fa-solid fa-folder-plus"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+
+        <partial name="_Form.cshtml" for="Address" />
+    </form>
+</div>
