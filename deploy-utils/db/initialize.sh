@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "postgres" --dbname "postgres" <<-EOSQL

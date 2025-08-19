@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2025 End Point Corporation. Apache License, version 2.0.
 
 if [ ! -d "./EndPointEcommerce.Infrastructure" ]; then
   echo "Run this from the same directory as end-point-ecommerce.sln."
