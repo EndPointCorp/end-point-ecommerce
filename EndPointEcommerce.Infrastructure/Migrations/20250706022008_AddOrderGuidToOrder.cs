@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
