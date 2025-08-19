@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;

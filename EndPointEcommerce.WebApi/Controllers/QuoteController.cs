@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 using Microsoft.AspNetCore.Mvc;
 using EndPointEcommerce.WebApi.ResourceModels;
 using EndPointEcommerce.WebApi.Services;

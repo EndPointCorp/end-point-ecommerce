@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 using EndPointEcommerce.AdminPortal.Startup;
 using EndPointEcommerce.Domain.Entities;
 using EndPointEcommerce.Infrastructure.Data;
