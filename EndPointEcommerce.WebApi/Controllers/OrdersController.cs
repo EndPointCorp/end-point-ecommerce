@@ -46,10 +46,7 @@ namespace EndPointEcommerce.WebApi.Controllers
         {
             var customerId = await _session.GetCustomerId(User);
 
-            if (customerId == null)
-            {
-                return NotFound(new ErrorMessage("Customer not found"));
-            }
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
             return Order.FromListOfEntities(
                 await _orderRepository.FetchAllByCustomerIdAsync(customerId.Value)
