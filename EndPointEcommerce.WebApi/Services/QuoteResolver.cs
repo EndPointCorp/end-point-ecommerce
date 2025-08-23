@@ -44,7 +44,7 @@ public class QuoteResolver : IQuoteResolver
     private async Task<Quote?> GetQuoteFromCustomer(IPrincipal principal)
     {
         var customerId = await _sessionHelper.GetCustomerId(principal) ??
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Customer not found");
 
         return await _quoteRepository.FindOpenByCustomerIdAsync(customerId);
     }
