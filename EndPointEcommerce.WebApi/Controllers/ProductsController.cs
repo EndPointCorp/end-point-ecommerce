@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EndPointEcommerce.Domain.Interfaces;
+using EndPointEcommerce.WebApi.ResourceModels;
 
 namespace EndPointEcommerce.WebApi.Controllers
 {
@@ -18,9 +19,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResourceModels.Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return ResourceModels.Product.FromListOfEntities(
+            return Product.FromListOfEntities(
                 await _repository.FetchAllAsync(enabledOnly: true),
                 _imagesUrl
             );
@@ -28,9 +29,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
         // GET: api/Products/CategoryId/{categoryId}
         [HttpGet("CategoryId/{categoryId}")]
-        public async Task<ActionResult<IEnumerable<ResourceModels.Product>>> GetProductsByCategoryId(int categoryId)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryId(int categoryId)
         {
-            return ResourceModels.Product.FromListOfEntities(
+            return Product.FromListOfEntities(
                 await _repository.FetchAllByCategoryIdAsync(categoryId, enabledOnly: true),
                 _imagesUrl
             );
@@ -38,9 +39,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
         // GET: api/Products/CategoryUrlKey/{categoryUrlKey}
         [HttpGet("CategoryUrlKey/{categoryUrlKey}")]
-        public async Task<ActionResult<IEnumerable<ResourceModels.Product>>> GetProductsByCategoryUrlKey(string categoryUrlKey)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategoryUrlKey(string categoryUrlKey)
         {
-            return ResourceModels.Product.FromListOfEntities(
+            return Product.FromListOfEntities(
                 await _repository.FetchAllByCategoryUrlKeyAsync(categoryUrlKey, enabledOnly: true),
                 _imagesUrl
             );
@@ -48,24 +49,24 @@ namespace EndPointEcommerce.WebApi.Controllers
 
         // GET: api/Products/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResourceModels.Product>> GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _repository.FindByIdAsync(id, enabledOnly: true);
 
-            if (product == null) return NotFound();
+            if (product == null) return NotFound(new ErrorMessage("Product not found"));
 
-            return ResourceModels.Product.FromEntity(product, _imagesUrl);
+            return Product.FromEntity(product, _imagesUrl);
         }
 
         // GET: api/Products/UrlKey/{urlKey}
         [HttpGet("UrlKey/{urlKey}")]
-        public async Task<ActionResult<ResourceModels.Product>> GetProductByUrlKey(string urlKey)
+        public async Task<ActionResult<Product>> GetProductByUrlKey(string urlKey)
         {
             var product = await _repository.FindByUrlKeyAsync(urlKey, enabledOnly: true);
 
-            if (product == null) return NotFound();
+            if (product == null) return NotFound(new ErrorMessage("Product not found"));
 
-            return ResourceModels.Product.FromEntity(product, _imagesUrl);
+            return Product.FromEntity(product, _imagesUrl);
         }
     }
 }

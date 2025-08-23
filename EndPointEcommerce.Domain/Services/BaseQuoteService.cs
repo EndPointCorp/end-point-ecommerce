@@ -22,11 +22,11 @@ public abstract class BaseQuoteService
 
     protected async Task<Quote> FindOpenQuoteOrThrow(int quoteId) =>
         await _quoteRepository.FindOpenByIdAsync(quoteId) ??
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Quote not found");
 
     protected static QuoteItem FindQuoteItemOrThrow(Quote quote, int quoteItemId) =>
         quote.GetItemById(quoteItemId) ??
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Quote item not found");
 
     protected async Task<Quote> FindOrCreateQuoteOrThrow(int? quoteId, int? customerId)
     {
@@ -35,7 +35,7 @@ public abstract class BaseQuoteService
             return await _quoteRepository.CreateNewAsync(customerId);
         else
             return await _quoteRepository.FindOpenByIdAsync(quoteId.Value) ??
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("Quote not found");
     }
 
     protected async Task UpdateTax(Quote quote) => await _quoteTaxCalculator.Run(quote);

@@ -72,5 +72,5 @@ public class QuoteItemCreator : BaseQuoteService, IQuoteItemCreator
 
     private async Task<Product> FindProductOrThrow(int productId) =>
         await _productRepository.FindByIdAsync(productId) ??
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Product not found");
 }
