@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 using Microsoft.AspNetCore.Mvc;
 using EndPointEcommerce.Domain.Interfaces;
 using static EndPointEcommerce.Domain.Interfaces.IProductRepository;
