@@ -676,3 +676,7 @@ Following is an overview of the data model, including the most notable tables an
 5. **`coupons`**: This table stores available coupon codes. Coupons apply discounts to quotes and orders. The discount can be a fixed amount or based on a percentage of the total value of the shopping cart.
 
 6. **`addresses`**: This table stores billing and shipping addresses associated with quotes, orders and customers.
+
+## License
+
+This project is copyright 2025 [End Point Corporation](https://endpointdev.com/) and is goverend by the Apache License, version 2.0.

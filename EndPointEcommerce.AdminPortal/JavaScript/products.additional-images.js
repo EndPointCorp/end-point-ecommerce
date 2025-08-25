@@ -1,3 +1,5 @@
+// Copyright 2025 End Point Corporation. Apache License, version 2.0.
+
 window.addEventListener('DOMContentLoaded', _event => {
     let additionaImageInputCount = 0;
 
