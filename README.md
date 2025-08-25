@@ -49,10 +49,6 @@ Minimalist E-Commerce system that's quick to set up and easy to understand. Mean
   - [Code base structure](#code-base-structure)
   - [Conceptual architecture](#conceptual-architecture)
   - [Data model](#data-model)
-- [CI](#ci)
-  - [Variables](#variables)
-  - [Container Registry](#container-registry)
-- [License](#license)
 
 ## Features
 
