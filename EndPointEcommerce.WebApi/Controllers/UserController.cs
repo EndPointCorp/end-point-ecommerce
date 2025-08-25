@@ -34,7 +34,7 @@ namespace EndPointEcommerce.WebApi.Controllers
         public async Task<ActionResult<ResourceModels.User>> GetUser()
         {
             var user = await _identityService.FindByUserNameAsync(User.Identity!.Name!);
-            if (user == null || !user.IsCustomer) return NotFound();
+            if (user == null || !user.IsCustomer) return NotFound(new ResourceModels.ErrorMessage("User not found"));
 
             return ResourceModels.User.FromEntity(user);
         }
@@ -70,7 +70,7 @@ namespace EndPointEcommerce.WebApi.Controllers
         public async Task<ActionResult<ResourceModels.User>> PutUser([FromBody] ResourceModels.UserPut user)
         {
             var userEntity = await _identityService.FindByUserNameAsync(User.Identity!.Name!);
-            if (userEntity == null || !userEntity.IsCustomer) return NotFound();
+            if (userEntity == null || !userEntity.IsCustomer) return NotFound(new ResourceModels.ErrorMessage("User not found"));
 
             userEntity = user.UpdateEntity(userEntity);
 

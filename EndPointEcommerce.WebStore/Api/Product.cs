@@ -1,6 +1,6 @@
 namespace EndPointEcommerce.WebStore.Api;
 
-public record class Product(
+public record Product(
     int Id,
     string UrlKey,
     string Sku,

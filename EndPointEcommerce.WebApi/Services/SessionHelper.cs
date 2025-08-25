@@ -26,7 +26,7 @@ public class SessionHelper : ISessionHelper
         if (IsAuthenticated(principal))
         {
             var user = await _identityService.FindByUserNameAsync(principal.Identity!.Name!) ??
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("User not found");
 
             customerId = user.CustomerId;
         }
