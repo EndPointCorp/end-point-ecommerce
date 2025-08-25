@@ -104,7 +104,7 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseStaticFiles();
+        app.MapStaticAssets();
 
         app.UseStaticFiles(new StaticFileOptions
         {
@@ -128,7 +128,8 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapRazorPages();
+        app.MapRazorPages()
+            .WithStaticAssets();
 
         app.MapHealthChecks("/healthz");
 
