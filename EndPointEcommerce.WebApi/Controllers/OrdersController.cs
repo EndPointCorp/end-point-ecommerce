@@ -6,6 +6,7 @@ using EndPointEcommerce.Domain.Services;
 using EndPointEcommerce.Domain.Exceptions;
 using EndPointEcommerce.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using EndPointEcommerce.WebApi.ResourceModels;
 
 namespace EndPointEcommerce.WebApi.Controllers
 {
@@ -43,38 +44,35 @@ namespace EndPointEcommerce.WebApi.Controllers
         // GET: api/Orders
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ResourceModels.Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             var customerId = await _session.GetCustomerId(User);
 
-            if (customerId == null)
-            {
-                return NotFound();
-            }
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
-            return ResourceModels.Order.FromListOfEntities(
+            return Order.FromListOfEntities(
                 await _orderRepository.FetchAllByCustomerIdAsync(customerId.Value)
             );
         }
 
         // GET: api/Orders/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResourceModels.Order>> GetOrder(Guid id)
+        public async Task<ActionResult<Order>> GetOrder(Guid id)
         {
             var order = await _orderRepository.FindByGuidWithItemsAsync(id);
 
-            if (order == null) return NotFound();
+            if (order == null) return NotFound(new ErrorMessage("Order not found"));
 
-            return ResourceModels.Order.FromEntity(order);
+            return Order.FromEntity(order);
         }
 
         // POST: api/Orders/
         [HttpPost]
-        public async Task<ActionResult<ResourceModels.Order>> PostOrder(
-            [FromBody] ResourceModels.OrderPost order
+        public async Task<ActionResult<Order>> PostOrder(
+            [FromBody] OrderPost order
         ) {
             var quote = await _quoteResolver.ResolveQuote(User, Request);
-            if (quote == null) return NotFound();
+            if (quote == null) return NotFound(new ErrorMessage("Quote not found"));
 
             try
             {
@@ -86,11 +84,11 @@ namespace EndPointEcommerce.WebApi.Controllers
 
                 _quoteCookieManager.DeleteQuoteIdCookie(Response);
 
-                return ResourceModels.Order.FromEntity(result, _imagesUrl);
+                return Order.FromEntity(result, _imagesUrl);
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new ErrorMessage(ex));
             }
             catch (DomainValidationException ex)
             {

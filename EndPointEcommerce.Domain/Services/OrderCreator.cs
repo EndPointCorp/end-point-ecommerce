@@ -91,7 +91,7 @@ public class OrderCreator : IOrderCreator
 
     private async Task<Quote> FindQuoteOrThrow(InputPayload payload) =>
         await _quoteRepository.FindOpenByIdAsync(payload.QuoteId) ??
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Quote not found");
 
     private static void ThrowIfNotValid(Quote quote)
     {
