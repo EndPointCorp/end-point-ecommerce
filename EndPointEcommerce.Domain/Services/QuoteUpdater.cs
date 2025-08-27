@@ -85,7 +85,7 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
         if (payload.HasCouponCode)
         {
             var coupon = await _couponRepository.FindByCodeAsync(payload.CouponCode!) ??
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("Coupon not found");
 
             quote.Coupon = coupon;
         }
@@ -101,14 +101,14 @@ public class QuoteUpdater : BaseQuoteService, IQuoteUpdater
     {
         var resolvedAddress = address ??
             (await _addressRepository.FindByIdAsync(addressId!.Value))?.Clone() ??
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("Address not found");
 
         resolvedAddress.Country ??= await _countryRepository.FindByIdAsync(resolvedAddress.CountryId) ??
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException("Country not found");
 
         if (resolvedAddress.StateId != null)
             resolvedAddress.State ??= await _stateRepository.FindByIdAsync(resolvedAddress.StateId.Value) ??
-                    throw new EntityNotFoundException();
+                    throw new EntityNotFoundException("State not found");
 
         if (quote.IsFromCustomer)
             resolvedAddress.CustomerId = quote.CustomerId;

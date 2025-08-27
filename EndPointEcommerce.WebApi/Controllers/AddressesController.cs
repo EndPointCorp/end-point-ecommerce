@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using EndPointEcommerce.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using EndPointEcommerce.WebApi.Services;
+using EndPointEcommerce.WebApi.ResourceModels;
 
 namespace EndPointEcommerce.WebApi.Controllers
 {
@@ -25,12 +26,12 @@ namespace EndPointEcommerce.WebApi.Controllers
 
         // GET: api/Addresses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResourceModels.Address>>> GetAddresses()
+        public async Task<ActionResult<IEnumerable<Address>>> GetAddresses()
         {
             var customerId = await _sessionHelper.GetCustomerId(User);
-            if (customerId == null) return NotFound();
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
-            return ResourceModels.Address.FromListOfEntities(
+            return Address.FromListOfEntities(
                 await _repository.FetchAllByCustomerIdAsync(customerId.Value)
             );
         }
@@ -38,25 +39,25 @@ namespace EndPointEcommerce.WebApi.Controllers
         // GET: api/Addresses/{id}
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResourceModels.Address>> GetAddress(int id)
+        public async Task<ActionResult<Address>> GetAddress(int id)
         {
             var customerId = await _sessionHelper.GetCustomerId(User);
-            if (customerId == null) return NotFound();
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
             var address = await _repository.FindByIdAsync(id);
-            if (address == null) return NotFound();
+            if (address == null) return NotFound(new ErrorMessage("Address not found"));
 
-            if (address.CustomerId != customerId) return NotFound();
+            if (address.CustomerId != customerId) return NotFound(new ErrorMessage("Address not found"));
 
-            return ResourceModels.Address.FromEntity(address!);
+            return Address.FromEntity(address!);
         }
 
         // POST: api/Addresses
         [HttpPost]
-        public async Task<ActionResult<ResourceModels.Address>> PostAddress([FromBody] ResourceModels.Address payload)
+        public async Task<ActionResult<Address>> PostAddress([FromBody] Address payload)
         {
             var customerId = await _sessionHelper.GetCustomerId(User);
-            if (customerId == null) return NotFound();
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
             var address = payload.ToEntity();
             address.CustomerId = customerId;
@@ -65,23 +66,23 @@ namespace EndPointEcommerce.WebApi.Controllers
             await _repository.AddAsync(address);
             address = await _repository.FindByIdAsync(address.Id);
 
-            return ResourceModels.Address.FromEntity(address!);
+            return Address.FromEntity(address!);
         }
 
         // PUT: api/Addresses/{id}
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResourceModels.Address>> PutAddress(
+        public async Task<ActionResult<Address>> PutAddress(
             int id,
-            [FromBody] ResourceModels.Address payload
+            [FromBody] Address payload
         ) {
             var customerId = await _sessionHelper.GetCustomerId(User);
-            if (customerId == null) return NotFound();
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
             var address = await _repository.FindByIdAsync(id);
-            if (address == null) return NotFound();
+            if (address == null) return NotFound(new ErrorMessage("Address not found"));
 
-            if (address.CustomerId != customerId) return NotFound();
+            if (address.CustomerId != customerId) return NotFound(new ErrorMessage("Address not found"));
 
             // Update the address
             address = payload.UpdateEntity(address);
@@ -89,7 +90,7 @@ namespace EndPointEcommerce.WebApi.Controllers
             await _repository.UpdateAsync(address);
             address = await _repository.FindByIdAsync(address.Id);
 
-            return ResourceModels.Address.FromEntity(address!);
+            return Address.FromEntity(address!);
         }
 
         // DELETE: api/Addresses
@@ -98,12 +99,12 @@ namespace EndPointEcommerce.WebApi.Controllers
         public async Task<ActionResult> DeleteAddress(int id)
         {
             var customerId = await _sessionHelper.GetCustomerId(User);
-            if (customerId == null) return NotFound();
+            if (customerId == null) return NotFound(new ErrorMessage("Customer not found"));
 
             var address = await _repository.FindByIdAsync(id);
-            if (address == null) return NotFound();
+            if (address == null) return NotFound(new ErrorMessage("Address not found"));
 
-            if (address.CustomerId != customerId) return NotFound();
+            if (address.CustomerId != customerId) return NotFound(new ErrorMessage("Address not found"));
 
             // Delete the address
             await _repository.DeleteAsync(address);

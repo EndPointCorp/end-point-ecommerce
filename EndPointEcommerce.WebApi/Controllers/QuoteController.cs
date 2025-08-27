@@ -53,7 +53,7 @@ namespace EndPointEcommerce.WebApi.Controllers
         public async Task<ActionResult<Quote>> GetQuote()
         {
             var quote = await _quoteResolver.ResolveQuote(User, Request);
-            if (quote == null) return NotFound();
+            if (quote == null) return NotFound(new ErrorMessage("Quote not found"));
 
             _quoteCookieManager.SetQuoteIdCookie(Response, quote.Id);
 
@@ -85,9 +85,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
                 return Quote.FromEntity(result, _imagesUrl);
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new ErrorMessage(ex));
             }
         }
 
@@ -112,9 +112,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
                 return QuoteItem.FromEntity(result, _imagesUrl);
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new ErrorMessage(ex));
             }
         }
 
@@ -155,7 +155,7 @@ namespace EndPointEcommerce.WebApi.Controllers
         public async Task<ActionResult<Quote>> PostQuoteValidate()
         {
             var quote = await _quoteResolver.ResolveQuote(User, Request);
-            if (quote == null) return NotFound();
+            if (quote == null) return NotFound(new ErrorMessage("Quote not found"));
 
             try
             {
@@ -163,9 +163,9 @@ namespace EndPointEcommerce.WebApi.Controllers
 
                 return Quote.FromEntity(result, _imagesUrl);
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new ErrorMessage(ex));
             }
             catch (DomainValidationException ex)
             {
@@ -178,7 +178,7 @@ namespace EndPointEcommerce.WebApi.Controllers
             Func<T, object?>? responseBuilder = null
         ) {
             var quote = await _quoteResolver.ResolveQuote(User, Request);
-            if (quote == null) return NotFound();
+            if (quote == null) return NotFound(new ErrorMessage("Quote not found"));
 
             try
             {
@@ -191,9 +191,9 @@ namespace EndPointEcommerce.WebApi.Controllers
                 else
                     return NoContent();
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
-                return NotFound();
+                return NotFound(new ErrorMessage(ex));
             }
         }
     }
