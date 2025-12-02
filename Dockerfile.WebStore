@@ -33,6 +33,8 @@ COPY EndPointEcommerce.WebStore/. ./EndPointEcommerce.WebStore/
 
 # build app
 WORKDIR /source/EndPointEcommerce.WebStore
+RUN pnpm install
+RUN pnpm run build
 RUN dotnet publish -c release -o /home/app --no-restore
 
 # final stage/image
