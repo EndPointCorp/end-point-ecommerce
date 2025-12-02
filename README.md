@@ -602,7 +602,7 @@ The `esbuild` bundling process is configured to ingest the JavaScript and SCSS f
 There are no additional steps necessary to bundle the frontend assets. That's because both projects have been configured to trigger the frontent asset bundling process as part of the usual `dotnet build` command. This was done by including the following in both projects' `*.csproj` files:
 
 ```xml
-<Target Name="BundleFrontendAssets" BeforeTargets="Build">
+<Target Name="BundleFrontendAssets" BeforeTargets="BeforeBuild">
   <Exec Command="pnpm install" />
   <Exec Command="pnpm run build" />
 </Target>
