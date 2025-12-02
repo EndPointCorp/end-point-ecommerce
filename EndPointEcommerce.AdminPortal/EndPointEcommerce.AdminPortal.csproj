@@ -28,7 +28,7 @@
     <ProjectReference Include="..\EndPointEcommerce.Infrastructure\EndPointEcommerce.Infrastructure.csproj" />
   </ItemGroup>
 
-  <Target Name="BundleFrontendAssets" BeforeTargets="Build">
+  <Target Name="BundleFrontendAssets" BeforeTargets="BeforeBuild">
     <Exec Command="pnpm install" />
     <Exec Command="pnpm run build" />
   </Target>
