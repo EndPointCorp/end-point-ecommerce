@@ -23,6 +23,8 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <!-- Include RestSharp explicitly because TaxJar installs an older version that has vulnerabilities. -->
+    <PackageReference Include="RestSharp" Version="113.0.0" /> 
     <PackageReference Include="TaxJar" Version="4.0.0" />
   </ItemGroup>
 
