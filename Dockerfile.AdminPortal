@@ -1,8 +1,8 @@
 # https://hub.docker.com/_/microsoft-dotnet
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
 # install Node.js and pnpm
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends nodejs
 RUN npm install -g pnpm@10
@@ -33,10 +33,12 @@ COPY EndPointEcommerce.WebStore/. ./EndPointEcommerce.WebStore/
 
 # build app
 WORKDIR /source/EndPointEcommerce.AdminPortal
+RUN pnpm install
+RUN pnpm run build
 RUN dotnet publish -c release -o /home/app --no-restore
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends curl \
