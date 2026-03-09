@@ -27,7 +27,7 @@ public class Program
 
         builder.Services.AddAntiforgery(options =>
         {
-            options.Cookie.Name = ".EndPointCommerce.AdminPortal.AntiForgery";
+            options.Cookie.Name = ".EndPointEcommerce.AdminPortal.AntiForgery";
         });
 
         builder.Services
@@ -118,7 +118,7 @@ public class Program
             }
             catch (AntiforgeryValidationException)
             {
-                context.Response.Cookies.Delete(".EndPointCommerce.AdminPortal.AntiForgery");
+                context.Response.Cookies.Delete(".EndPointEcommerce.AdminPortal.AntiForgery");
                 context.Response.Redirect(context.Request.Path);
             }
         });
