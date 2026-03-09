@@ -7,7 +7,6 @@ using EndPointEcommerce.AdminPortal.ViewModels;
 
 namespace EndPointEcommerce.AdminPortal.Pages.Account
 {
-    [IgnoreAntiforgeryToken]
     public class LoginModel : PageModel
     {
         private readonly IIdentityService _identityService;

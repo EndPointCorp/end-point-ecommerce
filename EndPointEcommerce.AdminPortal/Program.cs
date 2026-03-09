@@ -4,6 +4,7 @@ using EndPointEcommerce.AdminPortal.Startup;
 using EndPointEcommerce.Domain.Entities;
 using EndPointEcommerce.Infrastructure.Data;
 using EndPointEcommerce.Infrastructure.Startup;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
@@ -23,6 +24,11 @@ public class Program
         // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddAntiforgery(options =>
+        {
+            options.Cookie.Name = ".EndPointCommerce.AdminPortal.AntiForgery";
+        });
 
         builder.Services
             .AddDataProtection()
@@ -101,6 +107,21 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             // app.UseHsts();
         }
+
+        // Handle antiforgery token decryption failures (e.g. after data protection key loss)
+        // by clearing the invalid antiforgery cookie and redirecting so the user gets a fresh token.
+        app.Use(async (context, next) =>
+        {
+            try
+            {
+                await next(context);
+            }
+            catch (AntiforgeryValidationException)
+            {
+                context.Response.Cookies.Delete(".EndPointCommerce.AdminPortal.AntiForgery");
+                context.Response.Redirect(context.Request.Path);
+            }
+        });
 
         app.UseHttpsRedirection();
 
