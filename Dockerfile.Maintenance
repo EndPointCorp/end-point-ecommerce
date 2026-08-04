@@ -18,7 +18,7 @@ RUN mkdir -p /home/app/bin \
              /home/app/images
 
 # install tools
-RUN dotnet tool install dotnet-ef --global
+RUN dotnet tool install dotnet-ef --global --version 9.0.11
 ENV PATH="$PATH:/home/app/.dotnet/tools:/home/app/bin"
 
 # copy sln and csproj files and restore
