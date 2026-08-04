@@ -1,4 +1,5 @@
 // Copyright 2025 End Point Corporation. Apache License, version 2.0.
+#pragma warning disable xUnit1051
 
 using EndPointEcommerce.AdminPortal;
 using EndPointEcommerce.Domain.Entities;
