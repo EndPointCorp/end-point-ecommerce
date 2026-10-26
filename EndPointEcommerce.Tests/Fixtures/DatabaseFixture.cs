@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using EndPointEcommerce.Infrastructure.Data;
 
+// AssemblyFixture means that this class will be instantiated once for the entire test run.
+// That means that the database will be initialized only once per test run.
+[assembly: AssemblyFixture(typeof(EndPointEcommerce.Tests.Fixtures.DatabaseFixture))]
+
 namespace EndPointEcommerce.Tests.Fixtures;
 
 /// <summary>
