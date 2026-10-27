@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj" />
+  <Project Path="EndPointEcommerce.Domain/EndPointEcommerce.Domain.csproj" />
+  <Project Path="EndPointEcommerce.Infrastructure/EndPointEcommerce.Infrastructure.csproj" />
+  <Project Path="EndPointEcommerce.Jobs/EndPointEcommerce.Jobs.csproj" />
+  <Project Path="EndPointEcommerce.RazorTemplates/EndPointEcommerce.RazorTemplates.csproj" />
+  <Project Path="EndPointEcommerce.Tests/EndPointEcommerce.Tests.csproj" />
+  <Project Path="EndPointEcommerce.WebApi/EndPointEcommerce.WebApi.csproj" />
+  <Project Path="EndPointEcommerce.WebStore/EndPointEcommerce.WebStore.csproj" />
+</Solution>

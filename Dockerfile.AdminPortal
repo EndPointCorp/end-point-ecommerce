@@ -9,8 +9,8 @@ RUN npm install -g pnpm@10
 
 WORKDIR /source
 
-# copy sln and csproj files and restore
-COPY end-point-ecommerce.sln .
+# copy slnx and csproj files and restore
+COPY end-point-ecommerce.slnx .
 COPY Directory.Packages.props .
 COPY global.json .
 COPY EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj ./EndPointEcommerce.AdminPortal/
