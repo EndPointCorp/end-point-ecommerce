@@ -1,6 +1,7 @@
 // Copyright 2025 End Point Corporation. Apache License, version 2.0.
 
 using EndPointEcommerce.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EndPointEcommerce.Tests.Fixtures;
 
@@ -10,15 +11,18 @@ namespace EndPointEcommerce.Tests.Fixtures;
 public abstract class TransactionalTests : IClassFixture<DatabaseFixture>, IDisposable
 {
     protected readonly EndPointEcommerceDbContext dbContext;
+    private readonly IDbContextTransaction transaction;
 
     public TransactionalTests(DatabaseFixture fixture)
     {
         dbContext = fixture.CreateDbContext();
-        dbContext.Database.BeginTransaction();
+        transaction = dbContext.Database.BeginTransaction();
     }
 
     public void Dispose()
     {
-        dbContext.Database.RollbackTransaction();
+        transaction.Rollback();
+        transaction.Dispose();
+        dbContext.Dispose();
     }
 }

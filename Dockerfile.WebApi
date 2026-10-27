@@ -2,8 +2,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /source
 
-# copy sln and csproj files and restore
-COPY end-point-ecommerce.sln .
+# copy slnx and csproj files and restore
+COPY end-point-ecommerce.slnx .
+COPY Directory.Packages.props .
+COPY global.json .
 COPY EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj ./EndPointEcommerce.AdminPortal/
 COPY EndPointEcommerce.Domain/EndPointEcommerce.Domain.csproj ./EndPointEcommerce.Domain/
 COPY EndPointEcommerce.Infrastructure/EndPointEcommerce.Infrastructure.csproj ./EndPointEcommerce.Infrastructure/

@@ -21,8 +21,10 @@ RUN mkdir -p /home/app/bin \
 RUN dotnet tool install dotnet-ef --global
 ENV PATH="$PATH:/home/app/.dotnet/tools:/home/app/bin"
 
-# copy sln and csproj files and restore
-COPY --chown=app end-point-ecommerce.sln .
+# copy slnx and csproj files and restore
+COPY --chown=app end-point-ecommerce.slnx .
+COPY --chown=app Directory.Packages.props .
+COPY --chown=app global.json .
 COPY --chown=app EndPointEcommerce.AdminPortal/EndPointEcommerce.AdminPortal.csproj ./EndPointEcommerce.AdminPortal/
 COPY --chown=app EndPointEcommerce.Domain/EndPointEcommerce.Domain.csproj ./EndPointEcommerce.Domain/
 COPY --chown=app EndPointEcommerce.Infrastructure/EndPointEcommerce.Infrastructure.csproj ./EndPointEcommerce.Infrastructure/
