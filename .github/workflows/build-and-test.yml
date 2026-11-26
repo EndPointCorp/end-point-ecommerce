@@ -21,7 +21,7 @@ jobs:
 
     services:
       db:
-        image: postgres:17.2-alpine
+        image: postgres:19-alpine
         env:
           POSTGRES_PASSWORD: password
           POSTGRES_USER: end_point_ecommerce
@@ -41,12 +41,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0
+          dotnet-version: 11.0
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 12
 
       - name: Dependencies
         run: dotnet restore
