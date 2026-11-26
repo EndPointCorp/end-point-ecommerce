@@ -124,7 +124,7 @@ services:
     ports:
       - ${DB_PORT}:5432
     volumes:
-      - db-postgres-data:/var/lib/postgresql/data
+      - db-postgres-data:/var/lib/postgresql
     environment:
       - PGUSER=postgres
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres-db-password

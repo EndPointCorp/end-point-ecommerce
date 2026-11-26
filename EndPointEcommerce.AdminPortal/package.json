@@ -9,22 +9,17 @@
   "author": "End Point Dev",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "7.1.0",
-    "bootstrap": "5.3.8",
+    "@fortawesome/fontawesome-free": "7.3.1",
+    "bootstrap": "5.3.9",
     "chart.js": "2.9.4",
-    "datatables.net-bs5": "2.3.5",
-    "jquery": "3.7.1",
+    "datatables.net-bs5": "3.1.6",
+    "jquery": "4.1.0",
     "quill": "2.0.3",
-    "simple-datatables": "10.2.0"
+    "simple-datatables": "10.4.0"
   },
   "devDependencies": {
-    "esbuild": "0.27.0",
-    "esbuild-sass-plugin": "3.3.1",
-    "sass": "1.77.6"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+    "esbuild": "0.28.2",
+    "esbuild-sass-plugin": "3.7.0",
+    "sass": "1.108.2"
   }
 }

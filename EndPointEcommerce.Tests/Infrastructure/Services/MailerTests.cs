@@ -2,11 +2,11 @@
 
 using EndPointEcommerce.Infrastructure.Configuration;
 using EndPointEcommerce.Infrastructure.Services;
+using MailKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MimeKit;
 using Moq;
 
 namespace EndPointEcommerce.Tests.Infrastructure.Services
@@ -70,28 +70,29 @@ namespace EndPointEcommerce.Tests.Infrastructure.Services
             _mockSmtpClient.Verify(s => s.AuthenticateAsync("test_username", "test_password", default), Times.Once);
             _mockSmtpClient.Verify(
                 s => s.SendAsync(
-                    It.Is<MimeMessage>(m =>
-                        m.From.Count == 1 &&
-                        m.From.Mailboxes.Any(mb => mb.Name == "Test Sender" && mb.Address == "sender@test.com") &&
+                    It.Is<ISendRequest>(request =>
+                        request.Sender == null &&
+                        request.Recipients == null &&
+                        request.Message.From.Count == 1 &&
+                        request.Message.From.Mailboxes.Any(mb => mb.Name == "Test Sender" && mb.Address == "sender@test.com") &&
 
-                        m.To.Count == 1 &&
-                        m.To.Mailboxes.Any(mb => mb.Name == "Test Recipient" && mb.Address == "recipient@test.com") &&
+                        request.Message.To.Count == 1 &&
+                        request.Message.To.Mailboxes.Any(mb => mb.Name == "Test Recipient" && mb.Address == "recipient@test.com") &&
 
-                        m.Cc.Count == 2 &&
-                        m.Cc.Mailboxes.Any(mb => mb.Name == "cc1@test.com" && mb.Address == "cc1@test.com") &&
-                        m.Cc.Mailboxes.Any(mb => mb.Name == "cc2@test.com" && mb.Address == "cc2@test.com") &&
+                        request.Message.Cc.Count == 2 &&
+                        request.Message.Cc.Mailboxes.Any(mb => mb.Name == "cc1@test.com" && mb.Address == "cc1@test.com") &&
+                        request.Message.Cc.Mailboxes.Any(mb => mb.Name == "cc2@test.com" && mb.Address == "cc2@test.com") &&
 
-                        m.Bcc.Count == 2 &&
-                        m.Bcc.Mailboxes.Any(mb => mb.Name == "bcc1@test.com" && mb.Address == "bcc1@test.com") &&
-                        m.Bcc.Mailboxes.Any(mb => mb.Name == "bcc2@test.com" && mb.Address == "bcc2@test.com") &&
+                        request.Message.Bcc.Count == 2 &&
+                        request.Message.Bcc.Mailboxes.Any(mb => mb.Name == "bcc1@test.com" && mb.Address == "bcc1@test.com") &&
+                        request.Message.Bcc.Mailboxes.Any(mb => mb.Name == "bcc2@test.com" && mb.Address == "bcc2@test.com") &&
 
-                        m.Subject == "Test Subject" &&
+                        request.Message.Subject == "Test Subject" &&
 
-                        m.TextBody == "Test Body" &&
-                        m.HtmlBody == "Test Body"
+                        request.Message.TextBody == "Test Body" &&
+                        request.Message.HtmlBody == "Test Body"
                     ),
-                    default,
-                    null
+                    default
                 ),
                 Times.Once
             );
