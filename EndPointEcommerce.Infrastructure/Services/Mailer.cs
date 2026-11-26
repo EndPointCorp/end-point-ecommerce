@@ -1,6 +1,7 @@
 // Copyright 2025 End Point Corporation. Apache License, version 2.0.
 
 using Microsoft.Extensions.Options;
+using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
 using EndPointEcommerce.Infrastructure.Configuration;
@@ -79,7 +80,7 @@ public class Mailer : IMailer
                     MailKit.Security.SecureSocketOptions.StartTls);
                 if (!String.IsNullOrEmpty(_mailSettings.UserName) || !String.IsNullOrEmpty(_mailSettings.Password))
                     await _smtpClient.AuthenticateAsync(_mailSettings.UserName, _mailSettings.Password);
-                await _smtpClient.SendAsync(emailMessage);
+                await _smtpClient.SendAsync(new SendRequest(emailMessage));
                 await _smtpClient.DisconnectAsync(true);
             }
 

@@ -334,9 +334,9 @@ To install .NET CLI tools:
 
 To install Node.js and PNPM:
 
-- Run `curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash -` to install the package repository for Node.js.
+- Run `curl -fsSL https://deb.nodesource.com/setup_26.x | sudo bash -` to install the package repository for Node.js.
 - Run `sudo apt-get update && sudo apt-get install nodejs` to install Node.js.
-- Run `sudo npm install -g pnpm@10` to install PNPM.
+- Run `sudo npm install -g pnpm@12` to install PNPM.
 - Run `node --version` and `pnpm --version` to validate the installation succeeded.
 
 #### 2. Create a PostgreSQL database
